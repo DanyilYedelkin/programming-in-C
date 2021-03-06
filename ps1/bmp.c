@@ -375,12 +375,14 @@ unsigned char* bit_encrypt(const char* text){
     char back_bits[8];
     //char bits[8];
     //int count=9;
-    char bits_word[8];
+    //==============================problem
+    char bits_word[9];
     bits_word[8] = '\0';
-    char first_pair[4];
+    char first_pair[5];
     first_pair[4] = '\0';
-    char second_pair[4];
+    char second_pair[5];
     second_pair[4] = '\0';
+    //===============================
 
 
     for(int i=0; i<(strlen(text)+1); i++){
@@ -523,12 +525,14 @@ char* bit_decrypt(const unsigned char* text){
     free(new_bits);
     new_bits=NULL;
 
-    char bits_word[8];
+    //========================problem
+    char bits_word[9];
     bits_word[8] = '\0';
-    char first_pair[4];
+    char first_pair[5];
     first_pair[4] = '\0';
-    char second_pair[4];
+    char second_pair[5];
     second_pair[4] = '\0';
+    //========================
 
 
     for(int i=0; i<strlen((char*)text)+1; i++){
