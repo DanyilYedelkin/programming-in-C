@@ -51,7 +51,7 @@ char* vigenere_encrypt(const char* key, const char* text){
         }
         alphabet[i]=toupper(alphabet[i]);
     }         
-    char *new_text=(char*)calloc(2*strlen(text)+1, sizeof(char));
+    char *new_text=(char*)calloc(2*strlen(text)+41, sizeof(char));
     int counter=1, length=0, jump=0;
     /*for(int i=0, k=0, l=0; i<(strlen(text)+1); i++){
         for(int j=0; j<strlen(alphabet); j++){
@@ -201,7 +201,7 @@ char* vigenere_decrypt(const char* key, const char* text){
         }
         alphabet[i]=toupper(alphabet[i]);
     }         
-    char *new_text=(char*)calloc(2*strlen(text)+1, sizeof(char));
+    char *new_text=(char*)calloc(2*strlen(text)+41, sizeof(char));
     int counter=1, length=0, jump=0;
     /*for(int i=0, k=0, l=0; i<(strlen(text)+1); i++){
         for(int j=0; j<strlen(alphabet); j++){
@@ -369,9 +369,9 @@ unsigned char* bit_encrypt(const char* text){
             break;
         }
     }*/
-    unsigned char* new_text=(unsigned char*)calloc(2*strlen(text)+1, sizeof(char));
+    unsigned char* new_text=(unsigned char*)calloc(2*strlen(text)+41, sizeof(char));
     memcpy(new_text, (unsigned char*)text, strlen(text)+1);
-    unsigned int* new_bits=(unsigned int*)calloc(2*strlen(text)+1, sizeof(int));
+    unsigned int* new_bits=(unsigned int*)calloc(2*strlen(text)+41, sizeof(int));
     char back_bits[8];
     //char bits[8];
     //int count=9;
@@ -491,10 +491,10 @@ char* bit_decrypt(const unsigned char* text){
             break;
         }
     }*/
-    char* new_text=(char*)calloc(strlen((char*)text)+1, sizeof(char));
-    memcpy(new_text, text, strlen((char*)text)+1);
+    char* new_text=(char*)calloc(strlen((char*)text)+41, sizeof(char));
+    memcpy(new_text, text, strlen((char*)text));
 
-    unsigned int* new_bits=(unsigned int*)calloc(2*strlen((char*)text)+1, sizeof(int));
+    unsigned int* new_bits=(unsigned int*)calloc(2*strlen((char*)text)+41, sizeof(int));
     char back_bits[8];
     //char bits[8];
     //int count=9;
@@ -598,7 +598,7 @@ unsigned char* bmp_encrypt(const char* key, const char* text){
     char* vigenere_cipher=vigenere_encrypt(key, reverse_cipher);
     unsigned char* bit_cipher=bit_encrypt(vigenere_cipher);
     unsigned char* cipher=(unsigned char*)calloc(2*strlen((char*)text)+1, sizeof(char));
-    memcpy(cipher, bit_cipher, strlen((char*)text)+1);
+    memcpy(cipher, bit_cipher, strlen((char*)text));
     
     free(reverse_cipher);
     free(vigenere_cipher);
