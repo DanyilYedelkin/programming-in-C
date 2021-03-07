@@ -79,14 +79,14 @@ char* playfair_encrypt(const char* key, const char* text){
         }
     }
 
-    /*char *upgrade_key=(char*)calloc(strlen(key)+1, sizeof(char));
-    int repeating=0;
+    char *upgrade_key=(char*)calloc(2*strlen(text)+1, sizeof(char));
+    int repeating3=0;
 
     for(int i=0; i<5; i++){
-        upgrade_key[i+repeating]=changed_key[i];
-        repeating++;
+        upgrade_key[i+repeating3]=changed_key[i];
+        repeating3++;
     }
-    free(upgrade_key);*/
+    free(upgrade_key);
 
     //================================================================
 
@@ -148,15 +148,15 @@ char* playfair_encrypt(const char* key, const char* text){
             }
         }
     }
-    /*char *down=(char*)calloc(strlen(key)+1, sizeof(char));
+    char *down=(char*)calloc(2*strlen(text)+1, sizeof(char));
     changed_text[++length]='\0';
-    repeating=0;
+    int repeating5=0;
 
     for(int i=0; i<5; i++){
-        down[i+repeating]=changed_key[i];
-        repeating++;
+        down[i+repeating5]=changed_key[i];
+        repeating5++;
     }
-    free(down);*/
+    free(down);
     //changed_text[++length]='\0';
 
     //===============================================================================
@@ -440,15 +440,15 @@ char* playfair_decrypt(const char* key, const char* text){
         }
     }
 
-    //char *upgrade_key=(char*)calloc(strlen(key)+1, sizeof(char));
+    char *upgrade_key=(char*)calloc(2*strlen(text)+1, sizeof(char));
     char *changed_text=(char*)calloc(2*strlen(text)+1, sizeof(char));
-    //int repeating=0;
+    int repeating8=0;
 
-    /*for(int i=0; i<5; i++){
-        upgrade_key[i+repeating]=changed_key[i];
-        repeating++;
+    for(int i=0; i<5; i++){
+        upgrade_key[i+repeating8]=changed_key[i];
+        repeating8++;
     }
-    free(upgrade_key);   */
+    free(upgrade_key);   
 
     for(int i=0, another=0; i<strlen(text); i++){
         //if(changed_text!=NULL){
@@ -515,24 +515,24 @@ char* playfair_decrypt(const char* key, const char* text){
         }
     }
     //=======================================================
-    /*char *down2=(char*)calloc(strlen(key)+1, sizeof(char));
-    repeating=0;
+    char *down2=(char*)calloc(2*strlen(text)+1, sizeof(char));
+    int repeating1=0;
 
     for(int i=0; i<5; i++){
-        down2[i+repeating]=down2[i];
-        repeating++;
+        down2[i+repeating1]=down2[i];
+        repeating1++;
     }
     free(down2);
     changed_text[++length]='\0';
 
-    char *upgrade_key1=(char*)calloc(strlen(key)+1, sizeof(char));
-    repeating=0;
+    char *upgrade_key1=(char*)calloc(2*strlen(text)+1, sizeof(char));
+    int repeating2=0;
 
     for(int i=0; i<5; i++){
-        upgrade_key1[i+repeating]=upgrade_key1[i];
-        repeating++;
+        upgrade_key1[i+repeating2]=upgrade_key1[i];
+        repeating2++;
     }
-    free(upgrade_key1);*/
+    free(upgrade_key1);
     //=============================problem
     char alphabet[27];
     strcpy(alphabet, ALPHA);
@@ -546,14 +546,14 @@ char* playfair_decrypt(const char* key, const char* text){
     }
     //printf("%s\n", alphabet);
 
-    /*char *down1=(char*)calloc(strlen(key)+1, sizeof(char));
-    repeating=0;
+    char *down1=(char*)calloc(2*strlen(text)+1, sizeof(char));
+    int repeating=0;
 
     for(int i=0; i<5; i++){
         down1[i+repeating]=down1[i];
         repeating++;
     }
-    free(down1);*/
+    free(down1);
 
     for(int i=0 ; i<5; i++){
         for(int j=0; j<5; j++){
