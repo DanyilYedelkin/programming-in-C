@@ -413,6 +413,11 @@ char* playfair_decrypt(const char* key, const char* text){
             return NULL;
         }
     }
+    for(int i=0; i<strlen(text); i++){
+        if(text[i]=='W'){
+            return NULL;
+        }
+    }
     bool ifTrue=true;
 
     int numberLine=-1;
@@ -436,11 +441,6 @@ char* playfair_decrypt(const char* key, const char* text){
         }
     }
     free(proverkaText);*/
-    for(int i=0; i<strlen(text); i++){
-        if(text[i]=='W'){
-            return NULL;
-        }
-    }
 
     /*for(int i=0; i<(strlen(key)+1); i++){
         new_key[i]=toupper(key[i]);
