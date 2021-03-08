@@ -661,7 +661,7 @@ char* playfair_decrypt(const char* key, const char* text){
                             //printf("%c\n", CheckTable[i]);
                         }
                     }
-                }else if(cipher_table[i][j]!='.'){
+                }else if(cipher_table[i][j]!='W'){
                     CheckTable[i]=cipher_table[i][j];
                     //printf("%c\n", CheckTable[i]);
                     for(int alph=0; alph<25 ; alph++){
