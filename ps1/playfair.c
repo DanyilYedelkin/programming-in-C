@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "playfair.h"
+#include <stdbool.h>
 
 char* playfair_encrypt(const char* key, const char* text){
     if(text == NULL || key == NULL){
@@ -22,6 +23,7 @@ char* playfair_encrypt(const char* key, const char* text){
     //======================= problem 
     char alphabet[26];
     strcpy(alphabet, ALPHA);
+    bool iftrue=true;
     //alphabet[26]='\0';
     //=======================
     char cipher_table[5][5];
@@ -63,11 +65,22 @@ char* playfair_encrypt(const char* key, const char* text){
             break;
         }
     }*/
+    char *down10=(char*)calloc(2*strlen(text)+1, sizeof(char));
+    int repeating9=0;
+
+    for(int i=0; i<5; i++){
+        down10[i+repeating9]=key[i];
+        repeating9++;
+    }
+    free(down10);
 
     for(int i=0; i<strlen(key); i++){
         if(key[i]!=' ' && !isalpha(key[i])){
             free(changed_key);
             return NULL;
+        }
+        if(isalpha(key[i])){
+            iftrue=false;
         }
         changed_key[i]=key[i];
         changed_key[i]=toupper(changed_key[i]);
@@ -77,6 +90,10 @@ char* playfair_encrypt(const char* key, const char* text){
         if(key[i+1]=='\0'){
             changed_key[i+1]='\0';
         }
+    }
+    if(iftrue==true){
+        free(changed_key);
+        return NULL;
     }
 
     char *upgrade_key=(char*)calloc(2*strlen(text)+1, sizeof(char));
@@ -93,9 +110,9 @@ char* playfair_encrypt(const char* key, const char* text){
     char *changed_text=(char*)calloc(2*strlen(text)+1, sizeof(char));
 
     for(int i=0, another=0; i<strlen(text); i++){
-        //if(changed_text!=NULL){
+        if(changed_text!=NULL){
             changed_text[i+another]=toupper(text[i]);
-        //}
+        }
         if(length>-1){
             length++;
         }
@@ -108,6 +125,14 @@ char* playfair_encrypt(const char* key, const char* text){
                 another--;
             }
         }
+        char *donn=(char*)calloc(2*strlen(text)+1, sizeof(char));
+        int repeating11=0;
+
+        for(int i=0; i<5; i++){
+            donn[i+repeating11]=changed_key[i];
+            repeating11++;
+        }
+        free(donn);
         if(length>-1 && another>-1){
             if((another+i)%2==1){
                 if(changed_text[i+another]!=' '){
@@ -142,11 +167,11 @@ char* playfair_encrypt(const char* key, const char* text){
                 }
             }
         }
-        if(length>=0){
+        //if(length>=0){
             if(length%2==1){
                 changed_text[length]='X';
             }
-        }
+        //}
     }
     char *down=(char*)calloc(2*strlen(text)+1, sizeof(char));
     changed_text[++length]='\0';
@@ -168,57 +193,75 @@ char* playfair_encrypt(const char* key, const char* text){
     //printf("%s\n", alphabet);
 
 //===========================================================
+    char* CheckTable=(char*)calloc(2*strlen(text)+1, sizeof(char));  
 
     for(int i=0 ; i<5; i++){
         for(int j=0; j<5; j++){
             if(numberLine>-10){
                 numberLine++;
             }
-
+            CheckTable[i]=cipher_table[i][j];
+            //printf("%c\n", CheckTable[i]);
+            
                 if(numberLine<strlen(key)){
                     if(numberLine>-10){
                         cipher_table[i][j]='.'; 
                     }
+                    CheckTable[i]=cipher_table[i][j];
+                    //printf("%c\n", CheckTable[i]);
                     
                     for(int alph=0; alph<25 ; alph++){
                         if(alphabet[alph]==changed_key[numberLine]){
                             if(alphabet[alph]!=25){
                                 alphabet[alph]='.';
                             }
+                            CheckTable[i]=cipher_table[i][j];
+                            //printf("%c\n", CheckTable[i]);
                             if(cipher_table!=NULL){
                                 cipher_table[i][j]=changed_key[numberLine];
                             }
+                            CheckTable[i]=cipher_table[i][j];
+                            //printf("%c\n", CheckTable[i]);
                         }
                     }
+                    CheckTable[i]=cipher_table[i][j];
+                    //printf("%c\n", CheckTable[i]);
                     if(cipher_table[i][j]=='.'){
                         if(j>-1){
                             if(j!=0){
                                 j--;
                             } else if(j==0){
                                 if(j!='.'){
-                                    j--;
+                                    i--;
                                 }
                                 j=4;
                             }
                         }
                     }
-                }else if(cipher_table[i][j]!='.'){
+                    CheckTable[i]=cipher_table[i][j];
+                    //printf("%c\n", CheckTable[i]);
+                }else if(cipher_table[i][j]!='W'){
                     for(int alph=0; alph<25 ; alph++){
-                        //if(isalpha(alphabet)==0){
+                        //if(isalpha(alphabet)){
                             if(alphabet[alph]!='.'){
                                 if(cipher_table!=NULL){
                                     cipher_table[i][j]=alphabet[alph];
                                 }
+                                CheckTable[i]=cipher_table[i][j];
+                                //printf("%c\n", CheckTable[i]);
                                 if(alphabet[alph]!=25){
                                     alphabet[alph]='.';
                                 }
                                 break;
                             }
+                            CheckTable[i]=cipher_table[i][j];
+                            //printf("%c\n", CheckTable[i]);
                         //}
                 }
             }
         }
     }
+    free(CheckTable);
     //printf("%s\n\n", changed_text);
 
     for(int i=0; i<5; i++){
@@ -378,6 +421,7 @@ char* playfair_decrypt(const char* key, const char* text){
             return NULL;
         }
     }
+    bool ifTrue=true;
 
     int numberLine=-1;
     char changed_plafair[strlen(text)];
@@ -424,8 +468,19 @@ char* playfair_decrypt(const char* key, const char* text){
             break;
         }
     }*/
+    char *down44=(char*)calloc(2*strlen(text)+1, sizeof(char));
+    int repeating14=0;
+
+    for(int i=0; i<5; i++){
+        down44[i+repeating14]=down44[i];
+        repeating14++;
+    }
+    free(down44);
 
     for(int i=0; i<strlen(key); i++){
+        if(isalpha(key[i])){
+            ifTrue=false;
+        }
         if(key[i]!=' ' && !isalpha(key[i])){
             free(changed_key);
             return NULL;
@@ -438,6 +493,10 @@ char* playfair_decrypt(const char* key, const char* text){
         if(key[i+1]=='\0'){
             changed_key[i+1]='\0';
         }
+    }
+    if(ifTrue){
+        free(changed_key);
+        return NULL;
     }
 
     char *upgrade_key=(char*)calloc(2*strlen(text)+1, sizeof(char));
@@ -554,29 +613,41 @@ char* playfair_decrypt(const char* key, const char* text){
         repeating++;
     }
     free(down1);
+    char* CheckTable=(char*)calloc(2*strlen(text)+1, sizeof(char));
 
     for(int i=0 ; i<5; i++){
         for(int j=0; j<5; j++){
             if(numberLine>-10){
                 numberLine++;
             }
-
+            CheckTable[i]=cipher_table[i][j];
+            //printf("%c\n", CheckTable[i]);
                 if(numberLine<strlen(key)){
                     if(numberLine>-10){
                         cipher_table[i][j]='.'; 
                     }
+                    CheckTable[i]=cipher_table[i][j];
+                    //printf("%c\n", CheckTable[i]);
                     
                     for(int alph=0; alph<25 ; alph++){
+                        CheckTable[i]=cipher_table[i][j];
+                        //printf("%c\n", CheckTable[i]);
                         if(alphabet[alph]==changed_key[numberLine]){
                             if(alphabet[alph]!=25){
                                 alphabet[alph]='.';
                             }
+                            CheckTable[i]=cipher_table[i][j];
+                            //printf("%c\n", CheckTable[i]);
                             if(cipher_table!=NULL){
                                 cipher_table[i][j]=changed_key[numberLine];
                             }
+                            CheckTable[i]=cipher_table[i][j];
+                            //printf("%c\n", CheckTable[i]);
                         }
                     }
                     if(cipher_table[i][j]=='.'){
+                        CheckTable[i]=cipher_table[i][j];
+                        //printf("%c\n", CheckTable[i]);
                         if(j>-1){
                             if(j!=0){
                                 j--;
@@ -586,25 +657,38 @@ char* playfair_decrypt(const char* key, const char* text){
                                 }
                                 j=4;
                             }
+                            CheckTable[i]=cipher_table[i][j];
+                            //printf("%c\n", CheckTable[i]);
                         }
                     }
                 }else if(cipher_table[i][j]!='.'){
+                    CheckTable[i]=cipher_table[i][j];
+                    //printf("%c\n", CheckTable[i]);
                     for(int alph=0; alph<25 ; alph++){
+                        CheckTable[i]=cipher_table[i][j];
+                        //printf("%c\n", CheckTable[i]);
                         //if(isalpha(alphabet)==0){
                             if(alphabet[alph]!='.'){
                                 if(cipher_table!=NULL){
                                     cipher_table[i][j]=alphabet[alph];
                                 }
+                                CheckTable[i]=cipher_table[i][j];
+                                //printf("%c\n", CheckTable[i]);
                                 if(alphabet[alph]!=25){
                                     alphabet[alph]='.';
                                 }
+                                CheckTable[i]=cipher_table[i][j];
+                                //printf("%c\n", CheckTable[i]);
                                 break;
                             }
                         //}
                 }
+                CheckTable[i]=cipher_table[i][j];
+                //printf("%c\n", CheckTable[i]);
             }
         }
     }
+    free(CheckTable);
     //printf("%s\n\n", changed_text);
 
     for(int i=0; i<5; i++){
