@@ -241,9 +241,13 @@ char* playfair_encrypt(const char* key, const char* text){
                     CheckTable[i]=cipher_table[i][j];
                     //printf("%c\n", CheckTable[i]);
                 }else if(cipher_table[i][j]!='W'){
+                    CheckTable[i]=cipher_table[i][j];
+                    //printf("%c\n", CheckTable[i]);
                     for(int alph=0; alph<25 ; alph++){
                         //if(isalpha(alphabet)){
                             if(alphabet[alph]!='.'){
+                                CheckTable[i]=cipher_table[i][j];
+                                //printf("%c\n", CheckTable[i]);
                                 if(cipher_table!=NULL){
                                     cipher_table[i][j]=alphabet[alph];
                                 }
