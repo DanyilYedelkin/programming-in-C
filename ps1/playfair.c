@@ -116,15 +116,35 @@ char* playfair_encrypt(const char* key, const char* text){
         if(length>-1){
             length++;
         }
-
-        if(changed_text[i+another]=='W'){
-            changed_text[i+another]='V';
-        }else if(changed_text[i+another]==' '){
+        if(changed_text[i+another]==' '){
             if(length>-1){
                 length--;
                 another--;
             }
+        } else{
+            if(changed_text[i+another]=='W'){
+                changed_text[i+another]='V';
+            }
+            if(length>-1 && another>-1){
+                if((another+i)%2==1){
+                    if(changed_text[i+another]!=' '){
+                        if(changed_text[i+another]!='X'){
+                            if(changed_text[i+another]==changed_text[i-1+another]){
+                                changed_text[i+another+1]=changed_text[i+another];
+                                changed_text[i+another]='X';
+                                if(length>-10 && another>-10){
+                                    length++;
+                                    if(another>-10){
+                                       another++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
+
         char *donn=(char*)calloc(2*strlen(text)+1, sizeof(char));
         int repeating11=0;
 
@@ -133,40 +153,6 @@ char* playfair_encrypt(const char* key, const char* text){
             repeating11++;
         }
         free(donn);
-        if(length>-1 && another>-1){
-            if((another+i)%2==1){
-                if(changed_text[i+another]!=' '){
-                    if(changed_text[i+another]!='X'){
-                        if(changed_text[i+another]==changed_text[i-1+another]){
-                            changed_text[i+another+1]=changed_text[i+another];
-                            changed_text[i+another]='X';
-                            if(length>-1 && another>-1){
-                                length++;
-                                if(another>=0){
-                                    another++;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if((another+i)%2==1){
-            if(changed_text[i+another]!=' '){
-                if(changed_text[i+another]!='X'){
-                    if(changed_text[i+another]==changed_text[i-1+another]){
-                        changed_text[i+another+1]=changed_text[i+another];
-                        changed_text[i+another]='X';
-                        if(length>-1 && another>-1){
-                            length++;
-                            if(another>=0){
-                                another++;
-                            }
-                        }
-                    }
-                }
-            }
-        }
         //if(length>=0){
             if(length%2==1){
                 changed_text[length]='X';
@@ -494,9 +480,9 @@ char* playfair_decrypt(const char* key, const char* text){
         if(changed_key[i]=='W'){
             changed_key[i]='V';
         }
-        if(key[i+1]=='\0'){
+        /*if(key[i+1]=='\0'){
             changed_key[i+1]='\0';
-        }
+        }*/
     }
     if(ifTrue){
         free(changed_key);
@@ -513,70 +499,17 @@ char* playfair_decrypt(const char* key, const char* text){
     }
     free(upgrade_key);   
 
-    for(int i=0, another=0; i<strlen(text); i++){
-        //if(changed_text!=NULL){
-            changed_text[i+another]=toupper(text[i]);
-        //}
-        if(length>-1){
-            length++;
-        }
-
-        if(changed_text[i+another]=='W'){
-            changed_text[i+another]='V';
-        }else if(changed_text[i+another]==' '){
-            if(length>-1){
-                length--;
-                another--;
-            }
-        }
-        if(length>-1 && another>-1){
-            /*for(int i=0; i<(strlen(key)+1); i++){
-        new_key[i]=toupper(key[i]);
-    }*/
-    /*int counter=0;
-    int length_key=0;
-    */
-            if((another+i)%2==1){
-                if(changed_text[i+another]!=' '){
-                    if(changed_text[i+another]!='X'){
-                        if(changed_text[i+another]==changed_text[i-1+another]){
-                            changed_text[i+another+1]=changed_text[i+another];
-                            if(changed_text[i]>-1){
-                                changed_text[i+another]='X';
-                            }
-                            if(length>-1 && another>-1){
-                                length++;
-                                if(another>=0){
-                                    another++;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if((another+i)%2==1){
-            if(changed_text[i+another]!=' '){
-                if(changed_text[i+another]!='X'){
-                    if(changed_text[i+another]==changed_text[i-1+another]){
-                        changed_text[i+another+1]=changed_text[i+another];
-                        changed_text[i+another]='X';
-                        if(length>-1 && another>-1){
-                            length++;
-                            if(another>=0){
-                                another++;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if(length>=0){
-            if(length%2==1){
-                changed_text[length]='X';
+    char texts[strlen(text)];
+    strcpy(texts, text);
+    for(int i=0; i<strlen(text); i++){
+        if(texts[i]==' '){
+            for(int j=i; j<strlen(text); j++){
+                texts[j]=texts[j+1];
             }
         }
     }
+    
+
     //=======================================================
     char *down2=(char*)calloc(2*strlen(text)+1, sizeof(char));
     int repeating1=0;
@@ -657,7 +590,7 @@ char* playfair_decrypt(const char* key, const char* text){
                                 j--;
                             } else if(j==0){
                                 if(j!='.'){
-                                    j--;
+                                    i--;
                                 }
                                 j=4;
                             }
@@ -854,3 +787,4 @@ char* playfair_decrypt(const char* key, const char* text){
 
     return playfair;
 }
+
