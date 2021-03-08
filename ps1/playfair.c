@@ -428,14 +428,19 @@ char* playfair_decrypt(const char* key, const char* text){
     //playfair[finally_length]='\0';
     //mytext[finally_length]='\0';
     //int length=0;
-    char* proverkaText=(char*)calloc(strlen(text)+1, sizeof(char));
+    /*char* proverkaText=(char*)calloc(2*strlen(text)+1, sizeof(char));
     strcpy(proverkaText, text);
     for(int i=0; i<strlen(proverkaText); i++){
         if(proverkaText[i]=='W'){
             return NULL;
         }
     }
-    free(proverkaText);
+    free(proverkaText);*/
+    for(int i=0; i<strlen(text); i++){
+        if(text[i]=='W'){
+            return NULL;
+        }
+    }
 
     /*for(int i=0; i<(strlen(key)+1); i++){
         new_key[i]=toupper(key[i]);
@@ -802,4 +807,5 @@ char* playfair_decrypt(const char* key, const char* text){
 
     return playfair;
 }
+
 
