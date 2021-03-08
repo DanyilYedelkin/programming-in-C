@@ -65,10 +65,10 @@ char* playfair_encrypt(const char* key, const char* text){
     }*/
 
     for(int i=0; i<strlen(key); i++){
-        /*if(key[i]!=' ' && !isalpha(key[i])){
+        if(key[i]!=' ' && !isalpha(key[i])){
             free(changed_key);
             return NULL;
-        }*/
+        }
         changed_key[i]=key[i];
         changed_key[i]=toupper(changed_key[i]);
         if(changed_key[i]=='W'){
@@ -426,10 +426,10 @@ char* playfair_decrypt(const char* key, const char* text){
     }*/
 
     for(int i=0; i<strlen(key); i++){
-        /*if(key[i]!=' ' && !isalpha(key[i])){
+        if(key[i]!=' ' && !isalpha(key[i])){
             free(changed_key);
             return NULL;
-        }*/
+        }
         changed_key[i]=key[i];
         changed_key[i]=toupper(changed_key[i]);
         if(changed_key[i]=='W'){
