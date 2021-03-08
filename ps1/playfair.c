@@ -156,11 +156,12 @@ char* playfair_encrypt(const char* key, const char* text){
         //if(length>=0){
             if(length%2==1){
                 changed_text[length]='X';
+                length++;
             }
         //}
     }
     char *down=(char*)calloc(2*strlen(text)+1, sizeof(char));
-    changed_text[++length]='\0';
+    changed_text[length]='\0';
     int repeating5=0;
 
     for(int i=0; i<5; i++){
@@ -198,7 +199,7 @@ char* playfair_encrypt(const char* key, const char* text){
                     
                     for(int alph=0; alph<25 ; alph++){
                         if(alphabet[alph]==changed_key[numberLine]){
-                            if(alphabet[alph]!=25){
+                            if(alphabet[alph]!=26){
                                 alphabet[alph]='.';
                             }
                             CheckTable[i]=cipher_table[i][j];
@@ -271,7 +272,8 @@ char* playfair_encrypt(const char* key, const char* text){
     //printf("\n\n%d\n\n", length);
     //int first_pos_x=0, first_pos_y=0, second_pos_x=0, second_pos_y=0;
     int* numbers=(int*)calloc(2*strlen(text)+1, sizeof(int));
-    char *playfair = (char*)calloc(2*strlen(text)+1, sizeof(char));
+    //char *playfair = (char*)calloc(2*strlen(text)+1, sizeof(char));
+    char* playfair=(char*)calloc(length+length/2, sizeof(char));
     int counter=0;
 
     for(int i=0, g=1; i<length; i+=2, g+=2){
@@ -381,7 +383,7 @@ char* playfair_encrypt(const char* key, const char* text){
     changed_key=NULL;
     changed_text=NULL;
     numbers=NULL;
-    int finally_length=length+(length)/2;
+    int finally_length=length+(length)/2-1;
     //printf("\n%d, %d, %d, %d\n\n", first_pos_x, first_pos_y, second_pos_x, second_pos_y);
     
     playfair[finally_length]='\0';
@@ -425,7 +427,15 @@ char* playfair_decrypt(const char* key, const char* text){
     //char mytext[finally_length];
     //playfair[finally_length]='\0';
     //mytext[finally_length]='\0';
-    int length=0;
+    //int length=0;
+    char* proverkaText=(char*)calloc(strlen(text)+1, sizeof(char));
+    strcpy(proverkaText, text);
+    for(int i=0; i<strlen(proverkaText); i++){
+        if(proverkaText[i]=='W'){
+            return NULL;
+        }
+    }
+    free(proverkaText);
 
     /*for(int i=0; i<(strlen(key)+1); i++){
         new_key[i]=toupper(key[i]);
@@ -519,7 +529,7 @@ char* playfair_decrypt(const char* key, const char* text){
         repeating1++;
     }
     free(down2);
-    changed_text[++length]='\0';
+    //changed_text[++length]='\0';
 
     char *upgrade_key1=(char*)calloc(2*strlen(text)+1, sizeof(char));
     int repeating2=0;
@@ -551,6 +561,7 @@ char* playfair_decrypt(const char* key, const char* text){
     }
     free(down1);
     char* CheckTable=(char*)calloc(2*strlen(text)+1, sizeof(char));
+    //printf("\n%s\n", changed_key);
 
     for(int i=0 ; i<5; i++){
         for(int j=0; j<5; j++){
@@ -653,10 +664,13 @@ char* playfair_decrypt(const char* key, const char* text){
             //printf("%c", cipher_table[i][j]);
         }
     }
+    //printf("\n\n\n");
+    strcpy(changed_plafair, text);
 
     for(int i=0; i<strlen(text); i++){
-        //printf("%c", changed_text[i]);
+        //printf("%c", changed_plafair[i]);
     }
+    //printf("\n\n");
 
     for(int i=0; i<strlen(text); i++){
         if(changed_plafair[i]==' '){
@@ -678,6 +692,7 @@ char* playfair_decrypt(const char* key, const char* text){
             changed_text[i]=changed_plafair[i];//===
         }
     }
+    //printf("\n%s\n", changed_text);
     int counter=0;
 
     for(int i=0, g=1; i<finally_length; i+=2, g+=2){
