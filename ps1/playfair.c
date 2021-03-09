@@ -398,6 +398,12 @@ char* playfair_encrypt(const char* key, const char* text){
             }
         }
     }
+    for(int i=0; playfair[i]!='\0'; i++){
+        if(playfair[++i]=='\0' && playfair[i]==' '){
+            playfair[i-1]='\0';
+            break;
+        }
+    }
 
     return playfair;
 }
@@ -411,7 +417,7 @@ char* playfair_decrypt(const char* key, const char* text){
     for(int proverka=0; key[proverka]!='\0'; proverka++){
         if(key[proverka]!=' ' && !isalpha(key[proverka])){
             return NULL;
-        }
+        } 
     }
     for(int i=0; i<strlen(text); i++){
         if(text[i]=='W'){
