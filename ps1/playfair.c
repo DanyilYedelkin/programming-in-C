@@ -9,6 +9,11 @@ char* playfair_encrypt(const char* key, const char* text){
     if(text == NULL || key == NULL){
         return NULL;
     }
+    for(int i=0; i<strlen(key); i++){
+        if(key[i]==' ' && key[++i]=='\0'){
+            return NULL;
+        }
+    }
     for(int proverka=0; key[proverka]!='\0'; proverka++){
         if(key[proverka]!=' ' && !isalpha(key[proverka])){
             return NULL;
@@ -16,7 +21,7 @@ char* playfair_encrypt(const char* key, const char* text){
     }
     int numberLine=-1;
     //char *playfair = (char*)calloc(2*strlen(text), sizeof(char));
-    char *changed_key = (char*)calloc(2*strlen(key)+1, sizeof(char));
+    char *changed_key = (char*)calloc(strlen(key)+1, sizeof(char));
     strcpy(changed_key, key);
     //char *changed_text=(char*)calloc(2*strlen(text), sizeof(char));
     int length=0;
@@ -75,10 +80,6 @@ char* playfair_encrypt(const char* key, const char* text){
     free(down10);
 
     for(int i=0; i<strlen(key); i++){
-        /*if(key[i]!=' ' && !isalpha(key[i])){
-            free(changed_key);
-            return NULL;
-        }*/
         if(isalpha(key[i])){
             iftrue=false;
         }
@@ -108,36 +109,63 @@ char* playfair_encrypt(const char* key, const char* text){
     //================================================================
 
     char *changed_text=(char*)calloc(2*strlen(text)+1, sizeof(char));
+    char* checkText=(char*)calloc(2*strlen(text)+1, sizeof(char));
 
     for(int i=0, another=0; i<strlen(text); i++){
+        checkText[i]=changed_text[i];
+        //printf("\ncheckText[i]\n");
         if(changed_text!=NULL){
             changed_text[i+another]=toupper(text[i]);
         }
-        if(length>-1){
+        checkText[i]=changed_text[i];
+        //printf("\ncheckText[i]\n");
+        if(length>-100){
             length++;
         }
         if(changed_text[i+another]==' '){
-            if(length>-1){
+            checkText[i]=changed_text[i];
+            //printf("\ncheckText[i]\n");
+            if(length>-100){
                 length--;
                 another--;
             }
+            checkText[i]=changed_text[i];
+            //printf("\ncheckText[i]\n");
         } else{
+            checkText[i]=changed_text[i];
+            //printf("\ncheckText[i]\n");
             if(changed_text[i+another]=='W'){
                 changed_text[i+another]='V';
             }
-            if(length>-1 && another>-1){
+            checkText[i]=changed_text[i];
+            //printf("\ncheckText[i]\n");
+            if(length>-100 && another>-100){
                 if((another+i)%2==1){
+                    checkText[i]=changed_text[i];
+                    //printf("\ncheckText[i]\n");
                     if(changed_text[i+another]!=' '){
+                        checkText[i]=changed_text[i];
+                        //printf("\ncheckText[i]\n");
                         if(changed_text[i+another]!='X'){
+                            checkText[i]=changed_text[i];
+                            //printf("\ncheckText[i]\n");
                             if(changed_text[i+another]==changed_text[i-1+another]){
+                                checkText[i]=changed_text[i];
+                                //printf("\ncheckText[i]\n");
                                 changed_text[i+another+1]=changed_text[i+another];
+                                checkText[i]=changed_text[i];
+                                //printf("\ncheckText[i]\n");
                                 changed_text[i+another]='X';
-                                if(length>-10 && another>-10){
+                                if(length>-100 && another>-100){
                                     length++;
-                                    if(another>-10){
+                                    checkText[i]=changed_text[i];
+                                    //printf("\ncheckText[i]\n");
+                                    if(another>-100){
                                        another++;
                                     }
                                 }
+                                checkText[i]=changed_text[i];
+                                //printf("\ncheckText[i]\n");
                             }
                         }
                     }
@@ -153,22 +181,21 @@ char* playfair_encrypt(const char* key, const char* text){
             repeating11++;
         }
         free(donn);
-        //if(length>=0){
-            if(length%2==1){
-                changed_text[length]='X';
-                length++;
-            }
-        //}
     }
+    free(checkText);
     char *down=(char*)calloc(2*strlen(text)+1, sizeof(char));
-    changed_text[length]='\0';
     int repeating5=0;
+    if(length%2==1){
+        changed_text[length]='X';
+        length++;
+    }
 
     for(int i=0; i<5; i++){
         down[i+repeating5]=changed_key[i];
         repeating5++;
     }
     free(down);
+    changed_text[length]='\0';
     //changed_text[++length]='\0';
 
     //===============================================================================
@@ -257,7 +284,7 @@ char* playfair_encrypt(const char* key, const char* text){
 
     for(int i=0; i<5; i++){
         for(int j=0; j<5; j++){
-            //printf("%c", table[i][j]);
+            //printf("%c", cipher_table[i][j]);
         } 
         //printf("\n");
     }
@@ -265,6 +292,7 @@ char* playfair_encrypt(const char* key, const char* text){
         for(int j=0; j<5; j++){
             if(cipher_table[i][j]=='H'){
                 //printf("\n%d, %d\n", i, j);
+                break;
             }
         } 
         //printf("\n");
@@ -366,7 +394,7 @@ char* playfair_encrypt(const char* key, const char* text){
                                     numbers[i]=first_pos_x;
                                     //printf("%ls", numbers);
                                     numbers[i]=first_pos_y;
-                                    //printf("%ls", numbers);
+                                    //printf("%ls", numbers);                                   
                                 }
                                 counter=0;
             
@@ -813,5 +841,3 @@ char* playfair_decrypt(const char* key, const char* text){
 
     return playfair;
 }
-
-
