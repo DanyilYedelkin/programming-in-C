@@ -16,7 +16,7 @@ char* playfair_encrypt(const char* key, const char* text){
     }
     int numberLine=-1;
     //char *playfair = (char*)calloc(2*strlen(text), sizeof(char));
-    char *changed_key = (char*)calloc(strlen(key)+1, sizeof(char));
+    char *changed_key = (char*)calloc(2*strlen(key)+1, sizeof(char));
     strcpy(changed_key, key);
     //char *changed_text=(char*)calloc(2*strlen(text), sizeof(char));
     int length=0;
@@ -75,10 +75,10 @@ char* playfair_encrypt(const char* key, const char* text){
     free(down10);
 
     for(int i=0; i<strlen(key); i++){
-        if(key[i]!=' ' && !isalpha(key[i])){
+        /*if(key[i]!=' ' && !isalpha(key[i])){
             free(changed_key);
             return NULL;
-        }
+        }*/
         if(isalpha(key[i])){
             iftrue=false;
         }
@@ -399,8 +399,8 @@ char* playfair_encrypt(const char* key, const char* text){
         }
     }
     for(int i=0; playfair[i]!='\0'; i++){
-        if(playfair[++i]=='\0' && playfair[i]==' '){
-            playfair[i-1]='\0';
+        if(playfair[i+1]=='\0' && playfair[i]==' '){
+            playfair[i]='\0';
             break;
         }
     }
