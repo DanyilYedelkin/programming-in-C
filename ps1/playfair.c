@@ -9,7 +9,7 @@ char* playfair_encrypt(const char* key, const char* text){
     if(text == NULL || key == NULL){
         return NULL;
     }
-    for(int i=0; i<strlen(key); i++){
+    for(int i=0; i<2; i++){
         if(key[i]==' ' && key[++i]=='\0'){
             return NULL;
         }
@@ -25,10 +25,10 @@ char* playfair_encrypt(const char* key, const char* text){
     strcpy(changed_key, key);
     //char *changed_text=(char*)calloc(2*strlen(text), sizeof(char));
     int length=0;
+    bool ifTrue=true;
     //======================= problem 
     char alphabet[26];
     strcpy(alphabet, ALPHA);
-    bool iftrue=true;
     //alphabet[26]='\0';
     //=======================
     char cipher_table[5][5];
@@ -81,7 +81,7 @@ char* playfair_encrypt(const char* key, const char* text){
 
     for(int i=0; i<strlen(key); i++){
         if(isalpha(key[i])){
-            iftrue=false;
+            ifTrue=false;
         }
         changed_key[i]=key[i];
         changed_key[i]=toupper(changed_key[i]);
@@ -92,7 +92,7 @@ char* playfair_encrypt(const char* key, const char* text){
             changed_key[i+1]='\0';
         }
     }
-    if(iftrue==true){
+    if(ifTrue==true){
         free(changed_key);
         return NULL;
     }
@@ -841,3 +841,4 @@ char* playfair_decrypt(const char* key, const char* text){
 
     return playfair;
 }
+
