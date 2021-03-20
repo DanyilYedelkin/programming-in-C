@@ -42,6 +42,7 @@ int main(){
 	// n - reprezentuje počet častí jednej jazdy, t - čas, k = konštanta 
 	double n = 0, t = 0, k = 0, zero = 0.000000001;
 	scanf("%lf %lf", &n, &t);
+	printf("\n%lf %lf\n\n", n, t);
 	if((n < 1) || (n > 1000) || (t < 1) || (t > pow(10, 6))){
 		return 0;
 	}
@@ -50,6 +51,7 @@ int main(){
 	double *v = (double*)calloc(n, sizeof(double));
 	for(int i=0; i<n; i++){
 		scanf("%lf %lf", &s[i], &v[i]);
+		printf("%lf %lf\n", s[i], v[i]);
 		if((s[i] < 1) || (s[i] > 1000) || (v[i] > 1000) || (v[i] < -1000)){
 			free(s);
 			free(v);
