@@ -61,6 +61,7 @@ void creatingTrees(Node* trees, int n, int k){
         trees[num] = tree[num];
     }
 }
+//https://www.geeksforgeeks.org/write-c-code-to-determine-if-two-trees-are-identical/
 Node* creatingNodes(Node* tree, int head) {
     if (tree == NULL){
         tree = (Node*)malloc(sizeof(Node));
@@ -71,6 +72,7 @@ Node* creatingNodes(Node* tree, int head) {
     else if(head < tree->head) tree->left = creatingNodes(tree->left, head);
     return tree;
 }
+//https://www.cprogramming.com/tutorial/c/lesson18.html
 void destroyNode(Node* tree){
     if(tree == NULL){
         return;
@@ -80,6 +82,7 @@ void destroyNode(Node* tree){
         free(tree);
     }
 }
+//https://www.geeksforgeeks.org/write-c-code-to-determine-if-two-trees-are-identical/
 int comparing(Node* firstTree, Node* SecondTree) {
     if ((firstTree == NULL) && (SecondTree == NULL))  return 1;
     else if((firstTree == NULL) || (SecondTree == NULL)) return 0;
