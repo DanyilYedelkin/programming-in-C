@@ -40,9 +40,8 @@
 
 int main(){
 	// n - reprezentuje počet častí jednej jazdy, t - čas, k = konštanta 
-	int n = 0; 
-	double t = 0, k = 0;
-	scanf("%d %lf", &n, &t);
+	double n = 0, t = 0, k = 0, zero = 0.000000001;
+	scanf("%lf %lf", &n, &t);
 	if((n < 1) || (n > 1000) || (t < 1) || (t > pow(10, 6))){
 		return 0;
 	}
@@ -57,18 +56,18 @@ int main(){
 			return 0;
 		} 
 	}		
-	for(double left = -1000, right = 2000, t_n = 0; (right - left)>0.0000001; k = (right + left)/2){		
+	for(double left = -1000, right = 2000, t_n = 0; (right - left)>zero; k = (right + left)/2){		
 		t_n = 0;	
 		for(int i=0; i<n; i++){
 			// v = s*t - formula rychlosti => t = s/v => (t = S/(V+k))
 			t_n += s[i]/(v[i] + k);
 		}	
-		if(t_n > t) left = k;
-		else if(t_n > 0 && t_n < t) right = k;
-		else if(t_n < t) left = k;
-		else right = k;
+		if(t_n > t) left = k+zero;
+		else if(t_n > 0 && t_n < t) right = k-zero;
+		else if(t_n < t) left = k+zero;
+		else right = k-zero;
 	}
-	k += 0.000000003;
+	//k += 0.000000003;
 	free(s);
 	free(v);
 	printf("%.9lf\n", k);
