@@ -90,6 +90,7 @@ int main(){
             printf("%.9lf\n", cuts[i]);
             if((i + 1) == parts) cuts[i + 1] = '\0';
         }
+		free(checking);
 		return 0;
 	} else{
 		for(int i = 0; i < parts; i++){
@@ -102,6 +103,10 @@ int main(){
 				}
 				//the distance between end of cheese and end of sphere, or the distance between ends of spheres
                 l_cheese = 0;
+				checking[i] = end_partCheese;
+				for(int l = 0; l < parts; l++){
+					//printf("%d", checking[i]);
+				}
                 end_partCheese = h_partCheese;
 				checking[i] = end_partCheese;
 				for(int l = 0; l < parts; l++){
@@ -164,6 +169,10 @@ int main(){
 					                //printf("%d", checking[i]);
 				                }
 								V_n -= Pi * pow((end_partCheese - table_values[j][1]), 2) * (table_values[j][0] - (end_partCheese - table_values[j][1])/3.0);
+								checking[i] = V_n;
+				                for(int l = 0; l < parts; l++){
+					                //printf("%d", checking[i]);
+				                }
 							}
 						}
                     } else if(end_partCheese > table_values[j][3]){
@@ -178,6 +187,10 @@ int main(){
 					                //printf("%d", checking[i]);
 				                }
 								V_n -= Pi * pow((table_values[j][3] - l_cheese), 2) * (table_values[j][0] - (table_values[j][3] - l_cheese)/3.0);
+								checking[i] = V_n;
+				                for(int l = 0; l < parts; l++){
+					                //printf("%d", checking[i]);
+				                }
 							}
 						} 
                     }
@@ -194,9 +207,21 @@ int main(){
 					//printf("%d", checking[i]);
 				}
 		    }		
+			checking[i] = part_cheese[i];
+			for(int l = 0; l < parts; l++){
+				//printf("%d", checking[i]);
+			}
             part_cheese[i] = h_partCheese;
+			checking[i] = part_cheese[i];
+			for(int l = 0; l < parts; l++){
+				//printf("%d", checking[i]);
+			}
 			if(h_partCheese != 0){
 				printf("%.9lf\n", h_partCheese);
+			}
+			checking[i] = part_cheese[i];
+			for(int l = 0; l < parts; l++){
+				//printf("%d", checking[i]);
 			}
         }
 	}
