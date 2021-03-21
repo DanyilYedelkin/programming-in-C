@@ -47,7 +47,7 @@ int main(){
     double V_all_Sphere = 0;
 	double V_n = 0;
 	double r, x, y, z;
-	int *checking = (int*)calloc(100000, sizeof(int));
+	
 
     for (int i = 0; i < holes; i++){
         scanf("%lf %lf %lf %lf", &r, &x, &y, &z);
@@ -81,6 +81,7 @@ int main(){
 	double end_partCheese = 0;
 	double h_partCheese = 100.0 / parts;
 	double all_h = 0;
+	int *checking = (int*)calloc(100000, sizeof(int));
 
 	//checking if holes = 0
 	if(holes == 0){
