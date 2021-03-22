@@ -47,7 +47,6 @@ int main(){
     double V_all_Sphere = 0;
 	double V_n = 0;
 	double r, x, y, z;
-	int *checking = (int*)calloc(100000, sizeof(int));
 
     for (int i = 0; i < holes; i++){
         scanf("%lf %lf %lf %lf", &r, &x, &y, &z);
@@ -70,6 +69,7 @@ int main(){
         V_all_Sphere += V_Sphere_n;
     }
 	searching(holes, table);
+	int *checking = (int*)calloc(100000, sizeof(int));
 
 	//creating variables 
 	double V_Nparts = (pow(100.0, 3) - V_all_Sphere) / parts;
