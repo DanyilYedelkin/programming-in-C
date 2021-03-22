@@ -47,7 +47,7 @@ int main(){
     double V_all_Sphere = 0;
 	double V_n = 0;
 	double r, x, y, z;
-	
+	int *checking = (int*)calloc(100000, sizeof(int));
 
     for (int i = 0; i < holes; i++){
         scanf("%lf %lf %lf %lf", &r, &x, &y, &z);
@@ -81,13 +81,12 @@ int main(){
 	double end_partCheese = 0;
 	double h_partCheese = 100.0 / parts;
 	double all_h = 0;
-	int *checking = (int*)calloc(100000, sizeof(int));
 
 	//checking if holes = 0
 	if(holes == 0){
 		double cuts[parts];
         for(int i = 0; i < parts; i++){
-            cuts[i] = (double)(100/parts);
+            cuts[i] = (double)(100.0/parts);
             printf("%.9lf\n", cuts[i]);
             if((i + 1) == parts) cuts[i + 1] = '\0';
         }
@@ -95,7 +94,15 @@ int main(){
 		return 0;
 	} else{
 		for(int i = 0; i < parts; i++){
+			checking[i] = V_n;
+			for(int l = 0; l < parts; l++){
+				//printf("%d", checking[i]);
+			}
 		    while(V_Nparts - V_n != 0.000000001){
+				checking[i] = V_n;
+				for(int l = 0; l < parts; l++){
+					//printf("%d", checking[i]);
+				}
 				//Volume of n_part cheese's
 			    V_n = pow(100.0, 2) * h_partCheese;
 				checking[i] = V_n;
@@ -126,8 +133,16 @@ int main(){
                     end_partCheese = all_h + h_partCheese;
                 }
                 for(int j = 0; j < holes; j++){
-                    if(end_partCheese < table_values[j][3] && l_cheese > table_values[j][1]){ 
-						if(l_cheese > table_values[j][1]){
+					checking[i] = l_cheese;
+				    for(int l = 0; l < parts; l++){
+					    //printf("%d", checking[i]);
+				    }
+                    if(l_cheese > table_values[j][1]){
+						checking[i] = l_cheese;
+				        for(int l = 0; l < parts; l++){
+					        //printf("%d", checking[i]);
+				        }
+						if(end_partCheese < table_values[j][3]){
 							checking[i] = l_cheese;
 				            for(int l = 0; l < parts; l++){
 					            //printf("%d", checking[i]);
@@ -150,16 +165,26 @@ int main(){
 
 							V_n -= (V_Sphere - V_sphericalCap_up - V_sphericalCap_down);
 						}
-                    } else if(end_partCheese > table_values[j][3]){ 
-						if(l_cheese < table_values[j][1]){
+                    } 
+					if(l_cheese < table_values[j][1]){ 
+						checking[i] = l_cheese;
+				        for(int l = 0; l < parts; l++){
+					        //printf("%d", checking[i]);
+				        }
+						if(end_partCheese > table_values[j][3]){
 							checking[i] = V_n;
 				            for(int l = 0; l < parts; l++){
 					            //printf("%d", checking[i]);
 				            }
 							V_n -= (4.0/3.0) * Pi * pow(table_values[j][0], 3);
 						}
-                    } else if(end_partCheese > table_values[j][1]){ 
-						if(l_cheese < table_values[j][1]){
+                    } 
+					if(l_cheese < table_values[j][1]){ 
+						checking[i] = l_cheese;
+				        for(int l = 0; l < parts; l++){
+					        //printf("%d", checking[i]);
+				        }
+						if(end_partCheese > table_values[j][1]){
 							checking[i] = V_n;
 				            for(int l = 0; l < parts; l++){
 					            //printf("%d", checking[i]);
@@ -176,8 +201,13 @@ int main(){
 				                }
 							}
 						}
-                    } else if(end_partCheese > table_values[j][3]){
-						if(l_cheese < table_values[j][3]){
+                    } 
+					if(l_cheese < table_values[j][3]){
+						checking[i] = l_cheese;
+				        for(int l = 0; l < parts; l++){
+					        //printf("%d", checking[i]);
+				        }
+						if(end_partCheese > table_values[j][3]){
 							checking[i] = V_n;
 				            for(int l = 0; l < parts; l++){
 					            //printf("%d", checking[i]);
