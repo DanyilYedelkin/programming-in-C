@@ -1,22 +1,24 @@
+CC=gcc
 CFLAGS=-std=c11 -Werror -Wall -Wconversion
-OUTPUT=ps3
+LDLIBS=-lm
+OUTPUT=game
 
 all: $(OUTPUT)
 
-ps3: hof.o k.o ui.o main.o
-		gcc $(CFLAGS) -lm hof.o k.o ui.o main.o -o ps3
-
-main.o: main.c
-		gcc $(CFLAGS) -lm -c main.c -o main.o	
+$(OUTPUT): hof.o k.o ui.o main.o
+	$(CC) $(CFLAGS) hof.o k.o ui.o main.o $(LDLIBS) -o $(OUTPUT)
 
 hof.o: hof.c hof.h
-		gcc $(CFLAGS) -lm -c hof.c -o hof.o	
+	$(CC) $(CFLAGS) -c hof.c $(LDLIBS) -o hof.o
 
 k.o: k.c k.h
-		gcc $(CFLAGS) -lm -c k.c -o k.o
+	$(CC) $(CFLAGS) -c k.c $(LDLIBS) -o k.o
 
-ui.o: ui.c ui.h
-		gcc $(CFLAGS) -lm -c ui.c -o ui.o		
+ui.o: ui.c ui.h k.h
+	$(CC) $(CFLAGS) -c ui.c $(LDLIBS) -o ui.o
+
+main.o: main.c ui.h k.h
+	$(CC) $(CFLAGS) -c main.c $(LDLIBS) -o main.o
 
 clean:
-		rm -rf $(OUTPUT) *.o
+	rm -rf $(OUTPUT) *.o
