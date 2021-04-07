@@ -10,7 +10,7 @@
 int main()
 {
     struct player *list = malloc(sizeof(struct player) * 10);
-    struct player *player1 = malloc(sizeof(player1));
+    struct player *player1 = malloc(sizeof(player1)*30);
     player1->score = 0;
     char *name = "John";
     strcpy(player1->name, name);
