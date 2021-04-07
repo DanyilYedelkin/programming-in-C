@@ -17,7 +17,7 @@ int load(struct player list[]){
         if(number > 10) break;
         number++;
     }
-    qsort(list, number, sizeof(struct player), cmp);
+    qsort((void*)list, (size_t)number, (size_t)sizeof(struct player), cmp);
     fclose(fp);
     return number;
 }
