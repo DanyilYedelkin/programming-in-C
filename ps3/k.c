@@ -81,7 +81,7 @@ bool update(struct game *game, int dy, int dx){
         // player score
         for(int i = 0; i < SIZE; i++){
             for(int j = 0; j < SIZE - 1; j++){
-                if((game->board[i][j] == game->board[i][j+1]) && game->board[i][j] != ' ' && game->board[i][j+1] != ' '){
+                if((game->board[i][j] == game->board[i][j+1]) && game->board[i][j] != ' '){
                     //letter: A B C D E F G H I J K
                     //score: 2 4 8 16 32 64 128 256 512 1024 2048
                     char letter = game->board[i][j];
@@ -215,7 +215,7 @@ bool update(struct game *game, int dy, int dx){
                 }
             }
             for(int j = (SIZE - 1); j >= 0; j--){
-                if((game->board[i][j] == game->board[i][j-1]) && game->board[i][j] != ' ' && game->board[i][j-1] != ' '){
+                if((game->board[i][j] == game->board[i][j-1]) && game->board[i][j] != ' '){
                     //letter: A B C D E F G H I J K
                     //score: 2 4 8 16 32 64 128 256 512 1024 2048
                     char letter = game->board[i][j];
