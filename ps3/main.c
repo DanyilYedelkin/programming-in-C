@@ -65,6 +65,8 @@ int main()
                 break;
         }
     }
+    bool idi_uze = is_move_possible(game);
+    bool ded_sdelal_pobedu = is_game_won(game);
 
     return 0;
 }
