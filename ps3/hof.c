@@ -13,7 +13,7 @@ int load(struct player list[]){
     }
     
     int number = 0;
-    while(fscanf(fp, "%30s %d", list[number].name, &list[number].score) != EOF){
+    while(fscanf(fp, "%s %d", list[number].name, &list[number].score) != EOF){
         if(number > 10) break;
         number++;
     }
