@@ -14,10 +14,13 @@ int load(struct player list[]){
     
     int number = 0;
     while(fscanf(fp, "%s %d", list[number].name, &list[number].score) != EOF){
+        if(list == NULL){
+            return -1;
+        }
         if(number > 10) break;
         number++;
     }
-    qsort((void*)list, (size_t)number, (size_t)sizeof(struct player), cmp);
+    qsort(list, (size_t)number, (size_t)sizeof(struct player), cmp);
     fclose(fp);
     return number;
 }
@@ -54,45 +57,34 @@ bool add_player(struct player list[], int* size, const struct player player){
     if(*size < 0 || *size > 10) return false;
     bool add = false;
     
-    if(*size == 0){
-        list[*size] = player;
-        (*size)++;
-        add = true;
-        return add;
-    }
-
+    int player_place = 10;
     for(int i = 0; i < *size; i++){
-        if((i + 1) > *size){
-            list[i].score = player.score;
-            strcpy(list[i].name, player.name);
-            add = true;
+        if(list[i].score == player.score){
+            player_place = i;
             break;
         }
-        if(player.score > list[0].score){
-            if (*size < 10) (*size)++;
-            for(int j = (*size - 1); j > i; j--){
-                list[j] = list[j - 1];
-            }
-            list[i] = player;
-            add = true;
-            break;
-        }
-        //if(player.score < list[*size].score) break;
-        if(player.score == list[i].score){
-            if(i + 1 == 10){
-                list[i].score = player.score;
-                strcpy(list[i].name, player.name);
+    }
+    if(player_place == 10){
+        if(*size == 10){
+            if(list[10 - 1].score > player.score) add = false;
+            else if((list[10 - 1].score < player.score) || (list[10 - 1].score == player.score)){
+                list[10 - 1] = player;
+                qsort(list, (size_t)*size, sizeof(struct player), cmp);
                 add = true;
-                break;
             }
-            if (*size < 10) (*size)++;
-            for(int j = (*size - 1); j > i; j--){
-                list[j] = list[j - 1];
-            }
-            list[i] = player;
+        } else{
+            list[*size] = player;
+            if(*size > -1 && *size < 10)(*size)++;
+            qsort(list, (size_t) *size, sizeof(struct player), cmp);
             add = true;
-            break;
         }
+    } else{
+        if (*size < 10) (*size)++;
+        for(int i = (*size) - 1; i > player_place; i--){
+            list[i] = list[i - 1];
+        }
+        list[player_place] = player;
+        add = true;
     }
     
     return add;
