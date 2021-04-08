@@ -13,12 +13,15 @@ int load(struct player list[]){
     }
     
     int number = 0;
-    while(fscanf(fp, "%s %d", list[number].name, &list[number].score) != EOF){
-        if(list == NULL){
-            return -1;
-        }
-        if(number > 10) break;
-        number++;
+    while(1){
+        if(fscanf(fp, "%s %d", list[number].name, &list[number].score) != EOF){
+            if(list == NULL){
+                fclose(fp);
+                return -1;
+            } 
+            if(number > 10) break;
+            number++;
+        } else break;
     }
     qsort(list, (size_t)number, (size_t)sizeof(struct player), cmp);
     fclose(fp);
