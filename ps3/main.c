@@ -9,7 +9,7 @@
 
 int main()
 {
-    struct player *list = malloc(sizeof(struct player) * 10);
+    /*struct player *list = malloc(sizeof(struct player) * 10);
     struct player *player1 = malloc(sizeof(player1)*30);
     player1->score = 0;
     char *name = "John";
@@ -66,7 +66,30 @@ int main()
         }
     }
     bool idi_uze = is_move_possible(game);
-    bool ded_sdelal_pobedu = is_game_won(game);
+    bool ded_sdelal_pobedu = is_game_won(game);*/
+
+    struct game game = {
+        .board = {
+            {'A', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' '},
+            {'A', ' ', ' ', 'A'}
+        },
+        .score = 0
+    };
+    struct player list[10];
+    int size = load(list);
+    struct player player = {
+        .name = "Daniel",
+        .score = 1000
+    };
+    bool result = add_player(list, &size, player);
+    bool saving = save(player, size);
+    bool updating = update(&game, 1, 0);
+    bool idi_uze = is_move_possible(game);
+    bool spasibo_dedu_za_pobedu = is_game_won(game);
+    add_random_tile(&game);
+    render(game);
 
     return 0;
 }
