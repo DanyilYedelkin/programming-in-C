@@ -60,20 +60,26 @@ bool update(struct game *game, int dy, int dx){
 			for(int j = 0; j < SIZE; j++){
 				if(game->board[i][j] == ' '){
 					if(game->board[i][j] == ' ' && j < SIZE){
+                        if(j + 1 < SIZE){
 						if(game->board[i][j+1] == ' ' && (j + 1) < SIZE){
+                            if(j + 2 < SIZE){
 							if(game->board[i][j+2] == ' ' && (j + 2) < SIZE){
+                                if(j + 3 < SIZE){
 								if(game->board[i][j+3] != ' ' && (j + 3) < SIZE){
 									game->board[i][j] = game->board[i][j+3];
 								    game->board[i][j+3] = ' ';
 								}
+                                }
 							} else if((j + 2) < SIZE){
 								game->board[i][j] = game->board[i][j+2];
 								game->board[i][j+2] = ' ';
 							}
+                            }
 						} else if((j + 1) < SIZE){
 							game->board[i][j] = game->board[i][j+1];
 							game->board[i][j+1] = ' ';
 						}
+                        }
 					}
 				}
 			}
@@ -125,20 +131,26 @@ bool update(struct game *game, int dy, int dx){
             for(int j = 0; j < SIZE; j++){
 				if(game->board[i][j] == ' '){
 					if(game->board[i][j] == ' ' && j < SIZE){
+                        if(j + 1 < SIZE){
 						if(game->board[i][j+1] == ' ' && (j + 1) < SIZE){
+                            if(j + 2 < SIZE){
 							if(game->board[i][j+2] == ' ' && (j + 2) < SIZE){
+                                if(j + 3 < SIZE){
 								if(game->board[i][j+3] != ' ' && (j + 3) < SIZE){
 									game->board[i][j] = game->board[i][j+3];
 								    game->board[i][j+3] = ' ';
 								}
+                                }
 							} else if((j + 2) < SIZE){
 								game->board[i][j] = game->board[i][j+2];
 								game->board[i][j+2] = ' ';
 							}
+                            }
 						} else if((j + 1) < SIZE){
 							game->board[i][j] = game->board[i][j+1];
 							game->board[i][j+1] = ' ';
 						}
+                        }
 					}
 				}
 			}
@@ -151,20 +163,26 @@ bool update(struct game *game, int dy, int dx){
 		for(int j = 0; j < SIZE; j++){
 			for(int i = 0; i < SIZE; i++){
 				if(game->board[i][j] == ' ' && i < SIZE){
+                    if(i + 1 < SIZE){
 					if(game->board[i+1][j] == ' ' && (i + 1) < SIZE){
+                        if(i + 2 < SIZE){
 						if(game->board[i+2][j] == ' ' && (i + 2) < SIZE){
+                            if(i + 2 < SIZE){
 							if(game->board[i+3][j] != ' ' && (i + 3) < SIZE){
 								game->board[i][j] = game->board[i+3][j];
 								game->board[i+3][j] = ' ';
 							}
+                            }
 						}else if((i + 2) < SIZE){
 							game->board[i][j] = game->board[i+2][j];
 							game->board[i+2][j] = ' ';
 						}
+                        }
 					}else if((i + 1) < SIZE){
 						game->board[i][j] = game->board[i+1][j];
 						game->board[i+1][j] = ' ';
 					}
+                    }
 				}									
 			}
 		}
@@ -211,20 +229,26 @@ bool update(struct game *game, int dy, int dx){
 			}
             for(int i = 0; i < SIZE; i++){
 				if(game->board[i][j] == ' ' && i < SIZE){
+                    if(i + 1 < SIZE){
 					if(game->board[i+1][j] == ' ' && (i + 1) < SIZE){
+                        if(i + 2 < SIZE){
 						if(game->board[i+2][j] == ' ' && (i + 2) < SIZE){
+                            if(i + 2 < SIZE){
 							if(game->board[i+3][j] != ' ' && (i + 3) < SIZE){
 								game->board[i][j] = game->board[i+3][j];
 								game->board[i+3][j] = ' ';
 							}
+                            }
 						}else if((i + 2) < SIZE){
 							game->board[i][j] = game->board[i+2][j];
 							game->board[i+2][j] = ' ';
 						}
+                        }
 					}else if((i + 1) < SIZE){
 						game->board[i][j] = game->board[i+1][j];
 						game->board[i+1][j] = ' ';
 					}
+                    }
 				}									
 			}
 		}
@@ -236,19 +260,25 @@ bool update(struct game *game, int dy, int dx){
         for(int i = 0; i < SIZE; i++){
             for(int j = (SIZE - 1); j >= 0; j--){ //SIZE - 1
                 if(game->board[i][j] == ' '){
+                    if(j - 1 >= 0){
                     if(game->board[i][j-1] == ' ' && (j - 1) >= 0){
+                        if(j - 2 >= 0){
                         if(game->board[i][j-2] == ' ' && (j - 2) >= 0){
+                            if(j - 3 >= 0){
                             if(game->board[i][j-3] != ' ' && (j - 3) >= 0){
                                 game->board[i][j] = game->board[i][j-3];
                                 game->board[i][j-3] = ' ';
+                            }
                             }
                         } else if((j - 2) >= 0){
                             game->board[i][j] = game->board[i][j-2];
                             game->board[i][j-2] = ' ';
                         }
+                        }
                     } else if((j - 1) >= 0){
                         game->board[i][j] = game->board[i][j-1];
                         game->board[i][j-1] = ' ';
+                    }
                     }
                 }
             }
@@ -280,19 +310,25 @@ bool update(struct game *game, int dy, int dx){
               }
                 // flip all letters in one direction so that there is no space (" ") between them 
                 if(game->board[i][j] == ' '){
+                    if(j - 1 >= 0){
                     if(game->board[i][j-1] == ' ' && (j - 1) >= 0){
+                        if(j - 2 >= 0){
                         if(game->board[i][j-2] == ' ' && (j - 2) >= 0){
+                            if(j - 3 >= 0){
                             if(game->board[i][j-3] != ' ' && (j - 3) >= 0){
                                 game->board[i][j] = game->board[i][j-3];
                                 game->board[i][j-3] = ' ';
+                            }
                             }
                         } else if((j - 2) >= 0){
                             game->board[i][j] = game->board[i][j-2];
                             game->board[i][j-2] = ' ';
                         }
+                        }
                     } else if((j - 1) >= 0){
                         game->board[i][j] = game->board[i][j-1];
                         game->board[i][j-1] = ' ';
+                    }
                     }
                 }
             }
@@ -306,20 +342,26 @@ bool update(struct game *game, int dy, int dx){
 		for(int j = 0; j < SIZE; j++){
 			for(int i = (SIZE - 1); i >= 0; i--){ // SIZE - 1
 				if(game->board[i][j] == ' ' && i >= 0){
+                    if(i - 1 >= 0){
 					if(game->board[i-1][j] == ' ' && (i - 1) >= 0){
+                        if(i - 2 >= 0){
 						if(game->board[i-2][j] == ' ' && (i - 2) >= 0){
+                            if(i - 3 >= 0){
 							if(game->board[i-3][j] != ' ' && (i - 3) >= 0){
 								game->board[i][j] = game->board[i-3][j];
 								game->board[i-3][j] = ' ';
 							}
+                            }
 						}else if((i - 2) >= 0){
 							game->board[i][j] = game->board[i-2][j];
 							game->board[i-2][j] = ' ';
 						}
+                        }
 					}else if((i - 1) >= 0){
 						game->board[i][j] = game->board[i-1][j];
 						game->board[i-1][j] = ' ';
 					}
+                    }
 				}									
 			}
 		}
@@ -352,20 +394,26 @@ bool update(struct game *game, int dy, int dx){
             }
                 // flip all letters in one direction so that there is no space (" ") between them
                 if(game->board[i][j] == ' ' && i >= 0){
+                    if(i - 1 >= 0){
 					if(game->board[i-1][j] == ' ' && (i - 1) >= 0){
+                        if(i - 2 >= 0){
 						if(game->board[i-2][j] == ' ' && (i - 2) >= 0){
+                            if(i - 3 >= 0){
 							if(game->board[i-3][j] != ' ' && (i - 3) >= 0){
 								game->board[i][j] = game->board[i-3][j];
 								game->board[i-3][j] = ' ';
 							}
+                            }
 						}else if((i - 2) >= 0){
 							game->board[i][j] = game->board[i-2][j];
 							game->board[i-2][j] = ' ';
 						}
+                        }
 					}else if((i - 1) >= 0){
 						game->board[i][j] = game->board[i-1][j];
 						game->board[i-1][j] = ' ';
 					}
+                    }
 				}
 			}
 		}
@@ -407,5 +455,3 @@ bool update(struct game *game, int dy, int dx){
 
     return 0;
 }*/
-
-
