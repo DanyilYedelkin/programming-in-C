@@ -24,6 +24,7 @@ int load(struct player list[]){
     }
     if(number != 0) qsort(list, (size_t)number, (size_t)sizeof(struct player), cmp);
     fclose(fp);
+    
     return number;
 }
 
