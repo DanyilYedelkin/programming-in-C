@@ -7,8 +7,7 @@ int cmp(const void *a, const void *b);
 
 int load(struct player list[]){
     FILE *fp = fopen(HOF_FILE, "r");
-    if(fp == NULL){
-        fclose(fp); 
+    if(fp == NULL){ 
         return -1;
     }
     
