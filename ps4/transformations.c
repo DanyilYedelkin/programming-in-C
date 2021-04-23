@@ -111,6 +111,7 @@ struct bmp_image* rotate_right(const struct bmp_image* image){
 	}
 
 	return new;*/
+	if(image == NULL) return NULL;
 	struct bmp_image* new = malloc(sizeof(struct bmp_image));
     new->header = malloc(sizeof(struct bmp_header));
 	memcpy(new->header, image->header, sizeof(*new->header));
@@ -193,7 +194,7 @@ struct bmp_image* extract(const struct bmp_image* image, const char* colors_to_k
 }
 
 struct bmp_image* scale(const struct bmp_image* image, float factor){
-	if((image == NULL) || (factor <= 0)) return NULL;
+	//if((image == NULL) || (factor <= 0)) return NULL;
 
 	return NULL;
 }
