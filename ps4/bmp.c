@@ -101,14 +101,14 @@ struct bmp_image* read_bmp(FILE* stream){
 
     struct bmp_header* header = read_bmp_header(stream);
     if(header == NULL){
-        fprintf(stdout, "Error: This is not a BMP file.\n");
+        fprintf(stderr, "Error: This is not a BMP file.\n");
         free(header);
         return NULL;
     }
 
     struct pixel* data = read_data(stream, header);
     if(data == NULL){
-        fprintf(stdout, "Error: Corrupted BMP file.\n");
+        fprintf(stderr, "Error: Corrupted BMP file.\n");
         free(header);
         free(data);
         return NULL;
