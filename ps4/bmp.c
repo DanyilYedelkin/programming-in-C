@@ -2,6 +2,27 @@
 #include <stdlib.h>
 #include "bmp.h"
 
+/*
+         _nnnn_                      
+        dGGGGMMb     ,"""""""""""""".
+       @p~qp~~qMb    | Linux Rules! |
+       M|@||@) M|   _;..............'
+       @,----.JM| -'
+      JS^\__/  qKL
+     dZP        qKRb
+    dZP          qKKb
+   fZP            SMMb
+   HZM            MMMM
+   FqM            MMMM
+ __| ".        |\dS"qML
+ |    `.       | `' \Zq
+_)      \.___.,|     .'
+\____   )MMMMMM|   .'
+     `-'       `--' hjm
+*/
+
+
+
 struct bmp_header* read_bmp_header(FILE* stream){
     if(stream == NULL) return NULL;
     fseek(stream, 0, SEEK_END);
