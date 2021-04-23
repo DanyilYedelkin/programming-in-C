@@ -24,11 +24,11 @@ _)      \.___.,|     .'
 */
 
 int main(){
-    FILE* input = fopen("assets/lenna.bmp", "rb");
+    FILE* input = fopen("saboteur.bmp", "rb");
     struct bmp_image* image_bmp = read_bmp(input);
     fclose(input);
     image_bmp = flip_vertically(image_bmp);
-    FILE* output = fopen("assets/new.bmp", "wb");
+    FILE* output = fopen("output.bmp", "wb");
     write_bmp(output, image_bmp);
     fclose(output);
     flip_horizontally(NULL);
