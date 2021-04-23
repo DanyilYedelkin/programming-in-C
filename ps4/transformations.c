@@ -3,6 +3,26 @@
 #include <string.h>
 #include "bmp.h"
 
+/*
+         _nnnn_                      
+        dGGGGMMb     ,"""""""""""""".
+       @p~qp~~qMb    | Linux Rules! |
+       M|@||@) M|   _;..............'
+       @,----.JM| -'
+      JS^\__/  qKL
+     dZP        qKRb
+    dZP          qKKb
+   fZP            SMMb
+   HZM            MMMM
+   FqM            MMMM
+ __| ".        |\dS"qML
+ |    `.       | `' \Zq
+_)      \.___.,|     .'
+\____   )MMMMMM|   .'
+     `-'       `--' hjm
+*/
+
+
 struct bmp_image* flip_horizontally(const struct bmp_image* image){
 	if(image == NULL) return NULL;
 
@@ -73,10 +93,10 @@ struct bmp_image* rotate_left(const struct bmp_image* image){
 		for(int x = 0; x < image->header->height; x++){
 			new->data[y * image->header->height + image->header->height - x - 1].red 
 			    = image->data[x * image->header->width + y].red;
-			new->data[y * image->header->height + image->header->height - x - 1].green
-			    = image->data[x * image->header->width + y].green;
-			new->data[ y * image->header->height + image->header->height - x - 1].blue
+			new->data[y * image->header->height + image->header->height - x - 1].blue
 			    = image->data[x * image->header->width + y].blue;
+			new->data[ y * image->header->height + image->header->height - x - 1].green
+			    = image->data[x * image->header->width + y].green;
 		}
 	}
 	
@@ -84,18 +104,34 @@ struct bmp_image* rotate_left(const struct bmp_image* image){
 }
 
 struct bmp_image* rotate_right(const struct bmp_image* image){
-	struct bmp_image* new = malloc(sizeof(struct bmp_image));
+	/*struct bmp_image* new = malloc(sizeof(struct bmp_image));
 	new = rotate_left(image);
 	for(int i = 0; i < 2; i++){
 		new = rotate_left(new);
-		/*struct bmp_image* new_new = malloc(sizeof(struct bmp_image));
-		*new_new = *new;
-	    new_new = rotate_left(new_new);
-		*new = *new_new;
-		free(new_new);*/
 	}
 
-	return new;
+	return new;*/
+	struct bmp_image* new = malloc(sizeof(struct bmp_image));
+    new->header = malloc(sizeof(struct bmp_header));
+	memcpy(new->header, image->header, sizeof(*new->header));
+
+    //the idea of pixels https://stackoverflow.com/questions/56415441/flip-bmp-image-horizontal-in-c
+	//the idea of rotating http://www.cpp.re/forum/beginner/265541/
+	new->header->width = image->header->height;
+	new->header->height = image->header->width;
+	new->data = (struct pixel*)calloc(image->header->width*image->header->height, sizeof(struct pixel));
+	for (int y = 0; y < image->header->width; y++){
+		for(int x = 0; x < image->header->height; x++){
+			new->data[y * image->header->height + x].red 
+			    = image->data[x * image->header->width + image->header->width - y - 1].red; 
+			new->data[y * image->header->height + x].blue 
+			    = image->data[x * image->header->width + image->header->width - y - 1].blue;
+			new->data[y * image->header->height + x].green 
+			    = image->data[x * image->header->width + image->header->width - y - 1].green;
+		}
+	}
+	
+	return new;	
 }
 
 struct bmp_image* crop(const struct bmp_image* image, const uint32_t start_y, const uint32_t start_x, const uint32_t height, const uint32_t width){
