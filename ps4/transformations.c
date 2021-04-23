@@ -136,7 +136,7 @@ struct bmp_image* rotate_right(const struct bmp_image* image){
 }
 
 struct bmp_image* crop(const struct bmp_image* image, const uint32_t start_y, const uint32_t start_x, const uint32_t height, const uint32_t width){
-	if((image == NULL) || (start_x < 0 || start_x > image->header->width) || (start_y < 0 || start_y > image->header->height) || (width <= 0 || start_x + width > image->header->width) || (height <= 0 || height + start_y > image->header->height)) return NULL;
+	if((image == NULL) || (start_x < 0 || start_x > image->header->width) || (start_y < 0 || start_y > image->header->height) || (width <= 0 || start_x + width > image->header->width) || (height <= 0 || height + start_y > image->header->height) || (image->data == NULL) || (image->header == NULL)) return NULL;
 	
 	struct bmp_image* new = malloc(sizeof(struct bmp_image));
 	memcpy(new->header, image->header, sizeof(*new->header));
@@ -161,7 +161,7 @@ struct bmp_image* crop(const struct bmp_image* image, const uint32_t start_y, co
 }
 
 struct bmp_image* extract(const struct bmp_image* image, const char* colors_to_keep){
-	if((image == NULL) || (colors_to_keep == NULL)) return NULL;
+	if((image == NULL) || (colors_to_keep == NULL) || (image->data == NULL) || (image->header == NULL)) return NULL;
 	bool red = false, blue = false, green = false;
 
 	for(int i = 0; i < strlen(colors_to_keep); i++){
