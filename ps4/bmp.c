@@ -47,31 +47,7 @@ struct bmp_header* read_bmp_header(FILE* stream){
 
     struct bmp_header* header = (struct bmp_header*)malloc(sizeof(struct bmp_header));
     fread(header, sizeof(struct bmp_header), 1, stream);
-    if(header->bpp != 24){
-        free(header);
-        return NULL;
-    }
-    if(header->compression != 0){
-        free(header);
-        return NULL;
-    }
-    if(header->dib_size != 40){
-        free(header);
-        return NULL;
-    }
-    if(header->offset != 54){
-        free(header);
-        return NULL;
-    }
-    if(header->type != 0x4D42){
-        free(header);
-        return NULL;
-    }
-    if(header->width <= 0){
-        free(header);
-        return NULL;
-    }
-    if(header->height <= 0){
+    if((header->bpp != 24) || (header->compression != 0) || (header->dib_size != 40) || (header->offset != 54) || (header->type != 0x4D42) || (header->width <= 0) || (header->height <= 0)){
         free(header);
         return NULL;
     }
