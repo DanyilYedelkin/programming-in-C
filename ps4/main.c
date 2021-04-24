@@ -23,20 +23,33 @@ _)      \.___.,|     .'
      `-'       `--' hjm
 */
 
+
+
 int main(){
-    FILE* input = fopen("saboteur.bmp", "rb");
-    struct bmp_image* image_bmp = read_bmp(input);
-    fclose(input);
-    image_bmp = flip_vertically(image_bmp);
-    FILE* output = fopen("output.bmp", "wb");
-    write_bmp(output, image_bmp);
-    fclose(output);
-    flip_horizontally(NULL);
-    rotate_left(NULL);
-    rotate_right(NULL);
-    scale(NULL, 0);
-    crop(NULL, 0, 0, 0, 0);
-    extract(NULL, NULL);
-    free_bmp_image(image_bmp);
-    return 0;
+    FILE* stream = fopen("saboteur.bmp", "rb");
+    struct bmp_image* image = read_bmp(stream);
+    fclose(stream);
+	char* rgb = "rb";
+	struct bmp_image* image1 = flip_horizontally(image);
+	struct bmp_image* image2 = flip_vertically(image);
+	struct bmp_image* image3 = rotate_right(image);
+	struct bmp_image* image4 = rotate_left(image);
+	struct bmp_image* image5 = crop(image, 20, 10, 150, 150);
+	struct bmp_image* image6 = scale(image, 0.66);
+	struct bmp_image* image7 = extract(image, rgb);
+
+	FILE *stream2 = fopen("output.bmp", "wb");
+	write_bmp(stream2, image4);
+	fclose(stream2);
+
+	free_bmp_image(image);
+	free_bmp_image(image1);
+	free_bmp_image(image2);
+	free_bmp_image(image3);
+	free_bmp_image(image4);
+	free_bmp_image(image5);
+	free_bmp_image(image6);
+    free_bmp_image(image7);
+
+	return 0;
 }
