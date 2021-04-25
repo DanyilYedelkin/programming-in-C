@@ -46,6 +46,7 @@ struct bmp_header* read_bmp_header(FILE* stream){
             break;
         } else if(string_of_steam[i+1] == '\0'){
             free(string_of_steam);
+            free(long_of_string);
             return NULL;
         }
     }
@@ -132,3 +133,4 @@ void free_bmp_image(struct bmp_image* image){
         return NULL;
     }
 }
+
