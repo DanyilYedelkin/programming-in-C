@@ -129,8 +129,6 @@ void free_bmp_image(struct bmp_image* image){
         free(image->header);
         free(image->data);
         free(image);
-    } else{
-        return NULL;
     }
 }
 
