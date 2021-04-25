@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #include <string.h>
 #include "bmp.h"
 
@@ -39,11 +40,11 @@ struct bmp_image* flip_horizontally(const struct bmp_image* image){
 	int i = 0;
 	for(long y = 0; y < image->header->height; y++){
 		for(long x = 0; x < half_width; x++, i++){
-			new->data[y * new->header->width + x] = image->data[y * image->header->width + image->header->width - x - 1];
-			new->data[y * new->header->width + new->header->width - x - 1] = image->data[y * image->header->width + x];
+			new->data[x + y * new->header->width] = image->data[image->header->width - x - 1 + y * image->header->width];
+			new->data[new->header->width - x - 1 + y * new->header->width] = image->data[x + y * image->header->width];
 		}
 		if(new->header->width % 2 == 1){
-			new->data[y * new->header->width + half_width] = image->data[y * image->header->width + half_width];
+			new->data[half_width + y * new->header->width] = image->data[half_width + y * image->header->width];
 		}
 	}
 
@@ -65,13 +66,13 @@ struct bmp_image* flip_vertically(const struct bmp_image* image){
 	int i = 0;
 	for(long y = 0; y < half_height; y++){
 		for(long x = 0; x < image->header->width; x++, i++){
-			new->data[i] = image->data[(image->header->height - y - 1) * image->header->width + x];
-			new->data[(new->header->height - y - 1) * new->header->width + x] = image->data[i];
+			new->data[i] = image->data[x + image->header->width * (image->header->height - y - 1)];
+			new->data[x + new->header->width * (new->header->height - y - 1)] = image->data[i];
 		}
 	}
 	if(new->header->height % 2 == 1){
 		for(int x = 0; x < new->header->width; x++){
-			new->data[half_height * new->header->width + x] = image->data[half_height * image->header->width + x];
+			new->data[x + new->header->width * half_height] = image->data[x + image->header->width * half_height];
 		}
 	}
 
@@ -90,13 +91,13 @@ struct bmp_image* rotate_left(const struct bmp_image* image){
 	new->header->width = image->header->height;
 	new->header->height = image->header->width;
 	int new_bpp = new->header->bpp / 8;
-	int value = 0;
+	int padding = 0;
 	if((new_bpp * image->header->height) % 4 == 0){
-		value = 0;
+		padding = 0;
 	} else{
-		value = 4 - (new_bpp * image->header->height) % 4;
+		padding = 4 - (new_bpp * image->header->height) % 4;
 	}
-	int new_image_size = (image->header->height * new_bpp + value) * image->header->width;
+	int new_image_size = (image->header->height * new_bpp + padding) * image->header->width;
 	new->header->image_size = new_image_size;
 	new->header->size = new_image_size + new->header->offset;
 	new->data = (struct pixel*)calloc(image->header->width*image->header->height, sizeof(struct pixel));
@@ -130,17 +131,18 @@ struct bmp_image* rotate_right(const struct bmp_image* image){
 	new->header->width = image->header->height;
 	new->header->height = image->header->width;
 	int new_bpp = new->header->bpp / 8;
-	int value = 0;
+	int padding = 0;
 	if((new_bpp * image->header->height) % 4 == 0){
-		value = 0;
+		padding = 0;
 	} else{
-		value = 4 - (new_bpp * image->header->height) % 4;
+		padding = 4 - (new_bpp * image->header->height) % 4;
 	}
-	int new_image_size = (image->header->height * new_bpp + value) * image->header->width;
+	int new_image_size = (image->header->height * new_bpp + padding) * image->header->width;
 	new->header->image_size = new_image_size;
 	new->header->size = new_image_size + new->header->offset;
 	new->data = (struct pixel*)calloc(image->header->width*image->header->height, sizeof(struct pixel));
 	//the idea of rotating http://www.cpp.re/forum/beginner/265541/
+	//and the another idea of rotating https://cboard.cprogramming.com/c-programming/175363-rotating-bmp-image-multiple-90-c.html
 	int i = 0;
 	for (int y = 0; y < image->header->width; y++){
 		for(int x = 0; x < image->header->height; x++, i++){
@@ -228,5 +230,60 @@ struct bmp_image* extract(const struct bmp_image* image, const char* colors_to_k
 struct bmp_image* scale(const struct bmp_image* image, float factor){
 	if((image == NULL) || (factor <= 0)) return NULL;
 
-	return NULL;
+	/*struct bmp_image* new = malloc(sizeof(struct bmp_image));
+	*new->header = *image->header;
+	int new_width = round(new->header->width * factor);
+	int new_height = round(new->header->height * factor);
+	new->header->width = new_width;
+	new->header->height = new_height;
+	int padding = 0;
+	if(((image->header->bpp / 8) * new_width) % 4 == 0){
+		padding = 0;
+	} else{
+		padding = 4 - (((image->header->bpp / 8) * new_width) % 4);
+	}
+	new->header->size = ((padding + new_width * (image->header->bpp / 8)) * new_height) + image->header->offset;
+	new->header->image_size = ((padding + new_width * (image->header->bpp / 8)) * new_height);
+	new->data = (struct pixel*)calloc(new_height * new_width, sizeof(struct pixel));
+	int i = 0;
+	//http://www.c-cpp.ru/content/floor-floorl
+	for(int y = 0; y < new_height; y++){
+		for(int x = 0; x < new_width; x++, i++){
+			//add (int), because have an error: array subscript is not an integer
+			new->data[i] = image->data[(int)(floor(x/factor) + floor(y/factor)*image->header->width)];
+		}
+	}
+
+	return new;*/
+
+
+	struct bmp_image * new = malloc(sizeof(struct bmp_image));
+	new -> header = malloc(sizeof(struct bmp_header));
+	*new->header = *image->header;
+	int new_height = round(image->header->height * factor);
+	int new_width = round(image->header->width * factor);
+	new->header->width = new_width;
+	new->header->height = new_height;
+
+	int padding = 0;
+	if(((image->header->bpp / 8) * new_width) % 4 == 0){
+		padding = 0;
+	} else{
+		padding = 4 - (((image->header->bpp / 8) * new_width) % 4);
+	}
+
+	new->header->size = ((padding + new_width * (image->header->bpp / 8)) * new_height) + image->header->offset;
+	new->header->image_size = ((padding + new_width * (image->header->bpp / 8)) * new_height);
+
+	new->data = (struct pixel*) calloc(new_height * new_width, sizeof(struct pixel));
+	int i = 0;
+	//http://www.c-cpp.ru/content/floor-floorl
+	for(int y = 0; y < new_height; y++){
+		for(int x = 0; x < new_width; x++, i++){
+			//add (int), because have an error: array subscript is not an integer
+			new->data[i] = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)];
+		}
+	}
+
+	return new;
 }
