@@ -160,22 +160,34 @@ struct bmp_image* crop(const struct bmp_image* image, const uint32_t start_y, co
 	new->header->width = width;
 	new->header->height = height;
 	int new_bpp = image->header->bpp / 8;
-	int value = 0;
+	int padding = 0;
 	if(((new_bpp * width) % 4) == 0){
-		value = 0;
+		padding = 0;
 	} else{
-		value = 4 - ((new_bpp * width) % 4);
+		padding = 4 - ((new_bpp * width) % 4);
 	}
-	new->header->image_size = height * (width * new_bpp + value);
+	new->header->image_size = height * (width * new_bpp + padding);
 	new->header->size = new->header->offset + new->header->image_size;
 	new->data = (struct pixel*)calloc(height * width, sizeof(struct pixel));
+	struct pixel* datas = calloc(height * width, sizeof(struct pixel));
 
 	int i = 0;
+	//the cropped BMP image
+	//the idea of rotating http://www.cpp.re/forum/beginner/265541/
+	//and the another idea of rotating https://cboard.cprogramming.com/c-programming/175363-rotating-bmp-image-multiple-90-c.html
 	for(int y = 0; y < height; y++) {
 		for(int x = 0; x < width; x ++, i++) {
-			new->data[i] = image->data[(y * image->header->width + start_y) + x + start_x];
+			datas[i] = image->data[x + start_x + (y * image->header->width + start_y)];
 		}
 	}
+	i = 0;
+	//inverted the cropped BMP image
+	for(int y = 0; y < height; y++) {
+		for(int x = 0; x < width; x ++, i++) {
+			new->data[x + width * (height - y - 1)] = datas[i];
+		}
+	}
+	free(datas);
 
 	return new;	
 }
