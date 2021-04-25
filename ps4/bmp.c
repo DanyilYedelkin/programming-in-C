@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "bmp.h"
 
 /*
@@ -24,17 +25,22 @@ _)      \.___.,|     .'
 
 
 struct bmp_header* read_bmp_header(FILE* stream){
+    //https://web.cs.ucdavis.edu/~amenta/s12/readBMP.cpp
+    //https://elcharolin.wordpress.com/2018/11/28/read-and-write-bmp-files-in-c-c/
     if(stream == NULL) return NULL;
-    fseek(stream, 0, SEEK_END);
     //http://www.c-cpp.ru/content/ftell
-    long length_file = ftell(stream);
+    int length_file = ftell(stream);
     if(length_file == -1L) return NULL;
 
-    fseek(stream, 0, SEEK_SET);
     char *string_of_steam = calloc(length_file, sizeof(char));
     fread(string_of_steam, length_file, 1, stream);
+    char *long_of_string = calloc(strlen(string_of_steam), sizeof(char));
 
-    for(int i = 0; i < length_file; i++){
+    for(int i = 0, number = 0; i < length_file; i++){
+        if(string_of_steam[i] != '\0'){
+            number++;
+            long_of_string[number] = string_of_steam[i];
+        }
         if(string_of_steam[i+1] == 77 && string_of_steam[i] == 66){
             fseek(stream, i, SEEK_SET);
             break;
@@ -43,11 +49,12 @@ struct bmp_header* read_bmp_header(FILE* stream){
             return NULL;
         }
     }
+    free(long_of_string);
     free(string_of_steam);
 
-    struct bmp_header* header = (struct bmp_header*)malloc(sizeof(struct bmp_header));
+    struct bmp_header* header = malloc(sizeof(struct bmp_header));
     fread(header, sizeof(struct bmp_header), 1, stream);
-    if((header->bpp != 24) || (header->compression != 0) || (header->dib_size != 40) || (header->offset != 54) || (header->type != 0x4D42) || (header->width <= 0) || (header->height <= 0)){
+    if((header->bpp != 24) || (header->dib_size != 40) || (header->offset != 54) || (header->type != 0x4D42) || (header->width <= 0) || (header->height <= 0)){
         free(header);
         return NULL;
     }
@@ -58,7 +65,7 @@ struct bmp_header* read_bmp_header(FILE* stream){
 struct pixel* read_data(FILE* stream, const struct bmp_header* header){
     if((stream == NULL) || (header == NULL)) return NULL;
 
-    long size = header->height * header->width;
+    int size = header->height * header->width;
     struct pixel* data = calloc(size, sizeof(struct pixel));
     fseek(stream, header->offset, SEEK_SET);
 
@@ -91,8 +98,13 @@ struct bmp_image* read_bmp(FILE* stream){
     }
     
     struct bmp_image* image = malloc(sizeof(struct bmp_image));
-    image->data = data;
-    image->header = header;
+    if(header != NULL && data != NULL){
+        image->data = data;
+        image->header = header;
+    } else{
+        free_bmp_image(image);
+        return NULL;
+    }
 
     return image;
 }
@@ -116,5 +128,7 @@ void free_bmp_image(struct bmp_image* image){
         free(image->header);
         free(image->data);
         free(image);
+    } else{
+        return NULL;
     }
 }
