@@ -180,15 +180,16 @@ struct bmp_image* crop(const struct bmp_image* image, const uint32_t start_y, co
 	for(int y = 0; y < height; y++) {
 		for(int x = 0; x < width; x ++, i++) {
 			datas[i] = image->data[x + start_x + (y * image->header->width + start_y)];
+			new->data[x + width * (height - y - 1)] = image->data[x + start_x + (y * image->header->width + start_y)];
 		}
 	}
 	i = 0;
 	//inverted the cropped BMP image
-	for(int y = 0; y < height; y++) {
+	/*for(int y = 0; y < height; y++) {
 		for(int x = 0; x < width; x ++, i++) {
 			new->data[x + width * (height - y - 1)] = datas[i];
 		}
-	}
+	}*/
 	free(datas);
 
 	return new;	
@@ -281,7 +282,8 @@ struct bmp_image* scale(const struct bmp_image* image, float factor){
 	for(int y = 0; y < new_height; y++){
 		for(int x = 0; x < new_width; x++, i++){
 			//add (int), because have an error: array subscript is not an integer
-			new->data[i] = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)];
+			new->data[x + (y * new_width)] = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)];
+			//new->data[i] = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)];
 		}
 	}
 
