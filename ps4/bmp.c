@@ -28,10 +28,12 @@ struct bmp_header* read_bmp_header(FILE* stream){
     //https://web.cs.ucdavis.edu/~amenta/s12/readBMP.cpp
     //https://elcharolin.wordpress.com/2018/11/28/read-and-write-bmp-files-in-c-c/
     if(stream == NULL) return NULL;
+    fseek(stream, 0, SEEK_END);
     //http://www.c-cpp.ru/content/ftell
     int length_file = ftell(stream);
     if(length_file == -1L) return NULL;
 
+    fseek(stream, 0, SEEK_SET);
     char *string_of_steam = calloc(length_file, sizeof(char));
     fread(string_of_steam, length_file, 1, stream);
     char *long_of_string = calloc(strlen(string_of_steam), sizeof(char));
@@ -46,7 +48,7 @@ struct bmp_header* read_bmp_header(FILE* stream){
             break;
         } else if(string_of_steam[i+1] == '\0'){
             free(string_of_steam);
-            free(long_of_string);
+			free(long_of_string);
             return NULL;
         }
     }
@@ -102,10 +104,7 @@ struct bmp_image* read_bmp(FILE* stream){
     if(header != NULL && data != NULL){
         image->data = data;
         image->header = header;
-    } else{
-        free_bmp_image(image);
-        return NULL;
-    }
+    } 
 
     return image;
 }
@@ -131,4 +130,3 @@ void free_bmp_image(struct bmp_image* image){
         free(image);
     }
 }
-
