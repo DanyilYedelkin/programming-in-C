@@ -191,66 +191,13 @@ struct bmp_image* extract(const struct bmp_image* image, const char* colors_to_k
 struct bmp_image* scale(const struct bmp_image* image, float factor){
 	if((image == NULL) || (factor <= 0)) return NULL;
 
-	/*struct bmp_image* new = malloc(sizeof(struct bmp_image));
-	*new->header = *image->header;
-	int new_width = round(new->header->width * factor);
-	int new_height = round(new->header->height * factor);
-	new->header->width = new_width;
-	new->header->height = new_height;
-	int padding = 0;
-	if(((image->header->bpp / 8) * new_width) % 4 == 0){
-		padding = 0;
-	} else{
-		padding = 4 - (((image->header->bpp / 8) * new_width) % 4);
-	}
-	new->header->size = ((padding + new_width * (image->header->bpp / 8)) * new_height) + image->header->offset;
-	new->header->image_size = ((padding + new_width * (image->header->bpp / 8)) * new_height);
-	new->data = (struct pixel*)calloc(new_height * new_width, sizeof(struct pixel));
-	int i = 0;
-	//http://www.c-cpp.ru/content/floor-floorl
-	for(int y = 0; y < new_height; y++){
-		for(int x = 0; x < new_width; x++, i++){
-			//add (int), because have an error: array subscript is not an integer
-			new->data[i] = image->data[(int)(floor(x/factor) + floor(y/factor)*image->header->width)];
-		}
-	}
-
-	return new;*/
-
-
 	struct bmp_image * new = malloc(sizeof(struct bmp_image));
 	new->header = malloc(sizeof(struct bmp_header));
 	*new->header = *image->header;
-	int new_height = round((float)image->header->height * factor);
-	int new_width = round((float)image->header->width * factor);
+	uint32_t new_height = round((float)image->header->height * factor);
+	uint32_t new_width = round((float)image->header->width * factor);
 	new->header->width = (uint32_t)new_width;
 	new->header->height = (uint32_t)new_height;
-
-	/*int padding = 0;
-	if(((image->header->bpp / 8) * new_width) % 4 == 0){
-		padding = 0;
-	} else{
-		padding = 4 - (((image->header->bpp / 8) * new_width) % 4);
-	}
-
-	new->header->size = ((padding + new_width * (image->header->bpp / 8)) * new_height) + image->header->offset;
-	new->header->image_size = ((padding + new_width * (image->header->bpp / 8)) * new_height);*/
-
-
-	/*for(i = 0; i < height; ++i) {
-    y = round(i * yf);
-    if (y >= image->header->height) break;
-    yofs = y * image->header->width;
-    iofs = i * width;
-    for(j = 0; j < width; ++j){
-        x = round(j * xf);
-        if (x >= image->header->width) break;
-        fimage->data[iofs + j] = image->data[yofs + x];
-    }
-}
-
-float xf = image->header->width / (float)(width);
-float yf = image->header->height / (float)(height);*/
 
 	uint32_t padding = 0;
 	if(((image->header->bpp / 8) * new_width) % 4 == 0){
@@ -261,33 +208,21 @@ float yf = image->header->height / (float)(height);*/
 
 	new->header->size = ((padding + (uint32_t)new_width * (image->header->bpp / 8)) * (uint32_t)new_height) + image->header->offset;
 	new->header->image_size = ((padding + (uint32_t)new_width * (image->header->bpp / 8)) * (uint32_t)new_height);
+	new->data = (struct pixel*)calloc((uint32_t)(new_height * new_width), sizeof(struct pixel));
 
-	float x_factor = image->header->width / (float)new_width;
-	float y_factor = image->header->height / (float)new_height;
-
-	new->data = (struct pixel*) calloc(new_height * new_width, sizeof(struct pixel));
-	for(int i = 0; i < new_height; i++){
-		uint32_t y = round(i * y_factor);
-		if(y < image->header->height){
-			uint32_t y1 = y * image->header->width;
-			uint32_t i1 = i * new_width;
-			for(int j = 0; j < new_width; j++){
-				uint32_t x = round(j * x_factor);
-				if(x < image->header->width){
-					new->data[i1 + j] = image->data[y1 + x];
-				} else if((x > image->header->width) || (x = image->header->width)) break;
-			}
-		} else if((y > image->header->height) || (y = image->header->height)) break;
-	}
-
-	//int i = 0;
-	//http://www.c-cpp.ru/content/floor-floorl
-	/*for(int y = 0; y < new_height; y++){
+	int one = 0;
+	int two = 0;
+	int i = 0;
+	
+	for(int y = 0; y < new_height; y++){
 		for(int x = 0; x < new_width; x++, i++){
 			//add (int), because have an error: array subscript is not an integer
-			new->data[i] = image->data[(int)(floor(x/(image->header->width / (float)(new_width))) + floor(y/(image->header->height / (float)(new_height))) * image->header->width)];
+			//new->data[i] = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)];
+			one = (int)(x * image->header->width) / new->header->width;
+            two = (int)(y * image->header->height) / new->header->height;
+            new->data[i]=image->data[(two * image->header->width) + one];
 		}
-	}*/
+	}
 
 
 
