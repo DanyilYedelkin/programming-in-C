@@ -288,9 +288,9 @@ struct bmp_image* scale(const struct bmp_image* image, float factor){
 			//add (int), because have an error: array subscript is not an integer
 			//new->data[x + (y * new_width)] = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)];
 			//new->data[i] = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)];
-			new->data[i].red = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)].red;
-			new->data[i].blue = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)].blue;
-			new->data[i].green = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)].green;
+			new->data[x + y*new_width].red = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)].red;
+			new->data[x +y*new_width].blue = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)].blue;
+			new->data[x +y*new_width].green = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)].green;
 		}
 	}
 
