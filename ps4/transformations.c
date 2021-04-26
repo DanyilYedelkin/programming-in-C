@@ -173,25 +173,20 @@ struct bmp_image* crop(const struct bmp_image* image, const uint32_t start_y, co
 	new->data = (struct pixel*)calloc(height * width, sizeof(struct pixel));
 	struct pixel* datas = calloc(height * width, sizeof(struct pixel));
 
-	uint32_t i = 0;
+	int i = 0;
 	//the cropped BMP image
 	//the idea of rotating http://www.cpp.re/forum/beginner/265541/
 	//and the another idea of rotating https://cboard.cprogramming.com/c-programming/175363-rotating-bmp-image-multiple-90-c.html
-	for(uint32_t y = 0; y < height; y++) {
-		for(uint32_t x = 0; x < width; x ++, i++) {
-			datas[i].red = image->data[x + start_x + (y * image->header->width + start_y)].red;
-			datas[i].blue = image->data[x + start_x + (y * image->header->width + start_y)].blue;
-			datas[i].green = image->data[x + start_x + (y * image->header->width + start_y)].green;
-			//new->data[x + width * (height - y - 1)] = image->data[x + start_x + (y * image->header->width + start_y)];
+	for(int y = start_y; y < height + start_y; y++) {
+		for(int x = start_x; x < width + start_x; x ++, i++) {
+			new->data[i] = image->data[x + y * image->header->width];
 		}
 	}
 	i = 0;
 	//inverted the cropped BMP image
-	for(uint32_t y = 0; y < height; y++){
-		for(uint32_t x = 0; x < width; x ++, i++){
-			new->data[x + width * (height - y - 1)].red = datas[i].red;
-			new->data[x + width * (height - y - 1)].blue = datas[i].blue;
-			new->data[x + width * (height - y - 1)].green = datas[i].green;
+	for(int y = 0; y < height; y++){
+		for(int x = 0; x < width; x ++, i++){
+			//
 		}
 	}
 	free(datas);
@@ -281,16 +276,12 @@ struct bmp_image* scale(const struct bmp_image* image, float factor){
 	new->header->image_size = ((padding + new_width * (image->header->bpp / 8)) * new_height);
 
 	new->data = (struct pixel*) calloc(new_height * new_width, sizeof(struct pixel));
-	uint32_t i = 0;
+	int i = 0;
 	//http://www.c-cpp.ru/content/floor-floorl
-	for(uint32_t y = 0; y < new_height; y++){
-		for(uint32_t x = 0; x < new_width; x++, i++){
+	for(int y = 0; y < new_height; y++){
+		for(int x = 0; x < new_width; x++, i++){
 			//add (int), because have an error: array subscript is not an integer
-			//new->data[x + (y * new_width)] = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)];
-			//new->data[i] = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)];
-			new->data[x + y*new_width].red = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)].red;
-			new->data[x +y*new_width].blue = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)].blue;
-			new->data[x +y*new_width].green = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)].green;
+			new->data[i] = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)];
 		}
 	}
 
