@@ -159,37 +159,41 @@ struct bmp_image* crop(const struct bmp_image* image, const uint32_t start_y, co
     struct bmp_image * new = malloc(sizeof(struct bmp_image));
 	new->header = malloc(sizeof(struct bmp_header));
 	*new->header = *image->header;
-	new->header->width = width;
-	new->header->height = height;
-	int new_bpp = image->header->bpp / 8;
-	int padding = 0;
-	if(((new_bpp * width) % 4) == 0){
+	new->header->width = (uint32_t)width;
+	new->header->height = (uint32_t)height;
+	//int new_bpp = image->header->bpp / 8;
+	//uint32_t padding = (4 - (new->header->width * sizeof(struct pixel))%4)%4;
+	/*if(((new_bpp * width) % 4) == 0){
 		padding = 0;
 	} else{
 		padding = 4 - ((new_bpp * width) % 4);
-	}
-	new->header->image_size = height * (width * new_bpp + padding);
-	new->header->size = new->header->offset + new->header->image_size;
-	new->data = (struct pixel*)calloc(height * width, sizeof(struct pixel));
-	struct pixel* datas = calloc(height * width, sizeof(struct pixel));
+	}*/
+	//new->header->image_size = (uint32_t)height * ((uint32_t)width * sizeof(struct pixel) + padding);
+	//new->header->size = new->header->offset + new->header->image_size;
+	new->data = (struct pixel*)calloc((uint32_t)(height * width), sizeof(struct pixel));
+	//struct pixel* datas = calloc((uint32_t)(height * width), sizeof(struct pixel));
 
 	int i = 0;
 	//the cropped BMP image
 	//the idea of rotating http://www.cpp.re/forum/beginner/265541/
 	//and the another idea of rotating https://cboard.cprogramming.com/c-programming/175363-rotating-bmp-image-multiple-90-c.html
 	for(int y = start_y; y < height + start_y; y++) {
-		for(int x = start_x; x < width + start_x; x ++, i++) {
-			new->data[i] = image->data[x + y * image->header->width];
+		for(int x = start_x; x < width + start_x; x ++) {
+			new->data[i++] = image->data[y * image->header->width + x];
 		}
 	}
-	i = 0;
+	/*i = 0;
 	//inverted the cropped BMP image
 	for(int y = 0; y < height; y++){
 		for(int x = 0; x < width; x ++, i++){
 			//
 		}
-	}
-	free(datas);
+	}*/
+	//free(datas);
+
+	uint32_t padding = (4 - (new->header->width * sizeof(struct pixel))%4)%4;
+	new->header->image_size = (uint32_t)height * ((uint32_t)width * sizeof(struct pixel) + padding);
+	new->header->size = new->header->offset + new->header->image_size;
 
 	return new;	
 }
@@ -259,13 +263,14 @@ struct bmp_image* scale(const struct bmp_image* image, float factor){
 
 	struct bmp_image * new = malloc(sizeof(struct bmp_image));
 	new -> header = malloc(sizeof(struct bmp_header));
-	*new->header = *image->header;
+	//*new->header = *image->header;
+	memcpy(new->header, image->header, sizeof(*image->header));
 	int new_height = round((float)image->header->height * factor);
 	int new_width = round((float)image->header->width * factor);
-	new->header->width = new_width;
-	new->header->height = new_height;
+	new->header->width = (uint32_t)new_width;
+	new->header->height = (uint32_t)new_height;
 
-	int padding = 0;
+	/*int padding = 0;
 	if(((image->header->bpp / 8) * new_width) % 4 == 0){
 		padding = 0;
 	} else{
@@ -273,7 +278,7 @@ struct bmp_image* scale(const struct bmp_image* image, float factor){
 	}
 
 	new->header->size = ((padding + new_width * (image->header->bpp / 8)) * new_height) + image->header->offset;
-	new->header->image_size = ((padding + new_width * (image->header->bpp / 8)) * new_height);
+	new->header->image_size = ((padding + new_width * (image->header->bpp / 8)) * new_height);*/
 
 	new->data = (struct pixel*) calloc(new_height * new_width, sizeof(struct pixel));
 	int i = 0;
@@ -284,6 +289,16 @@ struct bmp_image* scale(const struct bmp_image* image, float factor){
 			new->data[i] = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)];
 		}
 	}
+
+	uint32_t padding = 0;
+	if(((image->header->bpp / 8) * new_width) % 4 == 0){
+		padding = 0;
+	} else{
+		padding = 4 - (((image->header->bpp / 8) * new_width) % 4);
+	}
+
+	new->header->size = ((padding + (uint32_t)new_width * (image->header->bpp / 8)) * (uint32_t)new_height) + image->header->offset;
+	new->header->image_size = ((padding + (uint32_t)new_width * (image->header->bpp / 8)) * (uint32_t)new_height);
 
 	return new;
 }
