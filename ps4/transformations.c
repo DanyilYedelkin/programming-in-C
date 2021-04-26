@@ -158,9 +158,24 @@ struct bmp_image* crop(const struct bmp_image* image, const uint32_t start_y, co
 	
     struct bmp_image * new = malloc(sizeof(struct bmp_image));
 	new->header = malloc(sizeof(struct bmp_header));
-	*new->header = *image->header;
+	/**new->header = *image->header;*/
+	new->header->type = image->header -> type;
+	new->header->reserved1 = image -> header -> reserved1;
+	new->header->reserved2 = image -> header -> reserved2;
+	new->header->offset = image -> header -> offset;
+	new->header->dib_size = image -> header -> dib_size;
+	new->header->planes = image -> header -> planes;
+	new->header->bpp = image -> header -> bpp;
+	new->header->compression = image -> header -> compression;
+	new->header->x_ppm = image -> header -> x_ppm;
+	new->header->y_ppm = image -> header -> y_ppm;
+	new->header->num_colors = image -> header -> num_colors;
+	new->header->important_colors = image -> header -> important_colors;
 	new->header->width = (uint32_t)width;
 	new->header->height = (uint32_t)height;
+	uint32_t padding = (4 - (new->header->width * sizeof(struct pixel))%4)%4;
+	new->header->image_size = (uint32_t)height * ((uint32_t)width * sizeof(struct pixel) + padding);
+	new->header->size = new->header->offset + new->header->image_size;
 	//int new_bpp = image->header->bpp / 8;
 	//uint32_t padding = (4 - (new->header->width * sizeof(struct pixel))%4)%4;
 	/*if(((new_bpp * width) % 4) == 0){
@@ -171,7 +186,7 @@ struct bmp_image* crop(const struct bmp_image* image, const uint32_t start_y, co
 	//new->header->image_size = (uint32_t)height * ((uint32_t)width * sizeof(struct pixel) + padding);
 	//new->header->size = new->header->offset + new->header->image_size;
 	new->data = (struct pixel*)calloc((uint32_t)(height * width), sizeof(struct pixel));
-	//struct pixel* datas = calloc((uint32_t)(height * width), sizeof(struct pixel));
+	struct pixel* datas = calloc((uint32_t)(height * width), sizeof(struct pixel));
 
 	int i = 0;
 	//the cropped BMP image
@@ -179,21 +194,21 @@ struct bmp_image* crop(const struct bmp_image* image, const uint32_t start_y, co
 	//and the another idea of rotating https://cboard.cprogramming.com/c-programming/175363-rotating-bmp-image-multiple-90-c.html
 	for(int y = start_y; y < height + start_y; y++) {
 		for(int x = start_x; x < width + start_x; x ++) {
-			new->data[i++] = image->data[y * image->header->width + x];
+			datas[i++] = image->data[y * image->header->width + x];
 		}
 	}
-	/*i = 0;
+	i = 0;
 	//inverted the cropped BMP image
 	for(int y = 0; y < height; y++){
-		for(int x = 0; x < width; x ++, i++){
-			//
+		for(int x = 0; x < width; x ++){
+			new->data[i++] = datas[x + (uint32_t)width*((uint32_t)height - y - 1)];
 		}
-	}*/
-	//free(datas);
+	}
+	free(datas);
 
-	uint32_t padding = (4 - (new->header->width * sizeof(struct pixel))%4)%4;
+	/*uint32_t padding = (4 - (new->header->width * sizeof(struct pixel))%4)%4;
 	new->header->image_size = (uint32_t)height * ((uint32_t)width * sizeof(struct pixel) + padding);
-	new->header->size = new->header->offset + new->header->image_size;
+	new->header->size = new->header->offset + new->header->image_size;*/
 
 	return new;	
 }
@@ -262,9 +277,25 @@ struct bmp_image* scale(const struct bmp_image* image, float factor){
 
 
 	struct bmp_image * new = malloc(sizeof(struct bmp_image));
-	new -> header = malloc(sizeof(struct bmp_header));
-	//*new->header = *image->header;
-	memcpy(new->header, image->header, sizeof(*image->header));
+	new->header = malloc(sizeof(struct bmp_header));
+	/**new->header = *image->header;*/
+	new->header->type = image->header->type;
+	new->header->size = image->header->size;
+	new->header->reserved1= image->header->reserved1;
+	new->header->reserved2 = image->header->reserved2;
+	new->header->offset = image->header->offset;
+	new->header->dib_size = image->header->dib_size;
+	new->header->width = image->header->width;
+	new->header->height= image->header->height;
+	new->header->planes = image->header->planes;
+	new->header->bpp = image->header->bpp;
+	new->header->compression = image->header->compression;
+	new->header->image_size = image->header->image_size;
+	new->header->x_ppm = image->header->x_ppm;
+	new->header->y_ppm = image->header->y_ppm;
+	new->header->num_colors = image->header->num_colors;
+	new->header->important_colors = image->header->important_colors;
+	//memcpy(new->header, image->header, sizeof(*image->header));
 	int new_height = round((float)image->header->height * factor);
 	int new_width = round((float)image->header->width * factor);
 	new->header->width = (uint32_t)new_width;
@@ -280,6 +311,16 @@ struct bmp_image* scale(const struct bmp_image* image, float factor){
 	new->header->size = ((padding + new_width * (image->header->bpp / 8)) * new_height) + image->header->offset;
 	new->header->image_size = ((padding + new_width * (image->header->bpp / 8)) * new_height);*/
 
+	uint32_t padding = 0;
+	if(((image->header->bpp / 8) * new_width) % 4 == 0){
+		padding = 0;
+	} else{
+		padding = 4 - (((image->header->bpp / 8) * new_width) % 4);
+	}
+
+	new->header->size = ((padding + (uint32_t)new_width * (image->header->bpp / 8)) * (uint32_t)new_height) + image->header->offset;
+	new->header->image_size = ((padding + (uint32_t)new_width * (image->header->bpp / 8)) * (uint32_t)new_height);
+
 	new->data = (struct pixel*) calloc(new_height * new_width, sizeof(struct pixel));
 	int i = 0;
 	//http://www.c-cpp.ru/content/floor-floorl
@@ -290,7 +331,7 @@ struct bmp_image* scale(const struct bmp_image* image, float factor){
 		}
 	}
 
-	uint32_t padding = 0;
+	/*uint32_t padding = 0;
 	if(((image->header->bpp / 8) * new_width) % 4 == 0){
 		padding = 0;
 	} else{
@@ -298,7 +339,7 @@ struct bmp_image* scale(const struct bmp_image* image, float factor){
 	}
 
 	new->header->size = ((padding + (uint32_t)new_width * (image->header->bpp / 8)) * (uint32_t)new_height) + image->header->offset;
-	new->header->image_size = ((padding + (uint32_t)new_width * (image->header->bpp / 8)) * (uint32_t)new_height);
+	new->header->image_size = ((padding + (uint32_t)new_width * (image->header->bpp / 8)) * (uint32_t)new_height);*/
 
 	return new;
 }
