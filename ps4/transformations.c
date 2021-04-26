@@ -236,6 +236,22 @@ struct bmp_image* scale(const struct bmp_image* image, float factor){
 	new->header->size = ((padding + new_width * (image->header->bpp / 8)) * new_height) + image->header->offset;
 	new->header->image_size = ((padding + new_width * (image->header->bpp / 8)) * new_height);*/
 
+
+	/*for(i = 0; i < height; ++i) {
+    y = round(i * yf);
+    if (y >= image->header->height) break;
+    yofs = y * image->header->width;
+    iofs = i * width;
+    for(j = 0; j < width; ++j){
+        x = round(j * xf);
+        if (x >= image->header->width) break;
+        fimage->data[iofs + j] = image->data[yofs + x];
+    }
+}
+
+float xf = image->header->width / (float)(width);
+float yf = image->header->height / (float)(height);*/
+
 	uint32_t padding = 0;
 	if(((image->header->bpp / 8) * new_width) % 4 == 0){
 		padding = 0;
@@ -246,15 +262,34 @@ struct bmp_image* scale(const struct bmp_image* image, float factor){
 	new->header->size = ((padding + (uint32_t)new_width * (image->header->bpp / 8)) * (uint32_t)new_height) + image->header->offset;
 	new->header->image_size = ((padding + (uint32_t)new_width * (image->header->bpp / 8)) * (uint32_t)new_height);
 
+	float x_factor = image->header->width / (float)new_width;
+	float y_factor = image->header->height / (float)new_height;
+
 	new->data = (struct pixel*) calloc(new_height * new_width, sizeof(struct pixel));
-	int i = 0;
+	for(int i = 0; i < new_height; i++){
+		uint32_t y = round(i * y_factor);
+		if(y < image->header->height){
+			uint32_t y1 = y * image->header->width;
+			uint32_t i1 = i * new_width;
+			for(int j = 0; j < new_width; j++){
+				uint32_t x = round(j * x_factor);
+				if(x < image->header->width){
+					new->data[i1 + j] = image->data[y1 + x];
+				} else if((x > image->header->width) || (x = image->header->width)) break;
+			}
+		} else if((y > image->header->height) || (y = image->header->height)) break;
+	}
+
+	//int i = 0;
 	//http://www.c-cpp.ru/content/floor-floorl
-	for(int y = 0; y < new_height; y++){
+	/*for(int y = 0; y < new_height; y++){
 		for(int x = 0; x < new_width; x++, i++){
 			//add (int), because have an error: array subscript is not an integer
-			new->data[i] = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)];
+			new->data[i] = image->data[(int)(floor(x/(image->header->width / (float)(new_width))) + floor(y/(image->header->height / (float)(new_height))) * image->header->width)];
 		}
-	}
+	}*/
+
+
 
 	return new;
 }
@@ -265,9 +300,9 @@ struct bmp_image* crop(const struct bmp_image* image, const uint32_t start_y, co
 	struct bmp_image* new_bmp =  malloc(sizeof(struct bmp_image));
 	new_bmp->header = malloc(sizeof(struct bmp_header));
 	*new_bmp->header = *image->header;
-	uint32_t padding = (4 - (new_bmp->header->width * sizeof(struct pixel)) % 4) % 4;
-	new_bmp->header->image_size = (uint32_t)height * ((uint32_t)width * sizeof(struct pixel) + padding);
-	new_bmp->header->size = new_bmp->header->offset + new_bmp->header->image_size;
+	//uint32_t padding = (4 - (new_bmp->header->width * sizeof(struct pixel)) % 4) % 4;
+	//new_bmp->header->image_size = (uint32_t)height * ((uint32_t)width * sizeof(struct pixel) + padding);
+	//new_bmp->header->size = new_bmp->header->offset + new_bmp->header->image_size;
 	int old_width = image->header->width;
 
 	new_bmp->data = calloc(new_bmp->header->width * new_bmp->header->height, sizeof(struct pixel));
@@ -295,6 +330,15 @@ struct bmp_image* crop(const struct bmp_image* image, const uint32_t start_y, co
 			new_bmp->data[x + width * (height - y - 1)] = datas[i];
 		}
 	}
+	int new_bpp = image->header->bpp / 8;
+	uint32_t padding = (4 - (new_bmp->header->width * sizeof(struct pixel))%4)%4;
+	if(((new_bpp * width) % 4) == 0){
+		padding = 0;
+	} else{
+		padding = 4 - ((new_bpp * width) % 4);
+	}
+	new_bmp->header->image_size = (uint32_t)height * ((uint32_t)width * sizeof(struct pixel) + padding);
+	new_bmp->header->size = new_bmp->header->offset + new_bmp->header->image_size;
 
 	free(datas);
 
