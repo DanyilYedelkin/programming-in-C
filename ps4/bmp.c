@@ -48,7 +48,7 @@ struct bmp_header* read_bmp_header(FILE* stream){
             break;
         } else if(string_of_steam[i+1] == '\0'){
             free(string_of_steam);
-			free(long_of_string);
+            free(long_of_string);
             return NULL;
         }
     }
@@ -104,7 +104,7 @@ struct bmp_image* read_bmp(FILE* stream){
     if(header != NULL && data != NULL){
         image->data = data;
         image->header = header;
-    } 
+    }
 
     return image;
 }
@@ -112,12 +112,15 @@ struct bmp_image* read_bmp(FILE* stream){
 bool write_bmp(FILE* stream, const struct bmp_image* image){
     if((stream == NULL) || (stream == NULL)) return false;
 
+    uint32_t height = image->header->height;
+    uint32_t width = image->header->width;
+
     fwrite(image->header, sizeof(struct bmp_header), 1, stream);
-    for(int i = 0; i < image->header->height; i++){
-        for(int j = 0; j < image->header->width; j++){
-            fwrite(&image->data[(i*image->header->width) + j], sizeof(struct pixel), 1, stream);
+    for(int i = 0; i < height; i++){
+        for(int j = 0; j < width; j++){
+            fwrite(&image->data[(i * width) + j], sizeof(struct pixel), 1, stream);
         }
-        fwrite(&PADDING_CHAR, sizeof(unsigned char), (image->header->width)%4, stream);
+        fwrite(&PADDING_CHAR, sizeof(unsigned char), ((width) % 4), stream);
     }
 
     return true;
@@ -130,3 +133,4 @@ void free_bmp_image(struct bmp_image* image){
         free(image);
     }
 }
+
