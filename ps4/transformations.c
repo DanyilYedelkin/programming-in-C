@@ -26,25 +26,28 @@ _)      \.___.,|     .'
 
 
 struct bmp_image* flip_horizontally(const struct bmp_image* image){
-	if(image == NULL) return NULL;
+	if((image == NULL) || (image->data == NULL)) return NULL;
 
 	struct bmp_image* new = malloc(sizeof(struct bmp_image));
     new->header = malloc(sizeof(struct bmp_header));
 	memcpy(new->header, image->header, sizeof(*new->header));
 
-	long size = image->header->width * image->header->height;
+	uint32_t size = image->header->width * image->header->height;
 	new->data = (struct pixel*)calloc(size, sizeof(struct pixel));
-	int half_width = new->header->width / 2;
+	uint32_t half_width = new->header->width / 2;
+	uint32_t old_width = image->header->width;
+	uint32_t new_width = new->header->width;
+	uint32_t old_height = image->header->height;
 
 	//flipping is like double(twice) rotate, but firstly we must find a half of BMP image
 	int i = 0;
-	for(long y = 0; y < image->header->height; y++){
+	for(long y = 0; y < old_height; y++){
 		for(long x = 0; x < half_width; x++, i++){
-			new->data[x + y * new->header->width] = image->data[image->header->width - x - 1 + y * image->header->width];
-			new->data[new->header->width - x - 1 + y * new->header->width] = image->data[x + y * image->header->width];
+			new->data[x + y * new_width] = image->data[old_width - x - 1 + y * old_width];
+			new->data[new_width - x - 1 + y * new_width] = image->data[x + y * old_width];
 		}
-		if(new->header->width % 2 == 1){
-			new->data[half_width + y * new->header->width] = image->data[half_width + y * image->header->width];
+		if((new_width % 2) == 1){
+			new->data[half_width + y * new_width] = image->data[half_width + y * old_width];
 		}
 	}
 
@@ -52,27 +55,31 @@ struct bmp_image* flip_horizontally(const struct bmp_image* image){
 }
 
 struct bmp_image* flip_vertically(const struct bmp_image* image){
-	if(image == NULL) return NULL;
+	if((image == NULL) || (image->data == NULL)) return NULL;
 
 	struct bmp_image* new = malloc(sizeof(struct bmp_image));
     new->header = malloc(sizeof(struct bmp_header));
 	memcpy(new->header, image->header, sizeof(*new->header));
 
-	long size = image->header->width * image->header->height;
+	uint32_t size = image->header->width * image->header->height;
 	new->data = (struct pixel*)calloc(size, sizeof(struct pixel));
-	int half_height = new->header->height / 2;
+	uint32_t half_height = new->header->height / 2;
+	uint32_t old_width = image->header->width;
+	uint32_t old_height = image->header->height;
+	uint32_t new_width = new->header->width;
+	uint32_t new_height = new->header->height;
 	
 	//flipping is like double(twice) rotate, but firstly we must find a half of BMP image
 	int i = 0;
-	for(long y = 0; y < half_height; y++){
-		for(long x = 0; x < image->header->width; x++, i++){
-			new->data[i] = image->data[x + image->header->width * (image->header->height - y - 1)];
-			new->data[x + new->header->width * (new->header->height - y - 1)] = image->data[i];
+	for(uint32_t y = 0; y < half_height; y++){
+		for(uint32_t x = 0; x < old_width; x++, i++){
+			new->data[i] = image->data[x + old_width * (old_height - y - 1)];
+			new->data[x + new_width * (new_height - y - 1)] = image->data[i];
 		}
 	}
-	if(new->header->height % 2 == 1){
-		for(int x = 0; x < new->header->width; x++){
-			new->data[x + new->header->width * half_height] = image->data[x + image->header->width * half_height];
+	if((new_height % 2) == 1){
+		for(uint32_t x = 0; x < new_width; x++){
+			new->data[x + new_width * half_height] = image->data[x + old_width * half_height];
 		}
 	}
 
@@ -90,14 +97,8 @@ struct bmp_image* rotate_left(const struct bmp_image* image){
 	//the idea of rotating http://www.cpp.re/forum/beginner/265541/
 	new->header->width = image->header->height;
 	new->header->height = image->header->width;
-	int new_bpp = new->header->bpp / 8;
-	int padding = 0;
-	if((new_bpp * image->header->height) % 4 == 0){
-		padding = 0;
-	} else{
-		padding = 4 - (new_bpp * image->header->height) % 4;
-	}
-	int new_image_size = (image->header->height * new_bpp + padding) * image->header->width;
+	int padding = 4 - ((new->header->bpp / 8) * image->header->height) % 4;
+	int new_image_size = (image->header->height * (new->header->bpp / 8) + padding) * image->header->width;
 	new->header->image_size = new_image_size;
 	new->header->size = new_image_size + new->header->offset;
 	new->data = (struct pixel*)calloc(image->header->width*image->header->height, sizeof(struct pixel));
@@ -105,8 +106,7 @@ struct bmp_image* rotate_left(const struct bmp_image* image){
 	int i = 0;
 	for (int y = 0; y < image->header->width; y++){
 		for(int x = 0; x < image->header->height; x++, i++){
-			new->data[image->header->height - x - 1 + y * image->header->height] 
-			    = image->data[x * image->header->width + y];
+			new->data[image->header->height - x - 1 + y * image->header->height] = image->data[x * image->header->width + y];
 		}
 	}
 	
@@ -130,14 +130,8 @@ struct bmp_image* rotate_right(const struct bmp_image* image){
 
 	new->header->width = image->header->height;
 	new->header->height = image->header->width;
-	int new_bpp = new->header->bpp / 8;
-	int padding = 0;
-	if((new_bpp * image->header->height) % 4 == 0){
-		padding = 0;
-	} else{
-		padding = 4 - (new_bpp * image->header->height) % 4;
-	}
-	int new_image_size = (image->header->height * new_bpp + padding) * image->header->width;
+	int padding = 4 - ((new->header->bpp / 8) * image->header->height) % 4;
+	int new_image_size = (image->header->height * (new->header->bpp / 8) + padding) * image->header->width;
 	new->header->image_size = new_image_size;
 	new->header->size = new_image_size + new->header->offset;
 	new->data = (struct pixel*)calloc(image->header->width*image->header->height, sizeof(struct pixel));
@@ -210,17 +204,15 @@ struct bmp_image* scale(const struct bmp_image* image, float factor){
 	new->header->image_size = ((padding + (uint32_t)new_width * (image->header->bpp / 8)) * (uint32_t)new_height);
 	new->data = (struct pixel*)calloc((uint32_t)(new_height * new_width), sizeof(struct pixel));
 
-	int one = 0;
-	int two = 0;
+	//int one = 0;
+	//int two = 0;
 	int i = 0;
 	
 	for(int y = 0; y < new_height; y++){
 		for(int x = 0; x < new_width; x++, i++){
 			//add (int), because have an error: array subscript is not an integer
 			//new->data[i] = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)];
-			one = (int)(x * image->header->width) / new->header->width;
-            two = (int)(y * image->header->height) / new->header->height;
-            new->data[i]=image->data[(two * image->header->width) + one];
+            new->data[i] = image->data[(((int)(y * image->header->height) / new->header->height) * image->header->width) + ((int)(x * image->header->width) / new->header->width)];
 		}
 	}
 
@@ -235,9 +227,6 @@ struct bmp_image* crop(const struct bmp_image* image, const uint32_t start_y, co
 	struct bmp_image* new_bmp =  malloc(sizeof(struct bmp_image));
 	new_bmp->header = malloc(sizeof(struct bmp_header));
 	*new_bmp->header = *image->header;
-	//uint32_t padding = (4 - (new_bmp->header->width * sizeof(struct pixel)) % 4) % 4;
-	//new_bmp->header->image_size = (uint32_t)height * ((uint32_t)width * sizeof(struct pixel) + padding);
-	//new_bmp->header->size = new_bmp->header->offset + new_bmp->header->image_size;
 	int old_width = image->header->width;
 
 	new_bmp->data = calloc(new_bmp->header->width * new_bmp->header->height, sizeof(struct pixel));
@@ -265,13 +254,7 @@ struct bmp_image* crop(const struct bmp_image* image, const uint32_t start_y, co
 			new_bmp->data[x + width * (height - y - 1)] = datas[i];
 		}
 	}
-	int new_bpp = image->header->bpp / 8;
-	uint32_t padding = (4 - (new_bmp->header->width * sizeof(struct pixel))%4)%4;
-	if(((new_bpp * width) % 4) == 0){
-		padding = 0;
-	} else{
-		padding = 4 - ((new_bpp * width) % 4);
-	}
+	uint32_t padding = 4 - (((image->header->bpp / 8) * width) % 4);
 	new_bmp->header->image_size = (uint32_t)height * ((uint32_t)width * sizeof(struct pixel) + padding);
 	new_bmp->header->size = new_bmp->header->offset + new_bmp->header->image_size;
 
