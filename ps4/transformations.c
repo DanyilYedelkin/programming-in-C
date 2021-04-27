@@ -98,6 +98,11 @@ struct bmp_image* rotate_left(const struct bmp_image* image){
 	new->header->width = image->header->height;
 	new->header->height = image->header->width;
 	int padding = 4 - ((new->header->bpp / 8) * image->header->height) % 4;
+	if(((new->header->bpp / 8) * image->header->height) % 4 == 0){
+		padding = 0;
+	} else{
+		padding = 4 - ((new->header->bpp / 8) * image->header->height) % 4;
+	}
 	int new_image_size = (image->header->height * (new->header->bpp / 8) + padding) * image->header->width;
 	new->header->image_size = new_image_size;
 	new->header->size = new_image_size + new->header->offset;
@@ -131,6 +136,11 @@ struct bmp_image* rotate_right(const struct bmp_image* image){
 	new->header->width = image->header->height;
 	new->header->height = image->header->width;
 	int padding = 4 - ((new->header->bpp / 8) * image->header->height) % 4;
+	if(((new->header->bpp / 8) * image->header->height) % 4 == 0){
+		padding = 0;
+	} else{
+		padding = 4 - ((new->header->bpp / 8) * image->header->height) % 4;
+	}
 	int new_image_size = (image->header->height * (new->header->bpp / 8) + padding) * image->header->width;
 	new->header->image_size = new_image_size;
 	new->header->size = new_image_size + new->header->offset;
