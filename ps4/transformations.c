@@ -32,6 +32,7 @@ struct bmp_image* flip_horizontally(const struct bmp_image* image){
     new->header = malloc(sizeof(struct bmp_header));
 	memcpy(new->header, image->header, sizeof(*new->header));
 
+	//creating new variables for simple codding 
 	uint32_t size = image->header->width * image->header->height;
 	new->data = (struct pixel*)calloc(size, sizeof(struct pixel));
 	uint32_t half_width = new->header->width / 2;
@@ -46,6 +47,7 @@ struct bmp_image* flip_horizontally(const struct bmp_image* image){
 			new->data[x + y * new_width] = image->data[old_width - x - 1 + y * old_width];
 			new->data[new_width - x - 1 + y * new_width] = image->data[x + y * old_width];
 		}
+		//checking if the bmp's width is pairing
 		if((new_width % 2) == 1){
 			new->data[half_width + y * new_width] = image->data[half_width + y * old_width];
 		}
@@ -61,6 +63,7 @@ struct bmp_image* flip_vertically(const struct bmp_image* image){
     new->header = malloc(sizeof(struct bmp_header));
 	memcpy(new->header, image->header, sizeof(*new->header));
 
+	//creating new variables for simple codding 
 	uint32_t size = image->header->width * image->header->height;
 	new->data = (struct pixel*)calloc(size, sizeof(struct pixel));
 	uint32_t half_height = new->header->height / 2;
@@ -77,6 +80,7 @@ struct bmp_image* flip_vertically(const struct bmp_image* image){
 			new->data[x + new_width * (new_height - y - 1)] = image->data[i];
 		}
 	}
+	//checking if the bmp's heigth is pairing
 	if((new_height % 2) == 1){
 		for(uint32_t x = 0; x < new_width; x++){
 			new->data[x + new_width * half_height] = image->data[x + old_width * half_height];
@@ -109,6 +113,7 @@ struct bmp_image* rotate_left(const struct bmp_image* image){
 	new->data = (struct pixel*)calloc(image->header->width*image->header->height, sizeof(struct pixel));
 	//and the another idea of rotating https://cboard.cprogramming.com/c-programming/175363-rotating-bmp-image-multiple-90-c.html
 	int i = 0;
+	//function to rotate the bmp image to the left
 	for (int y = 0; y < image->header->width; y++){
 		for(int x = 0; x < image->header->height; x++, i++){
 			new->data[image->header->height - x - 1 + y * image->header->height] = image->data[x * image->header->width + y];
@@ -136,6 +141,7 @@ struct bmp_image* rotate_right(const struct bmp_image* image){
 	new->header->width = image->header->height;
 	new->header->height = image->header->width;
 	int padding = 4 - ((new->header->bpp / 8) * image->header->height) % 4;
+	//checking padding of the bmp image
 	if(((new->header->bpp / 8) * image->header->height) % 4 == 0){
 		padding = 0;
 	} else{
@@ -148,6 +154,7 @@ struct bmp_image* rotate_right(const struct bmp_image* image){
 	//the idea of rotating http://www.cpp.re/forum/beginner/265541/
 	//and the another idea of rotating https://cboard.cprogramming.com/c-programming/175363-rotating-bmp-image-multiple-90-c.html
 	int i = 0;
+	//function to rotate the bmp image to the right
 	for (int y = 0; y < image->header->width; y++){
 		for(int x = 0; x < image->header->height; x++, i++){
 			new->data[i] = image->data[x * image->header->width + image->header->width - y - 1];
@@ -178,6 +185,7 @@ struct bmp_image* extract(const struct bmp_image* image, const char* colors_to_k
 	new->data = (struct pixel*)calloc(image->header->width*image->header->height, sizeof(struct pixel));
 
 	int i = 0;
+	//function for filling the picture with the desired colors (pixels)
 	for(int y = 0; y < image->header->height; y++){
 		for(int x = 0; x < image->header->width; x++, i++){
 			if(red == true) new->data[i].red = image->data[i].red;
@@ -204,20 +212,20 @@ struct bmp_image* scale(const struct bmp_image* image, float factor){
 	new->header->height = (uint32_t)new_height;
 
 	uint32_t padding = 0;
+	//checking padding of the bmp image
 	if(((image->header->bpp / 8) * new_width) % 4 == 0){
 		padding = 0;
 	} else{
 		padding = 4 - (((image->header->bpp / 8) * new_width) % 4);
 	}
 
+	//filling new size and image size into new bmp image
 	new->header->size = ((padding + (uint32_t)new_width * (image->header->bpp / 8)) * (uint32_t)new_height) + image->header->offset;
 	new->header->image_size = ((padding + (uint32_t)new_width * (image->header->bpp / 8)) * (uint32_t)new_height);
 	new->data = (struct pixel*)calloc((uint32_t)(new_height * new_width), sizeof(struct pixel));
 
-	//int one = 0;
-	//int two = 0;
 	int i = 0;
-	
+	//fuction for scaling a bmp image
 	for(int y = 0; y < new_height; y++){
 		for(int x = 0; x < new_width; x++, i++){
 			//add (int), because have an error: array subscript is not an integer
@@ -237,12 +245,12 @@ struct bmp_image* crop(const struct bmp_image* image, const uint32_t start_y, co
 	struct bmp_image* new_bmp =  malloc(sizeof(struct bmp_image));
 	new_bmp->header = malloc(sizeof(struct bmp_header));
 	*new_bmp->header = *image->header;
-	int old_width = image->header->width;
+	uint32_t old_width = image->header->width;
 
 	new_bmp->data = calloc(new_bmp->header->width * new_bmp->header->height, sizeof(struct pixel));
 	struct pixel* datas = calloc(new_bmp->header->width * new_bmp->header->height, sizeof(struct pixel));
-	for(int y = 0; y < image->header->height; y++){
-        for(int x = 0, i = 0; x < image->header->width; x++, i++){
+	for(uint32_t y = 0; y < image->header->height; y++){
+        for(uint32_t x = 0, i = 0; x < image->header->width; x++, i++){
             new_bmp->data[x + y * image->header->width] = image->data[x + (image->header->height - 1 - y) * image->header->width];
 			datas[x + y * image->header->width ] = image->data[x + (image->header->height - 1 - y) * image->header->width];
         }
@@ -250,17 +258,17 @@ struct bmp_image* crop(const struct bmp_image* image, const uint32_t start_y, co
 	
     new_bmp->header->width = (uint32_t)width;
     new_bmp->header->height = (uint32_t)height;
-    int i = 0;
-    for(int y = start_y; y < start_y + height; y++){
-        for(int x = start_x; x < start_x + width; x++, i++){
+    uint32_t i = 0;
+    for(uint32_t y = start_y; y < start_y + height; y++){
+        for(uint32_t x = start_x; x < start_x + width; x++, i++){
             new_bmp->data[i] = new_bmp->data[x + (y * old_width)];
 			datas[i] = datas[x + (y * old_width)];
         }
     }
 	i = 0;
 	
-	for(int y = 0; y < height; y++){
-	    for(int x = 0; x < width; x ++, i++){
+	for(uint32_t y = 0; y < height; y++){
+	    for(uint32_t x = 0; x < width; x ++, i++){
 			new_bmp->data[x + width * (height - y - 1)] = datas[i];
 		}
 	}
