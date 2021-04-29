@@ -1,6 +1,5 @@
-#include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
+#include <stdlib.h>
 #include <string.h>
 #include "bmp.h"
 
@@ -25,258 +24,121 @@ _)      \.___.,|     .'
 
 
 
-struct bmp_image* flip_horizontally(const struct bmp_image* image){
-	if((image == NULL) || (image->data == NULL)) return NULL;
+struct bmp_header* read_bmp_header(FILE* stream){
+    //https://web.cs.ucdavis.edu/~amenta/s12/readBMP.cpp
+    //https://elcharolin.wordpress.com/2018/11/28/read-and-write-bmp-files-in-c-c/
+    if(stream == NULL) return NULL;
+    fseek(stream, 0, 2);
+    //http://www.c-cpp.ru/content/ftell
+    int length_file = ftell(stream);
+    if(length_file == -1L) return NULL;
 
-	struct bmp_image* new = malloc(sizeof(struct bmp_image));
-    new->header = malloc(sizeof(struct bmp_header));
-	memcpy(new->header, image->header, sizeof(*new->header));
+    fseek(stream, 0, 0);
+    char *string_of_steam = calloc(length_file, sizeof(char));
+    fread(string_of_steam, length_file, 1, stream);
+    char *long_of_string = calloc(strlen(string_of_steam), sizeof(char));
 
-	//creating new variables for simple codding 
-	uint32_t size = image->header->width * image->header->height;
-	new->data = (struct pixel*)calloc(size, sizeof(struct pixel));
-	uint32_t half_width = new->header->width / 2;
-	uint32_t old_width = image->header->width;
-	uint32_t new_width = new->header->width;
-	uint32_t old_height = image->header->height;
-
-	//flipping is like double(twice) rotate, but firstly we must find a half of BMP image
-	int i = 0;
-	for(long y = 0; y < old_height; y++){
-		for(long x = 0; x < half_width; x++, i++){
-			new->data[x + y * new_width] = image->data[old_width - x - 1 + y * old_width];
-			new->data[new_width - x - 1 + y * new_width] = image->data[x + y * old_width];
-		}
-		//checking if the bmp's width is pairing
-		if((new_width % 2) == 1){
-			new->data[half_width + y * new_width] = image->data[half_width + y * old_width];
-		}
-	}
-
-	return new;
-}
-
-struct bmp_image* flip_vertically(const struct bmp_image* image){
-	if((image == NULL) || (image->data == NULL)) return NULL;
-
-	struct bmp_image* new = malloc(sizeof(struct bmp_image));
-    new->header = malloc(sizeof(struct bmp_header));
-	memcpy(new->header, image->header, sizeof(*new->header));
-
-	//creating new variables for simple codding 
-	uint32_t size = image->header->width * image->header->height;
-	new->data = (struct pixel*)calloc(size, sizeof(struct pixel));
-	uint32_t half_height = new->header->height / 2;
-	uint32_t old_width = image->header->width;
-	uint32_t old_height = image->header->height;
-	uint32_t new_width = new->header->width;
-	uint32_t new_height = new->header->height;
-	
-	//flipping is like double(twice) rotate, but firstly we must find a half of BMP image
-	int i = 0;
-	for(uint32_t y = 0; y < half_height; y++){
-		for(uint32_t x = 0; x < old_width; x++, i++){
-			new->data[i] = image->data[x + old_width * (old_height - y - 1)];
-			new->data[x + new_width * (new_height - y - 1)] = image->data[i];
-		}
-	}
-	//checking if the bmp's heigth is pairing
-	if((new_height % 2) == 1){
-		for(uint32_t x = 0; x < new_width; x++){
-			new->data[x + new_width * half_height] = image->data[x + old_width * half_height];
-		}
-	}
-
-	return new;
-}
-
-struct bmp_image* rotate_left(const struct bmp_image* image){
-	if(image == NULL) return NULL;
-
-	struct bmp_image* new = malloc(sizeof(struct bmp_image));
-    new->header = malloc(sizeof(struct bmp_header));
-	memcpy(new->header, image->header, sizeof(*image->header));
-
-    
-	//the idea of rotating http://www.cpp.re/forum/beginner/265541/
-	new->header->width = image->header->height;
-	new->header->height = image->header->width;
-	int padding = 4 - ((new->header->bpp / 8) * image->header->height) % 4;
-	if(((new->header->bpp / 8) * image->header->height) % 4 == 0){
-		padding = 0;
-	} else{
-		padding = 4 - ((new->header->bpp / 8) * image->header->height) % 4;
-	}
-	int new_image_size = (image->header->height * (new->header->bpp / 8) + padding) * image->header->width;
-	new->header->image_size = new_image_size;
-	new->header->size = new_image_size + new->header->offset;
-	new->data = (struct pixel*)calloc(image->header->width*image->header->height, sizeof(struct pixel));
-	//and the another idea of rotating https://cboard.cprogramming.com/c-programming/175363-rotating-bmp-image-multiple-90-c.html
-	int i = 0;
-	//function to rotate the bmp image to the left
-	for (int y = 0; y < image->header->width; y++){
-		for(int x = 0; x < image->header->height; x++, i++){
-			new->data[image->header->height - x - 1 + y * image->header->height] = image->data[x * image->header->width + y];
-		}
-	}
-	
-	return new;		
-}
-
-struct bmp_image* rotate_right(const struct bmp_image* image){
-	/*if(image == NULL) return NULL;
-
-	struct bmp_image* new = malloc(sizeof(struct bmp_image));
-	new = rotate_left(image);
-	for(int i = 0; i < 2; i++){
-		new = rotate_left(new);
-	}
-
-	return new;*/
-	if(image == NULL) return NULL;
-	struct bmp_image* new = malloc(sizeof(struct bmp_image));
-    new->header = malloc(sizeof(struct bmp_header));
-	memcpy(new->header, image->header, sizeof(*new->header));
-
-	new->header->width = image->header->height;
-	new->header->height = image->header->width;
-	int padding = 4 - ((new->header->bpp / 8) * image->header->height) % 4;
-	//checking padding of the bmp image
-	if(((new->header->bpp / 8) * image->header->height) % 4 == 0){
-		padding = 0;
-	} else{
-		padding = 4 - ((new->header->bpp / 8) * image->header->height) % 4;
-	}
-	int new_image_size = (image->header->height * (new->header->bpp / 8) + padding) * image->header->width;
-	new->header->image_size = new_image_size;
-	new->header->size = new_image_size + new->header->offset;
-	new->data = (struct pixel*)calloc(image->header->width*image->header->height, sizeof(struct pixel));
-	//the idea of rotating http://www.cpp.re/forum/beginner/265541/
-	//and the another idea of rotating https://cboard.cprogramming.com/c-programming/175363-rotating-bmp-image-multiple-90-c.html
-	int i = 0;
-	//function to rotate the bmp image to the right
-	for (int y = 0; y < image->header->width; y++){
-		for(int x = 0; x < image->header->height; x++, i++){
-			new->data[i] = image->data[x * image->header->width + image->header->width - y - 1];
-		}
-	}
-	
-	return new;	
-}
-
-
-
-struct bmp_image* extract(const struct bmp_image* image, const char* colors_to_keep){
-	if((image == NULL) || (colors_to_keep == NULL) || (image->data == NULL) || (image->header == NULL)) return NULL;
-	bool red = false, blue = false, green = false;
-
-	for(int i = 0; i < strlen(colors_to_keep); i++){
-		if(colors_to_keep[i] == 'r'){
-			red = true;
-		} else if(colors_to_keep[i] == 'b'){
-			blue = true;
-		} else if(colors_to_keep[i] == 'g'){
-			green = true;
-		} else return NULL;
-	}
-	struct bmp_image* new = malloc(sizeof(struct bmp_image));
-	new->header = malloc(sizeof(struct bmp_header));
-	*new->header = *image->header;
-	new->data = (struct pixel*)calloc(image->header->width*image->header->height, sizeof(struct pixel));
-
-	int i = 0;
-	//function for filling the picture with the desired colors (pixels)
-	for(int y = 0; y < image->header->height; y++){
-		for(int x = 0; x < image->header->width; x++, i++){
-			if(red == true) new->data[i].red = image->data[i].red;
-			else new->data[i].red = 0;
-			if(blue == true) new->data[i].blue = image->data[i].blue;
-			else new->data[i].blue = 0;
-			if(green == true) new->data[i].green = image->data[i].green;
-			else new->data[i].green = 0;
-		}
-	}
-
-	return new;
-}
-
-struct bmp_image* scale(const struct bmp_image* image, float factor){
-	if((image == NULL) || (factor <= 0)) return NULL;
-
-	struct bmp_image * new = malloc(sizeof(struct bmp_image));
-	new->header = malloc(sizeof(struct bmp_header));
-	*new->header = *image->header;
-	uint32_t new_height = round((float)image->header->height * factor);
-	uint32_t new_width = round((float)image->header->width * factor);
-	new->header->width = (uint32_t)new_width;
-	new->header->height = (uint32_t)new_height;
-
-	uint32_t padding = 0;
-	//checking padding of the bmp image
-	if(((image->header->bpp / 8) * new_width) % 4 == 0){
-		padding = 0;
-	} else{
-		padding = 4 - (((image->header->bpp / 8) * new_width) % 4);
-	}
-
-	//filling new size and image size into new bmp image
-	new->header->size = ((padding + (uint32_t)new_width * (image->header->bpp / 8)) * (uint32_t)new_height) + image->header->offset;
-	new->header->image_size = ((padding + (uint32_t)new_width * (image->header->bpp / 8)) * (uint32_t)new_height);
-	new->data = (struct pixel*)calloc((uint32_t)(new_height * new_width), sizeof(struct pixel));
-
-	int i = 0;
-	//fuction for scaling a bmp image
-	for(int y = 0; y < new_height; y++){
-		for(int x = 0; x < new_width; x++, i++){
-			//add (int), because have an error: array subscript is not an integer
-			//new->data[i] = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)];
-            new->data[i] = image->data[(((int)(y * image->header->height) / new->header->height) * image->header->width) + ((int)(x * image->header->width) / new->header->width)];
-		}
-	}
-
-
-
-	return new;
-}
-
-struct bmp_image* crop(const struct bmp_image* image, const uint32_t start_y, const uint32_t start_x, const uint32_t height, const uint32_t width){
-	if((image == NULL) || (start_x < 0 || start_x > image->header->width) || (start_y < 0 || start_y > image->header->height) || (width <= 0 || start_x + width > image->header->width) || (height <= 0 || height + start_y > image->header->height)) return NULL;
-
-	struct bmp_image* new_bmp =  malloc(sizeof(struct bmp_image));
-	new_bmp->header = malloc(sizeof(struct bmp_header));
-	*new_bmp->header = *image->header;
-	uint32_t old_width = image->header->width;
-
-	new_bmp->data = calloc(new_bmp->header->width * new_bmp->header->height, sizeof(struct pixel));
-	struct pixel* datas = calloc(new_bmp->header->width * new_bmp->header->height, sizeof(struct pixel));
-	for(uint32_t y = 0; y < image->header->height; y++){
-        for(uint32_t x = 0, i = 0; x < image->header->width; x++, i++){
-            new_bmp->data[x + y * image->header->width] = image->data[x + (image->header->height - 1 - y) * image->header->width];
-			datas[x + y * image->header->width ] = image->data[x + (image->header->height - 1 - y) * image->header->width];
+    for(int i = 0, number = 0; i < length_file; i++){
+        if(string_of_steam[i] != '\0'){
+            number++;
+            long_of_string[number] = string_of_steam[i];
+        }
+        if(string_of_steam[i+1] == 77 && string_of_steam[i] == 66){
+            fseek(stream, i, 0);
+            break;
+        } else if(string_of_steam[i+1] == '\0'){
+            free(string_of_steam);
+            free(long_of_string);
+            return NULL;
         }
     }
-	
-    new_bmp->header->width = (uint32_t)width;
-    new_bmp->header->height = (uint32_t)height;
-    uint32_t i = 0;
-    for(uint32_t y = start_y; y < start_y + height; y++){
-        for(uint32_t x = start_x; x < start_x + width; x++, i++){
-            new_bmp->data[i] = new_bmp->data[x + (y * old_width)];
-			datas[i] = datas[x + (y * old_width)];
-        }
+    free(long_of_string);
+    free(string_of_steam);
+
+    struct bmp_header* header = malloc(sizeof(struct bmp_header));
+    fread(header, sizeof(struct bmp_header), 1, stream);
+    if((header->bpp != 24) || (header->dib_size != 40) || (header->offset != 54) || (header->type != 0x4D42) || (header->width <= 0) || (header->height <= 0)){
+        free(header);
+        return NULL;
     }
-	i = 0;
-	
-	for(uint32_t y = 0; y < height; y++){
-	    for(uint32_t x = 0; x < width; x ++, i++){
-			new_bmp->data[x + width * (height - y - 1)] = datas[i];
-		}
-	}
-	uint32_t padding = 4 - (((image->header->bpp / 8) * width) % 4);
-	new_bmp->header->image_size = (uint32_t)height * ((uint32_t)width * sizeof(struct pixel) + padding);
-	new_bmp->header->size = new_bmp->header->offset + new_bmp->header->image_size;
 
-	free(datas);
+    return header;
+}
 
-    return new_bmp;
+struct pixel* read_data(FILE* stream, const struct bmp_header* header){
+    if((stream == NULL) || (header == NULL)) return NULL;
+
+    //creating new variables for simple codding 
+    uint32_t size = header->height * header->width;
+    uint32_t width = header->width;
+    uint32_t height = header->height;
+    struct pixel* data = calloc(size, sizeof(struct pixel));
+    fseek(stream, header->offset, 0);
+
+    //function for reading data memory
+    for(uint32_t i = 0; i < height; i++){
+        for(uint32_t j = 0; j < width; j++){
+            fread(&data[i * width + j], sizeof(struct pixel), 1, stream);
+        }
+        if((width % 4) != 0) fseek(stream, width, 1);
+    }
+
+    return data;
+}
+
+struct bmp_image* read_bmp(FILE* stream){
+    if(stream == NULL) return NULL;
+
+    //creating and checking a header bmp (for elements)
+    struct bmp_header* header = read_bmp_header(stream);
+    if(header == NULL){
+        fprintf(stderr, "Error: This is not a BMP file.\n");
+        free(header);
+        return NULL;
+    }
+
+    //creating and checking a data bmp (for elements)
+    struct pixel* data = read_data(stream, header);
+    if(data == NULL){
+        fprintf(stderr, "Error: Corrupted BMP file.\n");
+        free(header);
+        free(data);
+        return NULL;
+    }
+
+    //creating a new bmp image, and fill it with data & header
+    struct bmp_image* image = malloc(sizeof(struct bmp_image));
+    if(header != NULL && data != NULL){
+        image->data = data;
+        image->header = header;
+    }
+
+    return image;
+}
+
+bool write_bmp(FILE* stream, const struct bmp_image* image){
+    if((stream == NULL) || (image == NULL) || (image->data == NULL) || (image->header == NULL)) return false;
+
+    //creating new variables for simple codding 
+    uint32_t height = image->header->height;
+    uint32_t width = image->header->width;
+
+    //function for writing data
+    fwrite(image->header, sizeof(struct bmp_header), 1, stream);
+    for(uint32_t i = 0; i < height; i++){
+        for(uint32_t j = 0; j < width; j++){
+            fwrite(&image->data[(i * width) + j], sizeof(struct pixel), 1, stream);
+        }
+        fwrite(&PADDING_CHAR, sizeof(unsigned char), ((width) % 4), stream);
+    }
+
+    return true;
+}
+
+void free_bmp_image(struct bmp_image* image){
+    if(image != NULL){
+        free(image->header);
+        free(image->data);
+        free(image);
+    }
 }
