@@ -30,7 +30,7 @@ struct bmp_header* read_bmp_header(FILE* stream){
     if(stream == NULL) return NULL;
     fseek(stream, 0, 2);
     //http://www.c-cpp.ru/content/ftell
-    uint32_t length_file = ftell(stream);
+    int length_file = ftell(stream);
     if(length_file == -1L) return NULL;
 
     fseek(stream, 0, 0);
@@ -38,7 +38,7 @@ struct bmp_header* read_bmp_header(FILE* stream){
     fread(string_of_steam, length_file, 1, stream);
     char *long_of_string = calloc(strlen(string_of_steam), sizeof(char));
 
-    for(uint32_t i = 0, number = 0; i < length_file; i++){
+    for(int i = 0, number = 0; i < length_file; i++){
         if(string_of_steam[i] != '\0'){
             number++;
             long_of_string[number] = string_of_steam[i];
