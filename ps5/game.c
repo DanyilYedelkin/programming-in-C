@@ -5,7 +5,10 @@
 #include "world.h"
 
 struct game* create_game(){
-    struct game* created_game = malloc(sizeof(created_game));
+    //first change: malloc -> calloc
+    //struct game* created_game = malloc(sizeof(created_game));
+    struct game* created_game = calloc(1, sizeof(created_game));
+
     created_game->state = PLAYING;
     created_game->world = create_world();
     created_game->current_room = created_game->world->room;
@@ -127,8 +130,9 @@ void execute_command(struct game* game, struct command* command){
         show_room(game->current_room);
     }
     if(strcmp(command->name, "PRIKAZY") == 0){
-        for(int i = 0; game->parser->commands != NULL; i++){
-            printf("%s  -->  %s\n", game->parser->commands->command->name, game->parser->commands->command->description);
+        struct container* commands = game->parser->commands;
+        for(int i = 0; commands != NULL; i++){
+            printf("%s  -->  %s\n", commands->command->name, commands->command->description);
         }
     }
     if(strcmp(command->name, "VERZIA") == 0){
@@ -163,15 +167,16 @@ void execute_command(struct game* game, struct command* command){
     }
     if(strcmp(command->name, "INVENTAR") == 0){
         if(game->backpack->items != NULL){
-            for(int i = 0; game->backpack->items != NULL; i++){
-                printf("%s\n", game->backpack->items->item->name);
+            struct container* items = game->backpack->items;
+            for(int i = 0; items != NULL; i++){
+                printf("%s\n", items->item->name);
             }
         } else{
             printf("Your backpack is empty :D\n");
         }
     }
     if(strcmp(command->name, "POUZI") == 0){
-        return;
+        //return;
     }
     if(strcmp(command->name, "PRESKUMAJ") == 0){
         printf("%s\n", game->backpack->items->item->description);
@@ -185,7 +190,8 @@ void execute_command(struct game* game, struct command* command){
             if(fp != NULL){
                 while(1){
                     if(fscanf(fp, "%s", input_buffer) != EOF){
-                        execute_command(game, parse_input(game->parser, input_buffer));
+                        struct command* input_command = parse_input(game->parser, input_buffer);
+                        execute_command(game, input_command);
                     } else{
                         break;
                     }
@@ -198,8 +204,9 @@ void execute_command(struct game* game, struct command* command){
         if(game->parser->history != NULL){
             FILE *fp = fopen("game_saves.txt", "w");
             printf("Saving... Wait for a while, please\n");
-            for(int i = 0; game->parser->history != NULL; i++, game->parser->history = game->parser->history->next){
-                fprintf(fp, "%s\n", game->parser->history->text);
+            struct container* history = game->parser->history;
+            for(int i = 0; history != NULL; i++, history = history->next){
+                fprintf(fp, "%s\n", history->text);
             }
             printf("Saving is completed! :D\n");
             fclose(fp);
