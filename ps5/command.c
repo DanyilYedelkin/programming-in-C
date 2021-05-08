@@ -7,7 +7,6 @@ struct command* create_command(char* name, char* description, char* pattern, siz
     if((name == NULL) || (description == NULL)) return NULL;
 
     struct command* new_command = malloc(sizeof(struct command));
-    //new_command->groups = (char**)malloc(sizeof(char*) * nmatch);
     new_command->name = malloc(strlen(name)+1);
     strcpy(new_command->name, name);
     new_command->description = malloc(strlen(description)+1);
@@ -25,11 +24,6 @@ struct command* create_command(char* name, char* description, char* pattern, siz
 
 struct command* destroy_command(struct command* command){
     if(command == NULL) return NULL;
-
-    //for(int i = 0; i < command->nmatch; i++){
-        //free(command->groups[i]);
-        //command->groups[i] = NULL;
-    //}      // LOOK AT THIS!!!!!!!!!!!!!!!!!!!
     
     free(command->groups);
     free(command->name);
