@@ -7,7 +7,7 @@ void creating(struct item* new_item, char* name, char* description, unsigned int
 void free_memory_item(struct item* item);
 
 struct item* create_item(char* name, char* description, unsigned int properties){
-    if((name == NULL) || (description == NULL)) return NULL;
+    if((name == NULL) || (description == NULL) || (strlen(name) == 0) || (strlen(description) == 0)) return NULL;
 
     struct item* new_item = malloc(sizeof(struct item));
     new_item->name = calloc(strlen(name)+1, sizeof(struct item));
