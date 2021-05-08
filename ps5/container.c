@@ -92,7 +92,7 @@ struct container* destroy_containers(struct container* first){
     return NULL;
 }
 
-void free_memory_container(struct container* container){
+/*void free_memory_container(struct container* container){
     if(container->type == ROOM){
         container->room = destroy_room(container->room);
     }
@@ -106,7 +106,7 @@ void free_memory_container(struct container* container){
         free(container->text);
     }
     free(container);
-}
+}*/
 
 void* get_from_container_by_name(struct container *first, const char *name){
     if((name == NULL) || (first == NULL)) return NULL;
