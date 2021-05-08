@@ -6,7 +6,7 @@
 
 void creating_Wcont(struct container* new_container, enum container_type type, void* entry);
 void creating_cont(struct container* new_container, struct container* first, enum container_type type, void* entry);
-void free_memory_container(struct container* container);
+//void free_memory_container(struct container* container);
 int removing_first(struct container* first_container, struct container* first, void* entry);
 int removing_second(struct container* first_container, struct container* next_container, struct container* first, void* entry);
 
@@ -14,22 +14,32 @@ struct container* create_container(struct container* first, enum container_type 
     if((entry == NULL) || (first != NULL && first->type != type)) return NULL;
 
     if(first == NULL){
-        struct container* new_container = malloc(sizeof(struct container));
+        //first changed: malloc -> calloc
+        //struct container* new_container = malloc(sizeof(struct container));
+        struct container* new_container = calloc(1, sizeof(struct container));
         new_container->type = type;
 
         creating_Wcont(new_container, type, entry);
-        new_container->next = NULL;
+        //new_container->next = NULL;
 
+        //first changed: add the new container to the first container
         //first = new_container;
-        return new_container; //return first; ?????
+        return new_container;//return first;
     } else{
         if(type != first->type) return NULL;
 
+        struct container* check = first;
         struct container* new_container = malloc(sizeof(struct container));
         new_container->type = type;
-        creating_cont(new_container, first, type, entry);
+        //creating_cont(new_container, first, type, entry);
+        creating_Wcont(new_container, type, entry);
+        while(check->next != NULL){
+            check = check->next;
+        }
+        check->next = new_container;
+        new_container->next = NULL;
 
-        return new_container;
+        return first;
     }
 }
 
@@ -48,7 +58,7 @@ void creating_Wcont(struct container* new_container, enum container_type type, v
     }
 }
 
-void creating_cont(struct container* new_container, struct container* first, enum container_type type, void* entry){
+/*void creating_cont(struct container* new_container, struct container* first, enum container_type type, void* entry){
     if(type == ROOM){
         new_container->room = (struct room*)entry;
     }
@@ -69,7 +79,7 @@ void creating_cont(struct container* new_container, struct container* first, enu
         first = first->next;
     }
     first->next = new_container;
-}
+}*/
 
 struct container* destroy_containers(struct container* first){
     if(first == NULL) return NULL;
