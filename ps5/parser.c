@@ -5,7 +5,7 @@
 #include "parser.h"
 
 struct parser* create_parser(){
-    struct parser* parser = calloc(1, sizeof(struct parser));
+    struct parser* created_parser = calloc(1, sizeof(struct parser));
 
     //creating all parser points form https://kurzy.kpi.fei.tuke.sk/pvjc/2021/problemset.05.adventure.html
     char* parser_name[] ={
@@ -70,7 +70,7 @@ struct parser* create_parser(){
         "\\s*[uU][lL][oO][zZ]\\s*"
     };
 
-    struct command* new_command;
+    //struct command* new_command;
     int word = 0;
     int size_patter = 17;
 
@@ -84,12 +84,14 @@ struct parser* create_parser(){
         }
     } while(word < size_patter);*/
     while(word < size_patter){
-        new_command = create_command(parser_name[word], parser_description[word], parser_patter[word], 0);
-        parser->commands = create_container(parser->commands, COMMAND, new_command);
+        //created_parser->commands = create_container(created_parser->commands, COMMAND, create_command(parser_name[word], parser_description[word], parser_patter[word], 1));
+        create_container(created_parser->commands, COMMAND, create_command(parser_name[word], parser_description[word], parser_patter[word], 1));
         word++;
     }
 
-    return parser;
+    return created_parser;
+
+    //parser->history = create_container(NULL, COMMAND, create_command("Start", "Start game", "(Start)", 0));
 }
 
 struct parser* destroy_parser(struct parser* parser) {
