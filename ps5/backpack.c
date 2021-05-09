@@ -59,10 +59,11 @@ void delete_item_from_backpack(struct backpack* backpack, struct item* item){
     if((backpack == NULL) || (item == NULL)) return;
 
     //first changed: remove old method, add new
-    /*backpack->items = remove_container(backpack->items, item);
-    backpack->size--;*/
+    //second changed: remove back
+    backpack->items = remove_container(backpack->items, item);
+    backpack->size--;
 
-    struct container* items = backpack->items;
+    /*struct container* items = backpack->items;
     if(items->item == item){
         struct container* delete_first = backpack->items;
         backpack->items = backpack->items->next;
@@ -80,5 +81,5 @@ void delete_item_from_backpack(struct backpack* backpack, struct item* item){
     struct container* delete_first = items->next;
     items->next = items->next->next;
     free(delete_first);
-    backpack->size--;
+    backpack->size--;*/
 }
