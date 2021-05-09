@@ -91,8 +91,11 @@ struct container* destroy_world(struct container* world){
 }
 
 struct container* add_room_to_world(struct container* world, struct room* room){
-    if((get_from_container_by_name(world, room->name) != NULL) || (room == NULL)) return NULL;
+    if(room == NULL) return NULL;
 
+    if(world != NULL){
+        if(get_room(world, room->name) != NULL) return NULL;
+    }
     return create_world(world, ROOM, room);
 }
 
