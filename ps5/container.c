@@ -88,29 +88,7 @@ void creating_cont(struct container* new_container, struct container* first, enu
 struct container* destroy_containers(struct container* first){
     if(first == NULL) return NULL;
 
-    struct container* first_container = first;
-    struct container* next_container = first->next;
-
-    /*do{
-        next_container = first->next;
-        if(first_container != NULL){
-            //free_memory_container(first_container);
-            free(first_container);
-        }
-        first_container = next_container;
-    } while(next_container != NULL);
-
-    //free_memory_container(first_container);
-    free(first_container);*/
-
-    //first changed: delete old method and add new method
-    free_memory_container(first_container);
-    for(int i = 0; next_container != NULL; i++){
-        first_container = next_container;
-        next_container = next_container->next;
-        free_memory_container(first_container);
-    }
-
+    free_memory_container(first);
 
     return NULL;
 }
@@ -190,7 +168,10 @@ void* get_from_container_by_name(struct container *first, const char *name){
                 int difference = 0;
                 for(int i = 0; i < strlen(name); i++){
                     difference = tolower(first->room->name[i]) - tolower(name[i]);
-                    if(difference != 0) i = (strlen(name) + 1);
+                    if(difference != 0){
+                        first = first->next;
+                        break;
+                    }
                 }
                 if(difference == 0) return first;
                 else first = first->next;
@@ -203,7 +184,10 @@ void* get_from_container_by_name(struct container *first, const char *name){
                 int difference = 0;
                 for(int i = 0; i < strlen(name); i++){
                     difference = tolower(first->item->name[i]) - tolower(name[i]);
-                    if(difference != 0) i = (strlen(name) + 1);
+                    if(difference != 0){
+                        first = first->next;
+                        break;
+                    }
                 }
                 if(difference == 0) return first;
                 else first = first->next;
@@ -216,7 +200,10 @@ void* get_from_container_by_name(struct container *first, const char *name){
                 int difference = 0;
                 for(int i = 0; i < strlen(name); i++){
                     difference = tolower(first->command->name[i]) - tolower(name[i]);
-                    if(difference != 0) i = (strlen(name) + 1);
+                    if(difference != 0){
+                        first = first->next;
+                        break;
+                    }
                 }
                 if(difference == 0) return first;
                 else first = first->next;
@@ -229,7 +216,10 @@ void* get_from_container_by_name(struct container *first, const char *name){
                 int difference = 0;
                 for(int i = 0; i < strlen(name); i++){
                     difference = tolower(first->text[i]) - tolower(name[i]);
-                    if(difference != 0) i = (strlen(name) + 1);
+                    if(difference != 0){
+                        first = first->next;
+                        break;
+                    }
                 }
                 if(difference == 0) return first;
                 else first = first->next;
