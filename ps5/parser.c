@@ -5,10 +5,10 @@
 #include "parser.h"
 
 struct parser* create_parser(){
-    struct parser* parser = (struct parser*)calloc(1, sizeof(struct parser));
+    struct parser* parser = calloc(1, sizeof(struct parser));
 
     //creating all parser points form https://kurzy.kpi.fei.tuke.sk/pvjc/2021/problemset.05.adventure.html
-    char* parser_name[] = {
+    char* parser_name[] ={
         "KONIEC", 
         "SEVER", 
         "JUH", 
@@ -28,7 +28,7 @@ struct parser* create_parser(){
         "ULOZ"
     };
 
-    char* parser_description[] = {
+    char* parser_description[] ={
         "Príkaz ukončí rozohratú hru. Nastaví príslušný stav hry.", 
         "Presun do miestnosti nachádzajúcej sa na sever od aktuálnej. Zmení referenciu aktuálnej miestnosti.", 
         "Presun do miestnosti nachádzajúcej sa na juh od aktuálnej. Zmení referenciu aktuálnej miestnosti.", 
@@ -50,7 +50,7 @@ struct parser* create_parser(){
 
     //https://ru.wikipedia.org/wiki/Регулярные_выражения
     //https://www.youtube.com/watch?v=bWu8IJ_DasE
-    char* parser_patter[] = {
+    char* parser_patter[] ={
         "\\s*[kK][oO][nN][iI][eE][cC]\\s*", 
         "(\\s*[sS][eE][vV][eE][rR]\\s*)", 
         "\\s*[jJ][uU][hH]]\\s*", 
@@ -85,7 +85,7 @@ struct parser* create_parser(){
     } while(word < size_patter);*/
     while(word < size_patter){
         new_command = create_command(parser_name[word], parser_description[word], parser_patter[word], 0);
-        parser->commands = create_container(parser->commands, 2, new_command);
+        parser->commands = create_container(parser->commands, COMMAND, new_command);
         word++;
     }
 
@@ -106,13 +106,13 @@ struct command* parse_input(struct parser* parser, char* input){
     if((input == NULL) || (parser == NULL)) return NULL;
 
     //int input_word = 0;
-    int word2 = 0;
+    /*int word2 = 0;
     int word = 0;
     char* input_buffer = malloc(sizeof(char) * 20);
 
     for(int j = 0; input[word] == ' '; j++){
         word++;
-    }
+    }*/
 
     //first changed: remove old method and add new method
     /*do{
@@ -145,7 +145,7 @@ struct command* parse_input(struct parser* parser, char* input){
         }
     } while(input[input_word] == ' ');*/
 
-    while(word < strlen(input)){
+    /*while(word < strlen(input)){
         if(input[word] == ' '){
             input_buffer[word2] = '\0';
             break;
@@ -155,7 +155,13 @@ struct command* parse_input(struct parser* parser, char* input){
             if(word2 <= word) word2++;
         }
         word++;
-    }
+    }*/
 
-    return get_from_container_by_name(parser->commands, input_buffer);
+    for(int i = 0; parser->commands->command != NULL && parser->commands != NULL; i++, parser->commands = parser->commands->next){
+        if(regexec(&parser->commands->command->preg, input, 0, NULL, REG_ICASE) != REG_NOMATCH){
+            return parser->commands->command;
+        }
+    }
+    return NULL;
+    //return get_from_container_by_name(parser->commands, input_buffer);
 }
