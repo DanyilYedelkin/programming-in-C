@@ -5,7 +5,6 @@
 #include "parser.h"
 
 struct parser* create_parser(){
-    //first changed: add all functions and methods for create_parser()
     struct parser* parser = (struct parser*)calloc(1, sizeof(struct parser));
 
     //creating all parser points form https://kurzy.kpi.fei.tuke.sk/pvjc/2021/problemset.05.adventure.html
@@ -52,23 +51,23 @@ struct parser* create_parser(){
     //https://ru.wikipedia.org/wiki/Регулярные_выражения
     //https://www.youtube.com/watch?v=bWu8IJ_DasE
     char* parser_patter[] = {
-        "^\\s*((QU|EX)IT|KONIEC)\\s*$", 
-        "^\\s*(S|SEVER)\\s*$", 
-        "^\\s*(J|JUH)\\s*$", 
-        "^\\s*(V|VYCHOD)\\s*$", 
-        "^\\s*(Z|ZAPAD)\\s*$", 
-        "^\\s*ROZHLIADNI\\sSA\\s*$", 
-        "^\\s*(PRIKAZY|HELP|POMOC)\\s*$", 
-        "^\\s*VERZIA\\s*$", 
-        "^\\s*RESTART\\s*$", 
-        "^\\s*(O HRE|ABOUT)\\s*$", 
-        "^\\s*VEZMI(\\s+[a-zA-Z]+)+\\s*$", 
-        "^\\s*POLOZ(\\s+[a-zA-Z]+)+\\s*$", 
-        "^\\s*(INVENTAR|I)\\s*$", 
-        "^\\s*POUZI(\\s+[a-zA-Z]+)+\\s*$", 
-        "^\\s*PRESKUMAJ(\\s+[a-zA-Z]+)+\\s*$", 
-        "^\\s*(NAHRAJ|LOAD)\\s*$", 
-        "^\\s*(ULOZ|SAVE)\\s*$"
+        "^\\s{0,}((QU|EX)IT|KONIEC)\\s{0,}$", 
+        "^\\s{0,}(S|SEVER)\\s{0,}$", 
+        "^\\s{0,}(J|JUH)\\s{0,}$", 
+        "^\\s{0,}(V|VYCHOD)\\s{0,}$", 
+        "^\\s{0,}(Z|ZAPAD)\\s{0,}$", 
+        "^\\s{0,}ROZHLIADNI\\sSA\\s{0,}$", 
+        "^\\s{0,}(PRIKAZY|HELP|POMOC)\\s{0,}$", 
+        "^\\s{0,}VERZIA\\s{0,}$", 
+        "^\\s{0,}RESTART\\s{0,}$", 
+        "^\\s{0,}(O HRE|ABOUT)\\s{0,}$", 
+        "^\\s{0,}VEZMI(\\s{1,}[a-zA-Z]{1,}){1,}\\s{0,}$", 
+        "^\\s{0,}POLOZ(\\s{1,}[a-zA-Z]{1,}){1,}\\s{0,}$", 
+        "^\\s{0,}(INVENTAR|I)\\s{0,}$", 
+        "^\\s{0,}POUZI(\\s{1,}[a-zA-Z]{1,}){1,}\\s{0,}$", 
+        "^\\s{0,}PRESKUMAJ(\\s{1,}[a-zA-Z]{1,}){1,}\\s{0,}$", 
+        "^\\s{0,}(NAHRAJ|LOAD)\\s{0,}$", 
+        "^\\s{0,}(ULOZ|SAVE)\\s{0,}$"
     };
 
     struct command* new_command;
@@ -101,11 +100,17 @@ struct parser* destroy_parser(struct parser* parser) {
 struct command* parse_input(struct parser* parser, char* input){
     if((input == NULL) || (parser == NULL)) return NULL;
 
-    int input_word = 0;
+    //int input_word = 0;
+    int word2 = 0;
     int word = 0;
     char* input_buffer = malloc(sizeof(char) * 20);
 
-    do{
+    for(int j = 0; input[word] == ' '; j++){
+        word++;
+    }
+
+    //first changed: remove old method and add new method
+    /*do{
         if(input[0] != ' '){
             while(input_word < strlen(input)){
                 if(input[input_word] == ' '){
@@ -133,7 +138,19 @@ struct command* parse_input(struct parser* parser, char* input){
             }
             break;
         }
-    } while(input[input_word] == ' ');
+    } while(input[input_word] == ' ');*/
+
+    while(word < strlen(input)){
+        if(input[word] == ' '){
+            input_buffer[word2] = '\0';
+            break;
+        }
+        if(input[word] != ' '){
+            input_buffer[word2] = (char)tolower(input[word]);
+            if(word2 <= word) word2++;
+        }
+        word++;
+    }
 
     return get_from_container_by_name(parser->commands, input_buffer);
 }
