@@ -121,48 +121,50 @@ struct container* destroy_containers(struct container* first){
 void* get_from_container_by_name(struct container *first, const char *name){
     if((name == NULL) || (first == NULL)) return NULL;
 
-    for(; first != NULL; first = first->next){
+    //first changed: create a new container "item" and change first -> "item"
+    struct container* item = first;
+    for(; item != NULL; item = item->next){
         if(first->type == ROOM){
-            if((strlen(first->room->name) == strlen(name))){
+            if((strlen(item->room->name) == strlen(name))){
                 int difference = 0;
                 for(int i = 0; i < strlen(name); i++){
-                    difference = tolower(first->room->name[i]) - tolower(name[i]);
+                    difference = tolower(item->room->name[i]) - tolower(name[i]);
                     if(difference != 0) break;
                 }
-                if(difference == 0) return first->room;
+                if(difference == 0) return item->room;
             }
             break;
         }
         if(first->type == ITEM){
-            if((strlen(first->item->name) == strlen(name))){
+            if((strlen(item->item->name) == strlen(name))){
                 int difference = 0;
                 for(int i = 0; i < strlen(name); i++){
-                    difference = tolower(first->item->name[i]) - tolower(name[i]);
+                    difference = tolower(item->item->name[i]) - tolower(name[i]);
                     if(difference != 0) break;
                 }
-                if(difference == 0) return first->item;
+                if(difference == 0) return item->item;
             }
             break;
         }
         if(first->type == COMMAND){
-            if((strlen(first->command->name) == strlen(name))){
+            if((strlen(item->command->name) == strlen(name))){
                 int difference = 0;
                 for(int i = 0; i < strlen(name); i++){
-                    difference = tolower(first->command->name[i]) - tolower(name[i]);
+                    difference = tolower(item->command->name[i]) - tolower(name[i]);
                     if(difference != 0) break;
                 }
-                if(difference == 0) return first->command;
+                if(difference == 0) return item->command;
             }
             break;
         }
         if(first->type == TEXT){
-            if((strlen(first->text) == strlen(name))){
+            if((strlen(item->text) == strlen(name))){
                 int difference = 0;
                 for(int i = 0; i < strlen(name); i++){
-                    difference = tolower(first->text[i]) - tolower(name[i]);
+                    difference = tolower(item->text[i]) - tolower(name[i]);
                     if(difference != 0) break;
                 }
-                if(difference == 0) return first->text;
+                if(difference == 0) return item->text;
             }
             break;
         }
