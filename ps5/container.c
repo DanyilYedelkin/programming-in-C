@@ -49,13 +49,13 @@ struct container* create_container(struct container* first, enum container_type 
 
 void creating_Wcont(struct container* new_container, enum container_type type, void* entry){
     if(type == ROOM){
-        new_container->room = (struct room*)entry;
+        new_container->room = entry;
     }
     if(type == ITEM){
-        new_container->item = (struct item*)entry;
+        new_container->item = entry;
     }
     if(type == COMMAND){
-        new_container->command = (struct command*)entry;
+        new_container->command = entry;
     }
     if(type == TEXT){
         new_container->text = entry;
@@ -64,20 +64,20 @@ void creating_Wcont(struct container* new_container, enum container_type type, v
 
 void creating_cont(struct container* new_container, struct container* first, enum container_type type, void* entry){
     if(type == ROOM){
-        new_container->room = (struct room*)entry;
+        new_container->room = entry;
     }
     if(type == ITEM){
-        new_container->item = (struct item*)entry;
+        new_container->item = entry;
     }
     if(type == COMMAND){
-        new_container->command = (struct command*)entry;
+        new_container->command = entry;
     }
     if(type == TEXT){
-        char* new_text = malloc(strlen(entry) + 1);
+        /*char* new_text = malloc(strlen(entry) + 1);
         strcpy(new_text, entry);
-        new_container->text = new_text;
+        new_container->text = new_text;*/
 
-        //strcpy(new_container->text, entry);
+        strcpy(new_container->text, entry);
     }
     /*while(first->next != NULL){
         first = first->next;
@@ -110,7 +110,7 @@ void free_memory_container(struct container* container){
 }
 
 void* get_from_container_by_name(struct container *first, const char *name){
-    if((name == NULL) || (first == NULL)) return NULL;
+    if((name == NULL) || (first == NULL) || (strlen(name) == 0)) return NULL;
 
     //first changed: create a new container "item" and change first -> "item"
     /*struct container* item = first;
@@ -169,8 +169,7 @@ void* get_from_container_by_name(struct container *first, const char *name){
                 for(int i = 0; i < strlen(name); i++){
                     difference = tolower(first->room->name[i]) - tolower(name[i]);
                     if(difference != 0){
-                        first = first->next;
-                        break;
+                        i = 100000000;
                     }
                 }
                 if(difference == 0) return first;
@@ -185,8 +184,7 @@ void* get_from_container_by_name(struct container *first, const char *name){
                 for(int i = 0; i < strlen(name); i++){
                     difference = tolower(first->item->name[i]) - tolower(name[i]);
                     if(difference != 0){
-                        first = first->next;
-                        break;
+                        i = 100000000;
                     }
                 }
                 if(difference == 0) return first;
@@ -201,8 +199,7 @@ void* get_from_container_by_name(struct container *first, const char *name){
                 for(int i = 0; i < strlen(name); i++){
                     difference = tolower(first->command->name[i]) - tolower(name[i]);
                     if(difference != 0){
-                        first = first->next;
-                        break;
+                        i = 100000000;
                     }
                 }
                 if(difference == 0) return first;
@@ -217,8 +214,7 @@ void* get_from_container_by_name(struct container *first, const char *name){
                 for(int i = 0; i < strlen(name); i++){
                     difference = tolower(first->text[i]) - tolower(name[i]);
                     if(difference != 0){
-                        first = first->next;
-                        break;
+                        i = 100000000;
                     }
                 }
                 if(difference == 0) return first;
