@@ -51,30 +51,30 @@ struct parser* create_parser(){
     //https://ru.wikipedia.org/wiki/Регулярные_выражения
     //https://www.youtube.com/watch?v=bWu8IJ_DasE
     char* parser_patter[] = {
-        "^\\s{0,}((QU|EX)IT|KONIEC)\\s{0,}$", 
-        "^\\s{0,}(S|SEVER)\\s{0,}$", 
-        "^\\s{0,}(J|JUH)\\s{0,}$", 
-        "^\\s{0,}(V|VYCHOD)\\s{0,}$", 
-        "^\\s{0,}(Z|ZAPAD)\\s{0,}$", 
-        "^\\s{0,}ROZHLIADNI\\sSA\\s{0,}$", 
-        "^\\s{0,}(PRIKAZY|HELP|POMOC)\\s{0,}$", 
-        "^\\s{0,}VERZIA\\s{0,}$", 
-        "^\\s{0,}RESTART\\s{0,}$", 
-        "^\\s{0,}(O HRE|ABOUT)\\s{0,}$", 
-        "^\\s{0,}VEZMI(\\s{1,}[a-zA-Z]{1,}){1,}\\s{0,}$", 
-        "^\\s{0,}POLOZ(\\s{1,}[a-zA-Z]{1,}){1,}\\s{0,}$", 
-        "^\\s{0,}(INVENTAR|I)\\s{0,}$", 
-        "^\\s{0,}POUZI(\\s{1,}[a-zA-Z]{1,}){1,}\\s{0,}$", 
-        "^\\s{0,}PRESKUMAJ(\\s{1,}[a-zA-Z]{1,}){1,}\\s{0,}$", 
-        "^\\s{0,}(NAHRAJ|LOAD)\\s{0,}$", 
-        "^\\s{0,}(ULOZ|SAVE)\\s{0,}$"
+        "\\s*[kK][oO][nN][iI][eE][cC]\\s*", 
+        "(\\s*[sS][eE][vV][eE][rR]\\s*)", 
+        "\\s*[jJ][uU][hH]]\\s*", 
+        "\\s*[vV][yY][cC][hH][oO][dD]\\s*", 
+        "\\s*[zZ][aA][pP][aA][dD]\\s*", 
+        "\\s*[rR][oO][zZ][hH][lL][iI][aA][dD][nN][iI][ ][sS][aA]\\s*", 
+        "\\s*[pP][rR][iI][kK][aA][zZ][yY]\\s*", 
+        "\\s*[vV][eE][rR][zZ][iI][aA]\\s*", 
+        "\\s*[rR][eE][sS][tT][aA][rR][tT]\\s*", 
+        "\\s*[oO][ ][hH][rR][eE]\\s*", 
+        "\\s*[vV][eE][zZ][mM][iI]\\s*", 
+        "\\s*[pP][oO][lL][oO][zZ]\\s*", 
+        "\\s*[iI][nN][vV][eE][nN][tT][aA][rR]\\s*", 
+        "\\s*[pP][oO][uU][zZ][iI]\\s*", 
+        "\\s*[pP][rR][eE][sS][kK][uU][mM][aA][jJ]\\s*", 
+        "\\s*[nN][aA][hH][rR][aA][jJ]\\s*", 
+        "\\s*[uU][lL][oO][zZ]\\s*"
     };
 
     struct command* new_command;
     int word = 0;
     int size_patter = 17;
 
-    do{
+    /*do{
         if(word < size_patter){
             new_command = create_command(parser_name[word], parser_description[word], parser_patter[word], 0);
             parser->commands = create_container(parser->commands, 2, new_command);
@@ -82,7 +82,12 @@ struct parser* create_parser(){
         } else{
             break;
         }
-    } while(word < size_patter);
+    } while(word < size_patter);*/
+    while(word < size_patter){
+        new_command = create_command(parser_name[word], parser_description[word], parser_patter[word], 0);
+        parser->commands = create_container(parser->commands, 2, new_command);
+        word++;
+    }
 
     return parser;
 }
