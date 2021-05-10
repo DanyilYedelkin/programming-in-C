@@ -5,19 +5,23 @@
 #include "container.h"
 
 void creating_Wcont(struct container* new_container, enum container_type type, void* entry);
-void creating_cont(struct container* new_container, struct container* first, enum container_type type, void* entry);
+void creating_cont(struct container* new_container, enum container_type type, void* entry);
 void free_memory_container(struct container* container);
+int strcmpBIG(char const *first_name, char const *second_name);
 int removing_first(struct container* first_container, struct container* first, void* entry);
 int removing_second(struct container* first_container, struct container* next_container, struct container* first, void* entry);
 
 struct container* create_container(struct container* first, enum container_type type, void* entry){
     if((entry == NULL) || (first != NULL && first->type != type)) return NULL;
 
+    struct container* new_container = calloc(1, sizeof(struct container));
+    new_container->type = type;
+
     if(first == NULL){
         //first changed: malloc -> calloc
         //struct container* new_container = malloc(sizeof(struct container));
-        struct container* new_container = calloc(1, sizeof(struct container));
-        new_container->type = type;
+        /*struct container* new_container = calloc(1, sizeof(struct container));
+        new_container->type = type;*/
 
         creating_Wcont(new_container, type, entry);
 
@@ -29,9 +33,9 @@ struct container* create_container(struct container* first, enum container_type 
         if(type != first->type) return NULL;
 
         //struct container* check = first;
-        struct container* new_container = calloc(1, sizeof(struct container));
-        new_container->type = type;
-        creating_cont(new_container, first, type, entry);
+        /*struct container* new_container = calloc(1, sizeof(struct container));
+        new_container->type = type;*/
+        creating_cont(new_container, type, entry);
         //creating_Wcont(new_container, type, entry);
         /*while(check->next != NULL){
             check = check->next;
@@ -62,7 +66,7 @@ void creating_Wcont(struct container* new_container, enum container_type type, v
     }
 }
 
-void creating_cont(struct container* new_container, struct container* first, enum container_type type, void* entry){
+void creating_cont(struct container* new_container, enum container_type type, void* entry){
     if(type == ROOM){
         new_container->room = entry;
     }
@@ -73,16 +77,12 @@ void creating_cont(struct container* new_container, struct container* first, enu
         new_container->command = entry;
     }
     if(type == TEXT){
-        /*char* new_text = malloc(strlen(entry) + 1);
+        char* new_text = malloc(strlen(entry) + 1);
         strcpy(new_text, entry);
-        new_container->text = new_text;*/
+        new_container->text = new_text;
 
-        strcpy(new_container->text, entry);
+        //free(new_text);
     }
-    /*while(first->next != NULL){
-        first = first->next;
-    }
-    first->next = new_container;*/
 }
 
 struct container* destroy_containers(struct container* first){
@@ -162,7 +162,7 @@ void* get_from_container_by_name(struct container *first, const char *name){
     }*/
 
     //second changed: try another method 
-    if(first->type == ROOM){
+    /*if(first->type == ROOM){
         for(int i = 0; first != NULL && first->room != NULL && first->room->name != NULL; i++){
             if((strlen(first->room->name) == strlen(name))){
                 int difference = 0;
@@ -221,10 +221,50 @@ void* get_from_container_by_name(struct container *first, const char *name){
                 else first = first->next;
             }
         }
+    }*/
+
+    //third changed: try another method
+
+    if(first->type == ROOM){
+        for(int i = 0; first != NULL && first->room != NULL && first->room->name != NULL; i++, first = first->next){
+            if(strlen(name) == strlen(first->room->name)){
+                if(strcmpBIG(name, first->room->name) == 0) return first;
+            }
+        }
+    } else if(first->type == ITEM){
+        for(int i = 0; first != NULL && first->item != NULL && first->item->name != NULL; i++, first = first->next){
+            if(strlen(name) == strlen(first->item->name)){
+                if(strcmpBIG(name, first->item->name) == 0) return first;
+            }
+        }
+    } else if(first->type == COMMAND){
+        for(int i = 0; first != NULL && first->command != NULL && first->command->name != NULL; i++, first = first->next){
+            if(strlen(name) == strlen(first->command->name)){
+                if(strcmpBIG(name, first->command->name) == 0) return first;
+            }
+        }
+    } else if(first->type == TEXT){
+        for(int i = 0; first != NULL && first->text != NULL; i++, first = first->next){
+            if(strlen(name) == strlen(first->text)){
+                if(strcmpBIG(name, first->text) == 0) return first;
+            }
+        }
     }
 
     return NULL;
 }
+
+int strcmpBIG(char const *first_name, char const *second_name){
+    int difference = 0;
+
+    for(int i = 0; i < strlen(first_name); i++){
+        difference = tolower(first_name[i]) - tolower(second_name[i]);
+        if(difference != 0) return 0;
+    }
+
+    return 1;
+}
+
 
 struct container* remove_container(struct container *first, void *entry){
     if(first == NULL) return NULL;
