@@ -7,7 +7,7 @@
 struct game* create_game(){
     //first change: malloc -> calloc
     //struct game* created_game = malloc(sizeof(created_game));
-    struct game* created_game = calloc(1, sizeof(created_game));
+    struct game* created_game = calloc(1, sizeof(struct game));
 
     created_game->state = PLAYING;
     created_game->world = create_world();
@@ -84,8 +84,8 @@ void execute_command(struct game* game, struct command* command){
     +   VEZMI
     +   POLOZ
     +   INVERNTAR
-    ?   POUZI
-    ?   PRESKUMAJ
+    +   POUZI
+    +   PRESKUMAJ
     +   NAHRAJ
     +   ULOZ
 
