@@ -7,7 +7,7 @@
 void creating_Wcont(struct container* new_container, enum container_type type, void* entry);
 void creating_cont(struct container* new_container, enum container_type type, void* entry);
 void free_memory_container(struct container* container);
-//int strcmpBIG(char const *first_name, char const *second_name);
+int strcmpBIG(char const *first_name, char const *second_name);
 int removing_first(struct container* first_container, struct container* first, void* entry);
 int removing_second(struct container* first_container, struct container* next_container, struct container* first, void* entry);
 
@@ -99,6 +99,7 @@ void free_memory_container(struct container* container){
     }
     free(container);
 }
+
 
 void* get_from_container_by_name(struct container *first, const char *name){
     if((name == NULL) || (first == NULL) || (strlen(name) == 0)) return NULL;
@@ -247,18 +248,6 @@ void* get_from_container_by_name(struct container *first, const char *name){
     return NULL;
 }
 
-/*int strcmpBIG(char const *first_name, char const *second_name){
-    int difference = 0;
-
-    for(int i = 0; i < strlen(first_name); i++){
-        difference = tolower(first_name[i]) - tolower(second_name[i]);
-        if(difference != 0) return 0;
-    }
-
-    return 1;
-}*/
-
-
 struct container* remove_container(struct container *first, void *entry){
     if(first == NULL) return NULL;
     if(entry == NULL) return first;
@@ -320,4 +309,3 @@ int removing_second(struct container* first_container, struct container* next_co
     }
     return 0;
 }
-
