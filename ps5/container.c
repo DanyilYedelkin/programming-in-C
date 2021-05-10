@@ -7,7 +7,7 @@
 void creating_Wcont(struct container* new_container, enum container_type type, void* entry);
 void creating_cont(struct container* new_container, enum container_type type, void* entry);
 void free_memory_container(struct container* container);
-int strcmpBIG(char const *first_name, char const *second_name);
+//int strcmpBIG(char const *first_name, char const *second_name);
 int removing_first(struct container* first_container, struct container* first, void* entry);
 int removing_second(struct container* first_container, struct container* next_container, struct container* first, void* entry);
 
@@ -104,7 +104,8 @@ void* get_from_container_by_name(struct container *first, const char *name){
     if((name == NULL) || (first == NULL) || (strlen(name) == 0)) return NULL;
 
     //first changed: create a new container "item" and change first -> "item"
-    /*struct container* item = first;
+    //back to the first method
+    struct container* item = first;
     for(; item != NULL; item = item->next){
         if(first->type == ROOM){
             if((strlen(item->room->name) == strlen(name))){
@@ -150,7 +151,7 @@ void* get_from_container_by_name(struct container *first, const char *name){
             }
             break;
         }
-    }*/
+    }
 
     //second changed: try another method 
     /*if(first->type == ROOM){
@@ -215,8 +216,9 @@ void* get_from_container_by_name(struct container *first, const char *name){
     }*/
 
     //third changed: try another method
+    //back to the first method
 
-    if(first->type == ROOM){
+    /*if(first->type == ROOM){
         for(int i = 0; first != NULL; i++, first = first->next){
             if(strlen(name) == strlen(first->room->name)){
                 if(strcmpBIG(name, first->room->name) == 0) return first->room;
@@ -240,12 +242,12 @@ void* get_from_container_by_name(struct container *first, const char *name){
                 if(strcmpBIG(name, first->text) == 0) return first->text;
             }
         }
-    }
+    }*/
 
     return NULL;
 }
 
-int strcmpBIG(char const *first_name, char const *second_name){
+/*int strcmpBIG(char const *first_name, char const *second_name){
     int difference = 0;
 
     for(int i = 0; i < strlen(first_name); i++){
@@ -254,7 +256,7 @@ int strcmpBIG(char const *first_name, char const *second_name){
     }
 
     return 1;
-}
+}*/
 
 
 struct container* remove_container(struct container *first, void *entry){
@@ -288,7 +290,7 @@ int removing_first(struct container* first_container, struct container* first, v
         free(first_container);
         return 1;
     }
-    if((strcmp(first_container->text, entry) == 0) && (first->type == 3)){
+    if(strcmp(first_container->text, entry) == 0){
         free(first_container);
         return 1;
     }
@@ -311,10 +313,11 @@ int removing_second(struct container* first_container, struct container* next_co
         free(next_container);
         return 1;
     }
-    if((strcmp(next_container->text, entry) == 0) && (first->type == 3)){
+    if(strcmp(next_container->text, entry) == 0){
         first_container->next = next_container->next;
         free(next_container);
         return 1;
     }
     return 0;
 }
+
