@@ -14,14 +14,11 @@ int removing_second(struct container* first_container, struct container* next_co
 struct container* create_container(struct container* first, enum container_type type, void* entry){
     if((entry == NULL) || (first != NULL && first->type != type)) return NULL;
 
-    struct container* new_container = calloc(1, sizeof(struct container));
-    new_container->type = type;
-
     if(first == NULL){
         //first changed: malloc -> calloc
         //struct container* new_container = malloc(sizeof(struct container));
-        /*struct container* new_container = calloc(1, sizeof(struct container));
-        new_container->type = type;*/
+        struct container* new_container = calloc(1, sizeof(struct container));
+        new_container->type = type;
 
         creating_Wcont(new_container, type, entry);
 
@@ -33,21 +30,19 @@ struct container* create_container(struct container* first, enum container_type 
         if(type != first->type) return NULL;
 
         //struct container* check = first;
-        /*struct container* new_container = calloc(1, sizeof(struct container));
-        new_container->type = type;*/
-        creating_cont(new_container, type, entry);
+        struct container* new_container = first;
+        for(int i = 0; new_container->next != NULL; i++, new_container = new_container->next){}
+        new_container->next = calloc(1, sizeof(struct container));
+        new_container->next->type = type;
+        creating_cont(new_container->next, type, entry);
         //creating_Wcont(new_container, type, entry);
         /*while(check->next != NULL){
             check = check->next;
         }
         check->next = new_container;
         new_container->next = NULL;*/
-        for(int i = 0; first->next != NULL; i++){
-            first = first->next;
-        }
-        first->next = new_container;
 
-        return new_container;
+        return new_container->next;
     }
 }
 
@@ -77,11 +72,7 @@ void creating_cont(struct container* new_container, enum container_type type, vo
         new_container->command = entry;
     }
     if(type == TEXT){
-        char* new_text = malloc(strlen(entry) + 1);
-        strcpy(new_text, entry);
-        new_container->text = new_text;
-
-        //free(new_text);
+        new_container->text = entry;
     }
 }
 
@@ -226,27 +217,27 @@ void* get_from_container_by_name(struct container *first, const char *name){
     //third changed: try another method
 
     if(first->type == ROOM){
-        for(int i = 0; first != NULL && first->room != NULL && first->room->name != NULL; i++, first = first->next){
+        for(int i = 0; first != NULL; i++, first = first->next){
             if(strlen(name) == strlen(first->room->name)){
-                if(strcmpBIG(name, first->room->name) == 0) return first;
+                if(strcmpBIG(name, first->room->name) == 0) return first->room;
             }
         }
     } else if(first->type == ITEM){
-        for(int i = 0; first != NULL && first->item != NULL && first->item->name != NULL; i++, first = first->next){
+        for(int i = 0; first != NULL; i++, first = first->next){
             if(strlen(name) == strlen(first->item->name)){
-                if(strcmpBIG(name, first->item->name) == 0) return first;
+                if(strcmpBIG(name, first->item->name) == 0) return first->item;
             }
         }
     } else if(first->type == COMMAND){
-        for(int i = 0; first != NULL && first->command != NULL && first->command->name != NULL; i++, first = first->next){
+        for(int i = 0; first != NULL; i++, first = first->next){
             if(strlen(name) == strlen(first->command->name)){
-                if(strcmpBIG(name, first->command->name) == 0) return first;
+                if(strcmpBIG(name, first->command->name) == 0) return first->command;
             }
         }
     } else if(first->type == TEXT){
-        for(int i = 0; first != NULL && first->text != NULL; i++, first = first->next){
+        for(int i = 0; first != NULL; i++, first = first->next){
             if(strlen(name) == strlen(first->text)){
-                if(strcmpBIG(name, first->text) == 0) return first;
+                if(strcmpBIG(name, first->text) == 0) return first->text;
             }
         }
     }
