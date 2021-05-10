@@ -96,7 +96,7 @@ struct container* add_room_to_world(struct container* world, struct room* room){
     if(world != NULL){
         if(get_room(world, room->name) != NULL) return NULL;
     }
-    return create_world(world, ROOM, room);
+    return create_container(world, ROOM, room);
 }
 
 struct room* get_room(struct container* world, char* name){
