@@ -22,7 +22,7 @@ struct backpack* destroy_backpack(struct backpack* backpack){
     return NULL;
 }
 
-bool add_item_to_backpack(struct backpack* backpack, struct item* item){
+bool add_item_to_backpack(struct backpack* backpack, struct item* item){   //=====================================================
     if((item == NULL) || (backpack == NULL)) return false;
 
     if(backpack->capacity > backpack->size){
@@ -49,7 +49,7 @@ bool add_item_to_backpack(struct backpack* backpack, struct item* item){
     return true;
 }
 
-struct item* get_item_from_backpack(const struct backpack* backpack, char* name){
+struct item* get_item_from_backpack(const struct backpack* backpack, char* name){  //=====================================================
     if((name == NULL) || (backpack == NULL)) return NULL;
 
     return get_from_container_by_name(backpack->items, name);
