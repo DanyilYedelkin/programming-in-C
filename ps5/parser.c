@@ -74,7 +74,7 @@ struct parser* create_parser(){
     int word = 0;
     int size_patter = 17;
     created_parser->commands = NULL;
-    created_parser->history = NULL;
+    //created_parser->history = NULL;
 
     /*do{
         if(word < size_patter){
@@ -92,6 +92,7 @@ struct parser* create_parser(){
         word++;
         //number++;
     }
+    created_parser->history = create_container(NULL, COMMAND, create_command("Start", "Start the game", "(Start)", 0));
 
     return created_parser;
 }
@@ -161,7 +162,7 @@ struct command* parse_input(struct parser* parser, char* input){
         word++;
     }*/
 
-    for(int i = 0; parser->commands->command != NULL && parser->commands != NULL; i++, parser->commands = parser->commands->next){
+    for(int i = 0; parser->commands != NULL; i++, parser->commands = parser->commands->next){
         if(regexec(&parser->commands->command->preg, input, 0, NULL, REG_ICASE) != REG_NOMATCH){
             return parser->commands->command;
         }
