@@ -85,12 +85,12 @@ struct parser* create_parser(){
             break;
         }
     } while(word < size_patter);*/
-    int number = 0;
+    //int number = 0;
     while(word < size_patter){
         //created_parser->commands = create_container(created_parser->commands, COMMAND, create_command(parser_name[word], parser_description[word], parser_patter[word], 1));
-        created_parser->commands = create_container(created_parser->commands, COMMAND, create_command(parser_name[word], parser_description[word], parser_patter[word], number));
+        created_parser->commands = create_container(created_parser->commands, COMMAND, create_command(parser_name[word], parser_description[word], parser_patter[word], 1));
         word++;
-        number++;
+        //number++;
     }
 
     return created_parser;
