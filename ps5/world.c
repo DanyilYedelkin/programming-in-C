@@ -67,7 +67,7 @@ struct container* create_world(){
     add_item_to_room(dah_hesho, recorder);
 
     //create containers for all rooms
-    world = add_room_to_world(NULL, home);
+    world = add_room_to_world(world, home);
     world = add_room_to_world(world, garden);
     world = add_room_to_world(world, akkala_tower);
     world = add_room_to_world(world, dah_hesho);
