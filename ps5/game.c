@@ -94,6 +94,7 @@ void execute_command(struct game* game, struct command* command){
     if(strcmp(command->name, "KONIEC") == 0){
         game->state = GAMEOVER;  
         printf("Gameover\n");
+        //destroy_game(game);
     } else if(strcmp(command->name, "SEVER") == 0){
         if(game->current_room->north == NULL){
             printf("Sorry, but you can't find the north\n");
@@ -140,6 +141,7 @@ void execute_command(struct game* game, struct command* command){
     } else if(strcmp(command->name, "RESTART") == 0){
         printf("Restart the game :D\n");
         game->state = RESTART;
+        //destroy_game(game);
     } else if(strcmp(command->name, "O HRE") == 0){
         printf("STEP INTO A WORLD OF ADVENTURE\n\n");
         printf("Forget everything you know about The Legend of Zelda games.\n");
@@ -173,16 +175,16 @@ void execute_command(struct game* game, struct command* command){
         if(fp == NULL){
             printf("You haven't any saves\n");
         } else{
-            char input_buffer[INPUT_BUFFER_SIZE];
+            //char input_buffer[INPUT_BUFFER_SIZE];
             if(fp != NULL){
-                while(1){
-                    if(fscanf(fp, "%s", input_buffer) != EOF){
+                //while(1){
+                    //if(fscanf(fp, "%s", input_buffer) != EOF){
                         //struct command* input_command = parse_input(game->parser, input_buffer);
                         //execute_command(game, input_command);
-                    } else{
-                        break;
-                    }
-                }
+                    //} else{
+                       // break;
+                    //}
+                //}
             }
         }
         fclose(fp);
