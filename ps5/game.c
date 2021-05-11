@@ -92,7 +92,8 @@ void execute_command(struct game* game, struct command* command){
     */
 
     if(strcmp(command->name, "KONIEC") == 0){
-        game->state = GAMEOVER;       
+        game->state = GAMEOVER;  
+        printf("Gameover\n");     
     } else if(strcmp(command->name, "SEVER") == 0){
         if(game->current_room->north == NULL){
             printf("Sorry, but you can't find the north\n");
