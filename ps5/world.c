@@ -83,42 +83,37 @@ struct container* create_world(){
 
 
     //creating rooms
-    struct room* room_1 = create_room("start", "NBA"); 
+    struct room* room_1 = create_room("A", "a"); 
 
     struct container* world = create_container(NULL, ROOM, room_1);
 
-    struct room* room_2 = create_room("A", "Ga"); 
-    struct room* room_3 = create_room("B", "GA"); 
-    struct room* room_4 = create_room("C", "GT"); 
-    struct room* room_5 = create_room("D", "GT"); 
-    struct room* room_6 = create_room("E", "GT"); 
-    struct room* room_7 = create_room("F", "GZ"); 
-    struct room* room_8 = create_room("G", "GT"); 
-    struct room* room_9 = create_room("I", "GI"); 
-    struct room* room_10 = create_room("K", "GKa"); 
-    struct room* room_11 = create_room("L", "GT"); 
-    struct room* room_12 = create_room("M", "GT"); 
-    struct room* room_13 = create_room("N", "GC"); 
-    struct room* room_14 = create_room("Y", "GS");
-    struct room* room_15 = create_room("V", "Gv");
-    struct room* room_16 = create_room("Z", "Gf");
-    struct room* room_17 = create_room("W", "Gw");
-    struct room* room_18 = create_room("U", "Gu");
-    struct room* room_19 = create_room("Q", "Gq");
-    struct room* room_20 = create_room("P", "Gp");
+    struct room* room_2 = create_room("B", "b"); 
+    struct room* room_3 = create_room("C", "c"); 
+    struct room* room_4 = create_room("D", "d"); 
+    struct room* room_5 = create_room("E", "e"); 
+    struct room* room_6 = create_room("F", "f"); 
+    struct room* room_7 = create_room("G", "g"); 
+    struct room* room_8 = create_room("H", "h"); 
+    struct room* room_9 = create_room("I", "i"); 
+    struct room* room_10 = create_room("J", "j"); 
+    struct room* room_11 = create_room("K", "k"); 
+    struct room* room_12 = create_room("L", "l"); 
+    struct room* room_13 = create_room("M", "m"); 
+    struct room* room_14 = create_room("N", "n");
+    struct room* room_15 = create_room("O", "o");
+    struct room* room_16 = create_room("P", "p");
+    struct room* room_17 = create_room("Q", "q");
+    struct room* room_18 = create_room("R", "r");
+    struct room* room_19 = create_room("S", "s");
+    struct room* room_20 = create_room("T", "t");
 
     //creating items
-    struct item* item_1 = create_item("shield", "I.", MOVABLE);
-    struct item* item_2 = create_item("sword", "T.", MOVABLE);
-    struct item* item_3 = create_item("magical shield", "I.", MOVABLE);
-    struct item* item_4 = create_item("spellbook", "I ", MOVABLE);
-    struct item* item_5 = create_item("bone", "T", MOVABLE);
-    struct item* item_6 = create_item("armory", "T", MOVABLE);
-    struct item* item_7 = create_item("arrow", "T", MOVABLE);
-    struct item* item_8 = create_item("bow", "I", MOVABLE);
-    struct item* item_9 = create_item("poison", "I ", MOVABLE);
-    struct item* item_10 = create_item("radio", "T", MOVABLE);
-
+    struct item* item_1 = create_item("shield", "u", MOVABLE);
+    struct item* item_2 = create_item("sword", "v", MOVABLE);
+    struct item* item_3 = create_item("magical shield", "w", MOVABLE);
+    struct item* item_4 = create_item("spellbook", "x", MOVABLE);
+    struct item* item_5 = create_item("bone", "y", MOVABLE);
+    struct item* item_6 = create_item("armory", "z", MOVABLE);
 
     //add items to some rooms
     add_item_to_room(room_1, item_1); 
@@ -127,13 +122,30 @@ struct container* create_world(){
     add_item_to_room(room_9, item_4);
     add_item_to_room(room_12 , item_5); 
     add_item_to_room(room_14, item_6); 
-    add_item_to_room(room_8, item_7); 
-    add_item_to_room(room_13, item_8); 
-    add_item_to_room(room_15, item_9); 
-    add_item_to_room(room_4, item_10); 
+
+    set_exits_from_room(room_1, NULL, NULL, room_2, NULL);
+    set_exits_from_room(room_2, NULL, NULL, room_3, room_1);
+    set_exits_from_room(room_3, NULL, NULL, room_4, room_2);
+    set_exits_from_room(room_4, NULL, NULL, room_5, room_3);
+    set_exits_from_room(room_5, NULL, NULL, room_6, room_4);
+    set_exits_from_room(room_6, NULL, NULL, room_7, room_5);
+    set_exits_from_room(room_7, NULL, NULL, room_8, room_6);
+    set_exits_from_room(room_8, NULL, NULL, room_9, room_7);
+    set_exits_from_room(room_9, NULL, NULL, room_10, room_8);
+    set_exits_from_room(room_10, NULL, NULL, room_11, room_9);
+    set_exits_from_room(room_11, NULL, NULL, room_12, room_10);
+    set_exits_from_room(room_12, NULL, NULL, room_13, room_11);
+    set_exits_from_room(room_13, NULL, NULL, room_14, room_12);
+    set_exits_from_room(room_14, NULL, NULL, room_15, room_13);
+    set_exits_from_room(room_15, NULL, NULL, room_16, room_14);
+    set_exits_from_room(room_16, NULL, NULL, room_17, room_15);
+    set_exits_from_room(room_17, NULL, NULL, room_18, room_16);
+    set_exits_from_room(room_18, NULL, NULL, room_19, room_17);
+    set_exits_from_room(room_19, NULL, NULL, room_20, room_18);
+    set_exits_from_room(room_20, NULL, NULL, NULL, room_19);
 
     //add all rooms to world
-    add_room_to_world(world, room_1); 
+    //add_room_to_world(world, room_1); 
     add_room_to_world(world, room_2); 
     add_room_to_world(world, room_3);
     add_room_to_world(world, room_4); 
