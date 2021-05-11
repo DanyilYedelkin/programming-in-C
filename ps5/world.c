@@ -22,7 +22,7 @@ struct container* create_world(){
     struct room* kaam_yatak_shrine = create_room("Kaam Ya'tak Shrine", "Kaam Ya'tak Shrine is located South of the Central Hyrule Tower, just South of Mount Daphnes.");
 
     //connecting rooms in the world
-    set_exits_from_room(home, NULL, garden, NULL, NULL);
+    /*set_exits_from_room(home, NULL, garden, NULL, NULL);
     set_exits_from_room(garden, home, akkala_tower, NULL, NULL);
     set_exits_from_room(akkala_tower, garden, dah_hesho, NULL, NULL);
     set_exits_from_room(dah_hesho, akkala_tower, south_akkala_stable, NULL, NULL);
@@ -36,7 +36,7 @@ struct container* create_world(){
     set_exits_from_room(tutsuwa_nima_shrine, skull_lake, central_tower, NULL, NULL);
     set_exits_from_room(central_tower, tutsuwa_nima_shrine, dah_kaso_shrine, NULL, NULL);
     set_exits_from_room(dah_kaso_shrine, central_tower, kaam_yatak_shrine, NULL, NULL);
-    set_exits_from_room(kaam_yatak_shrine, dah_kaso_shrine, NULL, NULL, NULL);
+    set_exits_from_room(kaam_yatak_shrine, dah_kaso_shrine, NULL, NULL, NULL);*/
 
 
     //creating items
