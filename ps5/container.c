@@ -156,7 +156,7 @@ void* get_from_container_by_name(struct container *first, const char *name){
 
     //second changed: try another method 
     /*if(first->type == ROOM){
-        for(int i = 0; first != NULL && first->room != NULL && first->room->name != NULL; i++){
+        for(int i = 0; first != NULL || first->room != NULL; i++){
             if((strlen(first->room->name) == strlen(name))){
                 int difference = 0;
                 for(int i = 0; i < strlen(name); i++){
@@ -171,13 +171,13 @@ void* get_from_container_by_name(struct container *first, const char *name){
         }
     }
     if(first->type == ITEM){
-        for(int i = 0; first != NULL && first->item != NULL && first->item->name != NULL; i++){
+        for(int i = 0; first != NULL || first->item != NULL; i++){
             if((strlen(first->item->name) == strlen(name))){
                 int difference = 0;
                 for(int i = 0; i < strlen(name); i++){
                     difference = tolower(first->item->name[i]) - tolower(name[i]);
                     if(difference != 0){
-                        i = 100000000;
+                        i = 10000000;
                     }
                 }
                 if(difference == 0) return first;
@@ -186,7 +186,7 @@ void* get_from_container_by_name(struct container *first, const char *name){
         }
     }
     if(first->type == COMMAND){
-        for(int i = 0; first != NULL && first->command != NULL && first->command->name != NULL; i++){
+        for(int i = 0; first != NULL || first->command != NULL; i++){
             if((strlen(first->command->name) == strlen(name))){
                 int difference = 0;
                 for(int i = 0; i < strlen(name); i++){
@@ -201,7 +201,7 @@ void* get_from_container_by_name(struct container *first, const char *name){
         }
     }
     if(first->type == TEXT){
-        for(int i = 0; first != NULL && first->text != NULL; i++){
+        for(int i = 0; first != NULL || first->text != NULL; i++){
             if((strlen(first->text) == strlen(name))){
                 int difference = 0;
                 for(int i = 0; i < strlen(name); i++){
@@ -246,7 +246,7 @@ void* get_from_container_by_name(struct container *first, const char *name){
     }*/
 
     //fourth method:
-    struct container* item = first;
+    /*struct container* item = first;
     for(; item != NULL; item = item->next){
         if(first->type == ROOM){
             if(item->room != NULL && item->room->name != NULL){
@@ -292,14 +292,42 @@ void* get_from_container_by_name(struct container *first, const char *name){
             }
             break;
         }
+    }*/
+
+
+
+    if(first->type == ROOM){
+        for(int i = 0; first != NULL && first->room != NULL; i++, first = first->next){
+            if(strcmpBIG(name, first->room->name) == 1) return first->room;
+        }
+    } else if(first->type == ITEM){
+        for(int i = 0; first != NULL && first->item != NULL; i++, first = first->next){
+            if(strcmpBIG(name, first->item->name) == 1) return first->item;
+        }
+    } else if(first->type == COMMAND){
+        for(int i = 0; first != NULL && first->command != NULL; i++, first = first->next){
+            if(strcmpBIG(name, first->command->name) == 1) return first->command;
+        }
+    } else if(first->type == TEXT){
+        for(int i = 0; first != NULL && first->text != NULL; i++, first = first->next){
+            if(strcmpBIG(name, first->text) == 1) return first->text;
+        }
     }
-
-
-
-
+    
 
     return NULL;
 }
+
+int strcmpBIG(char const *first_name, char const *second_name){
+    if((first_name == NULL) || (second_name == NULL)) return 0;
+    int difference = 0;
+    for(int i = 0; i < strlen(first_name); i++){
+        difference = tolower(first_name[i]) - tolower(second_name[i]);
+        if(difference != 0) return 0;
+    }
+    return 1;
+}
+
 
 struct container* remove_container(struct container *first, void *entry){
     if(first == NULL) return NULL;
