@@ -4,8 +4,6 @@
 
 struct container* create_world(){
 
-    struct container* world = (struct container*)calloc(1, sizeof(struct container));
-
     //creating rooms
     struct room* home = create_room("start", "Nachadzas sa v chyzi svarneho suhaja. Na vychode sa nachadzaju dvere veduce z chyze von.");
     struct room* garden = create_room("garden", "Stojis pred chyzou a rozoznavas zahradku, ktora je znacne neudrziavana. este ze husty lesik na severe v porovnani so zahradkou nicim nevynika.");
@@ -66,22 +64,24 @@ struct container* create_world(){
     add_item_to_room(kaam_yatak_shrine, candle);
     add_item_to_room(dah_hesho, recorder);
 
+    struct container* world = create_container(NULL, ROOM, home);
+
     //create containers for all rooms
-    world = add_room_to_world(world, home);
-    world = add_room_to_world(world, garden);
-    world = add_room_to_world(world, akkala_tower);
-    world = add_room_to_world(world, dah_hesho);
-    world = add_room_to_world(world, south_akkala_stable);
-    world = add_room_to_world(world, spring_of_power);
-    world = add_room_to_world(world, ze_kasho_shrine);
-    world = add_room_to_world(world, ancient_tech_lab);
-    world = add_room_to_world(world, east_akkala_stable);
-    world = add_room_to_world(world, katosa_aug_shrine);
-    world = add_room_to_world(world, skull_lake);
-    world = add_room_to_world(world, tutsuwa_nima_shrine);
-    world = add_room_to_world(world, central_tower);
-    world = add_room_to_world(world, dah_kaso_shrine);
-    world = add_room_to_world(world, kaam_yatak_shrine);
+    //add_room_to_world(world, ROOM, home);
+    add_room_to_world(world, garden);
+    add_room_to_world(world, akkala_tower);
+    add_room_to_world(world, dah_hesho);
+    add_room_to_world(world, south_akkala_stable);
+    add_room_to_world(world, spring_of_power);
+    add_room_to_world(world, ze_kasho_shrine);
+    add_room_to_world(world, ancient_tech_lab);
+    add_room_to_world(world, east_akkala_stable);
+    add_room_to_world(world, katosa_aug_shrine);
+    add_room_to_world(world, skull_lake);
+    add_room_to_world(world, tutsuwa_nima_shrine);
+    add_room_to_world(world, central_tower);
+    add_room_to_world(world, dah_kaso_shrine);
+    add_room_to_world(world, kaam_yatak_shrine);
 
     return world;
 }
