@@ -33,10 +33,10 @@ bool add_item_to_backpack(struct backpack* backpack, struct item* item){   //===
         if(item->properties && MOVABLE > 0){
         //struct container* items = backpack->items;
         if(backpack->items != NULL){
-            backpack->items = create_container(backpack->items, ITEM, item);
+            create_container(backpack->items, ITEM, item);
             backpack->size++;
         } else if(backpack->items == NULL){
-            create_container(backpack->items, ITEM, item);
+            backpack->items = create_container(backpack->items, ITEM, item);
             backpack->size++;
         }
         }
