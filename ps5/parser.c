@@ -56,7 +56,7 @@ struct command* parse_input(struct parser* parser, char* input){
     char* input_buffer = malloc(sizeof(char) * 20);
 
     //first changed: remove old method and add new method
-    do{
+    /*do{
         if(input[0] != ' '){
             while(input_word < strlen(input)){  
                 if(input[input_word] == ' ' ){
@@ -124,10 +124,37 @@ struct command* parse_input(struct parser* parser, char* input){
             }
             break;
         }
-    } while(input[input_word] == ' ');
+    } while(input[input_word] == ' ');*/
+
+
+    for(int i = 0; input[input_word] == ' '; i++, input_word++){}
+
+    while(input[input_word] != ' '){
+        input_buffer[word] = (char)tolower(input[input_word]);
+        word++;
+        input_word++;
+    }
+    if(input[input_word] == ' ' && (input[input_word - 1] == 'O' || input[input_word - 1] == 'I')){
+        while(input[input_word] == ' '){
+            input_word++;
+        }
+        input_buffer[word] = ' ';
+        word++;
+        while(input[input_word] != ' '){
+            if(input[input_word] == ' '){
+                input_buffer[word] = '\0';
+                break;
+            }
+            input_buffer[word] = (char)tolower(input[input_word]);
+            word++;
+            input_word++;
+        }
+    } else{
+        input_buffer[word] = '\0';
+    }
+    //input_buffer[word] = '\0';
 
     printf("%s\n", input_buffer);
 
     return get_from_container_by_name(parser->commands, input_buffer);
 }
-//dasd
