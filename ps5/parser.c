@@ -5,15 +5,16 @@
 #include "parser.h"
 
 struct parser* create_parser(){
-
+    
     //https://ru.wikipedia.org/wiki/Регулярные_выражения
     //https://www.youtube.com/watch?v=bWu8IJ_DasE
-    
-    struct parser* created_parser = calloc (1,sizeof(struct parser));
+    struct parser* created_parser = calloc(1, sizeof(struct parser));
+    //created_parser->commands = calloc(17, sizeof(struct parser));
+
     created_parser->commands = create_container(NULL, COMMAND, create_command("KONIEC", "Príkaz ukončí rozohratú hru. Nastaví príslušný stav hry.", "^\\s{0,}((QU|EX)IT|KONIEC)\\s{0,}$", 3));
     create_container(created_parser->commands, COMMAND, create_command("SEVER", "Presun do miestnosti nachádzajúcej sa na sever od aktuálnej. Zmení referenciu aktuálnej miestnosti.", "^\\s{0,}(S|SEVER)\\s{0,}$", 2));
-    create_container(created_parser->commands, COMMAND, create_command("JUH", "Presun do miestnosti nachádzajúcej sa na juh od aktuálnej. Zmení referenciu aktuálnej miestnosti.", "^\\s{0,}(J|JUH)\\s{0,}$", 2));
-    create_container(created_parser->commands, COMMAND, create_command("VYCHOD", "Presun do miestnosti nachádzajúcej sa na východ od aktuálnej. Zmení referenciu aktuálnej miestnosti.", "^\\s{0,}(V|VYCHOD)\\s{0,}$", 2));
+    created_parser->commands = create_container(created_parser->commands, COMMAND, create_command("JUH", "Presun do miestnosti nachádzajúcej sa na juh od aktuálnej. Zmení referenciu aktuálnej miestnosti.", "^\\s{0,}(J|JUH)\\s{0,}$", 2));
+    created_parser->commands = create_container(created_parser->commands, COMMAND, create_command("VYCHOD", "Presun do miestnosti nachádzajúcej sa na východ od aktuálnej. Zmení referenciu aktuálnej miestnosti.", "^\\s{0,}(V|VYCHOD)\\s{0,}$", 2));
     create_container(created_parser->commands, COMMAND, create_command("ZAPAD", "Presun do miestnosti nachádzajúcej sa na západ od aktuálnej. Zmení referenciu aktuálnej miestnosti.", "^\\s{0,}(Z|ZAPAD)\\s{0,}$", 2));
 
     create_container(created_parser->commands, COMMAND, create_command("ROZHLIADNI SA", "Príkaz vypíše aktuálne informácie o miestnosti, v ktorej sa hráč práve nachádza.", "^\\s{0,}ROZHLIADNI\\sSA\\s{0,}$", 1));
@@ -31,7 +32,7 @@ struct parser* create_parser(){
     create_container(created_parser->commands, COMMAND, create_command("NAHRAJ", "Príkaz zabezpečí nahratie uloženej pozície hry z disku. Voliteľným parametrom je cesta k súboru.", "^\\s{0,}(NAHRAJ|LOAD)\\s{0,}$", 2));
     create_container(created_parser->commands, COMMAND, create_command("ULOZ", "Príkaz uloží stav rozohratej hry na disk. Voliteľným parametrom je cesta k súboru.", "^\\s{0,}(ULOZ|SAVE)\\s{0,}$", 2));
 
-    created_parser->history = create_container(NULL, COMMAND, create_command("O HRE", "Príkaz zobrazí krátky text, ktorý poslúži ako úvod do príbehu. Ako dobrý začiatok sa javí známy text: Kde bolo tam bolo, …", "[!A-Za-z]?[A-Za-z]+[!A-Za-z]+[A-Za-z]+", 2));
+    created_parser->history = create_container(NULL, COMMAND, create_command("O HRE", "Príkaz zobrazí krátky text, ktorý poslúži ako úvod do príbehu. Ako dobrý začiatok sa javí známy text: Kde bolo tam bolo, …", "^\\s{0,}(O HRE|ABOUT)\\s{0,}$", 2));
 
     if (created_parser->history == NULL){
         free(created_parser);
@@ -54,13 +55,8 @@ struct command* parse_input(struct parser* parser, char* input){
     if((input == NULL) || (parser == NULL)) return NULL;
 
     int input_word = 0;
-    //int word2 = 0;
     int word = 0;
     char* input_buffer = malloc(sizeof(char) * 20);
-
-    /*for(int j = 0; input[word] == ' '; j++){
-        word++;
-    }*/
 
     //first changed: remove old method and add new method
     do{
@@ -93,38 +89,7 @@ struct command* parse_input(struct parser* parser, char* input){
         }
     } while(input[input_word] == ' ');
 
-    free(input_buffer);
-
-    /*while(word < strlen(input)){
-        if(input[word] == ' '){
-            input_buffer[word2] = '\0';
-            break;
-        }
-        if(input[word] != ' '){
-            input_buffer[word2] = (char)tolower(input[word]);
-            if(word2 <= word) word2++;
-        }
-        word++;
-    }*/
+    //printf("%s\n\n", input_buffer);
 
     return get_from_container_by_name(parser->commands, input_buffer);
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*for(int i = 0; parser->commands != NULL; i++, parser->commands = parser->commands->next){
-        if(regexec(&parser->commands->command->preg, input, 0, NULL, REG_ICASE) != REG_NOMATCH){
-            return parser->commands->command;
-        }
-    }
-    return NULL;*/
 }
