@@ -30,24 +30,24 @@ bool add_item_to_backpack(struct backpack* backpack, struct item* item){   //===
         /*backpack->items = create_container(backpack->items, ITEM, item);
         backpack->size++;
         return true;*/
+        if(item->properties && MOVABLE > 0){
         //struct container* items = backpack->items;
         if(backpack->items != NULL){
-            /*while(items->next != NULL){
-                if(backpack->capacity < backpack->size){
-                    return false;
-                }
-                items = items->next;
-            }*/
             backpack->items = create_container(backpack->items, ITEM, item);
             backpack->size++;
         } else if(backpack->items == NULL){
             backpack->items = create_container(backpack->items, ITEM, item);
-            //backpack->size++;
+            backpack->size++;
+        }
         }
     } else return false;
 
     return true;
 }
+
+
+
+
 
 struct item* get_item_from_backpack(const struct backpack* backpack, char* name){  //=====================================================
     if((name == NULL) || (backpack == NULL)) return NULL;
