@@ -53,7 +53,7 @@ struct command* parse_input(struct parser* parser, char* input){
 
     int input_word = 0;
     int word = 0;
-    char* input_buffer = malloc(sizeof(char) * 20);
+    char input_buffer[strlen(input)];
 
     //first changed: remove old method and add new method
     /*do{
@@ -127,14 +127,20 @@ struct command* parse_input(struct parser* parser, char* input){
     } while(input[input_word] == ' ');*/
 
 
-    for(int i = 0; input[input_word] == ' '; i++, input_word++){}
+    //for(int i = 0; input[input_word] == ' '; i++, input_word++){}
+    if(input[input_word] == ' '){
+        for(int i = 0; input[input_word] == ' '; i++, input_word++){}
+    }
 
-    while(input[input_word] != ' '){
-        input_buffer[word] = (char)tolower(input[input_word]);
+    while(input_word < strlen(input)){
+        if(input[input_word] == ' '){
+            break;
+        }
+        input_buffer[word] = (char)toupper(input[input_word]);
         word++;
         input_word++;
     }
-    if(input[input_word] == ' ' && (input[input_word - 1] == 'O' || input[input_word - 1] == 'I')){
+    if(input[input_word] == ' ' && ((char)toupper(input[input_word - 1]) == 'O' || (char)toupper(input[input_word - 1]) == 'I')){
         while(input[input_word] == ' '){
             input_word++;
         }
@@ -145,7 +151,7 @@ struct command* parse_input(struct parser* parser, char* input){
                 input_buffer[word] = '\0';
                 break;
             }
-            input_buffer[word] = (char)tolower(input[input_word]);
+            input_buffer[word] = (char)toupper(input[input_word]);
             word++;
             input_word++;
         }
