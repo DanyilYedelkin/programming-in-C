@@ -49,7 +49,7 @@ struct parser* destroy_parser(struct parser* parser) {
 }
 
 struct command* parse_input(struct parser* parser, char* input){
-    if((input == NULL) || (parser == NULL)) return NULL;
+    if((input == NULL) || (parser == NULL) || (strlen(input) == 0) || (strlen(input) < 1)) return NULL;
 
     int input_word = 0;
     int word = 0;
@@ -127,7 +127,6 @@ struct command* parse_input(struct parser* parser, char* input){
     } while(input[input_word] == ' ');*/
 
 
-    //for(int i = 0; input[input_word] == ' '; i++, input_word++){}
     if(input[input_word] == ' '){
         for(int i = 0; input[input_word] == ' '; i++, input_word++){}
     }
@@ -140,7 +139,7 @@ struct command* parse_input(struct parser* parser, char* input){
         word++;
         input_word++;
     }
-    if(input[input_word] == ' ' && ((char)toupper(input[input_word - 1]) == 'O' || (char)toupper(input[input_word - 1]) == 'I')){
+    if(input[input_word] == ' ' && (((char)toupper(input[input_word - 1]) == 'I' && (char)toupper(input[input_word - 2]) == 'N') || (char)toupper(input[input_word - 1]) == 'O')){
         while(input[input_word] == ' '){
             input_word++;
         }
@@ -160,5 +159,6 @@ struct command* parse_input(struct parser* parser, char* input){
     }
     input_buffer[word] = '\0';
 
-    return get_from_container_by_name(parser->commands, input_buffer);
+    //return get_from_container_by_name(parser->commands, input_buffer);
+    return create_command(input_buffer, " ", "(EXIT)", 1); 
 }
