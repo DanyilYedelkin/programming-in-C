@@ -51,9 +51,9 @@ struct parser* destroy_parser(struct parser* parser) {
 struct command* parse_input(struct parser* parser, char* input){
     if((input == NULL) || (parser == NULL) || (strlen(input) == 0) || (strlen(input) < 1)) return NULL;
 
-    int input_word = 0;
+    /*int input_word = 0;
     int word = 0;
-    char input_buffer[strlen(input)];
+    char input_buffer[strlen(input)];*/
 
     //first changed: remove old method and add new method
     /*do{
@@ -127,7 +127,7 @@ struct command* parse_input(struct parser* parser, char* input){
     } while(input[input_word] == ' ');*/
 
 
-    if(input[input_word] == ' '){
+    /*if(input[input_word] == ' '){
         for(int i = 0; input[input_word] == ' '; i++, input_word++){}
     }
 
@@ -135,11 +135,11 @@ struct command* parse_input(struct parser* parser, char* input){
         if(input[input_word] == ' '){
             break;
         }
-        input_buffer[word] = (char)toupper(input[input_word]);
+        input_buffer[word] = (char)tolower(input[input_word]);
         word++;
         input_word++;
     }
-    if(input[input_word] == ' ' && (((char)toupper(input[input_word - 1]) == 'I' && (char)toupper(input[input_word - 2]) == 'N') || (char)toupper(input[input_word - 1]) == 'O')){
+    if(input[input_word] == ' ' && (((char)tolower(input[input_word - 1]) == 'I' && (char)tolower(input[input_word - 2]) == 'N') || (char)tolower(input[input_word - 1]) == 'O')){
         while(input[input_word] == ' '){
             input_word++;
         }
@@ -150,13 +150,39 @@ struct command* parse_input(struct parser* parser, char* input){
                 input_buffer[word] = '\0';
                 break;
             }
-            input_buffer[word] = (char)toupper(input[input_word]);
+            input_buffer[word] = (char)tolower(input[input_word]);
             word++;
             input_word++;
         }
     }
-    input_buffer[word] = '\0';
+    input_buffer[word] = '\0';*/
 
-    return get_from_container_by_name(parser->commands, input_buffer);
+
+    //third method
+
+    char* input_buffer = calloc(20, sizeof(char));
+    int word = 0;
+    int ch_word = 0;
+
+
+    if(input[ch_word] == ' '){
+        for(int j = 0; input[ch_word] == ' '; j++, ch_word++){}
+    }
+
+    while(ch_word < strlen(input)){
+        if(input[ch_word] == ' '){
+            input_buffer[word] = '\0';
+            break;
+        }
+        input_buffer[word] = (char)tolower(input[ch_word]);
+        word++;
+        ch_word++;
+    }
+
+    printf("%s\n", input_buffer);
+
+    return get_from_container_by_name(parser->commands, input_buffer); 
+
+    //return get_from_container_by_name(parser->commands, input_buffer);
     //return create_command(input_buffer, " ", "(EXIT)", 1); 
 }
