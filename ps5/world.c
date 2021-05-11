@@ -6,6 +6,7 @@ struct container* create_world(){
 
     //creating rooms
     struct room* home = create_room("start", "Nachadzas sa v chyzi svarneho suhaja. Na vychode sa nachadzaju dvere veduce z chyze von.");
+    struct container* world = create_container(NULL, ROOM, home);
     struct room* garden = create_room("garden", "Stojis pred chyzou a rozoznavas zahradku, ktora je znacne neudrziavana. este ze husty lesik na severe v porovnani so zahradkou nicim nevynika.");
     struct room* akkala_tower = create_room("Akkala Tower", "Akkala Tower is in the northeast portion of Hyrule, due north of Zora's Domain.");
     struct room* dah_hesho = create_room("Dah Hesho Shrine", "The Dah Hesho Shrine is one of the Shrines in the Akkala Region of The Legend of Zelda: Breath of the Wild. Location: Dah Hesho Shrine is located: From Akkala Tower, it is east of Tarrey Town or Lake Akkala.");
@@ -45,7 +46,7 @@ struct container* create_world(){
     add_item_to_room(kaam_yatak_shrine, candle);
     add_item_to_room(dah_hesho, recorder);
 
-    struct container* world = create_container(NULL, ROOM, home);
+    //struct container* world = create_container(NULL, ROOM, home);
 
     //add all rooms to world
     add_room_to_world(world, home);
