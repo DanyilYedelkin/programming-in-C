@@ -5,42 +5,43 @@
 struct container* create_world(){
 
     //creating rooms
-    struct room* home = create_room("start", "s");
-    struct container* world = create_container(NULL, ROOM, home);
-    struct room* garden = create_room("garden", "g");
-    struct room* akkala_tower = create_room("Akkala", "a");
-    struct room* dah_hesho = create_room("Dah", "d");
-    struct room* south_akkala_stable = create_room("Southd", "w");
-    struct room* spring_of_power = create_room("Spring", "t");
-    struct room* ze_kasho_shrine = create_room("Ze", "Ze");
-    struct room* ancient_tech_lab = create_room("Ancient", "Th");
-    struct room* east_akkala_stable = create_room("Easta", "It");
-    struct room* katosa_aug_shrine = create_room("Katosa", "Ka");
-    struct room* skull_lake = create_room("Skul", "Thsda");
-    struct room* tutsuwa_nima_shrine = create_room("Tutsuwa", "Tut");
-    struct room* central_tower = create_room("Centra", "Centra");
-    struct room* dah_kaso_shrine = create_room("Dahaaso", "Shrin");
-    struct room* kaam_yatak_shrine = create_room("Kaamyat", "Kaam");
-    struct room* kaam1 = create_room("Kat1", "Kaam1");
-    struct room* kaam2 = create_room("Kat2", "Kaam2");
-    struct room* kaam3 = create_room("Kat3", "Kaam3");
-    struct room* kaam4 = create_room("Kat4", "Kaam4");
-    struct room* kaam5 = create_room("Kat5", "Kaam5");
+    struct room* home = create_room("a1", "a");
+    struct container* created_world = create_container(NULL, ROOM, home);
+
+    struct room* garden = create_room("a2", "b");
+    struct room* akkala_tower = create_room("a3", "c");
+    struct room* dah_hesho = create_room("a4", "d");
+    struct room* south_akkala_stable = create_room("a5", "e");
+    struct room* spring_of_power = create_room("a6", "f");
+    struct room* ze_kasho_shrine = create_room("a7", "g");
+    struct room* ancient_tech_lab = create_room("a8", "k");
+    struct room* east_akkala_stable = create_room("a9", "l");
+    struct room* katosa_aug_shrine = create_room("a10", "m");
+    struct room* skull_lake = create_room("a11", "n");
+    struct room* tutsuwa_nima_shrine = create_room("a12", "o");
+    struct room* central_tower = create_room("a13", "r");
+    struct room* dah_kaso_shrine = create_room("a14", "s");
+    struct room* kaam_yatak_shrine = create_room("a15", "t");
+    struct room* kaam1 = create_room("a16", "u");
+    struct room* kaam2 = create_room("a17", "y");
+    struct room* kaam3 = create_room("a18", "v");
+    struct room* kaam4 = create_room("a19", "w");
+    struct room* kaam5 = create_room("a20", "q");
 
     //creating items
-    struct item* sword = create_item("Sword", "Its", MOVABLE);
-    struct item* magical_sword = create_item("MagicalSword", "Thehite", MOVABLE);
-    struct item* magical_shield = create_item("MagicalShield", "Itis", MOVABLE);
-    struct item* boomerang = create_item("Boomerang", "Ican", MOVABLE);
-    struct item* bomb = create_item("Bomb", "eycan", MOVABLE);
-    struct item* bow = create_item("Bow", "ceLink", MOVABLE);
-    struct item* arrow = create_item("Arrow", "esedeadly", MOVABLE);
-    struct item* silver_arrow = create_item("SilverArrow", "rimary", MOVABLE);
-    struct item* candle = create_item("Candle", "edther", MOVABLE);
-    struct item* recorder = create_item("Recorder", "corder", MOVABLE);
+    struct item* sword = create_item("Sword", "a1", MOVABLE);
+    struct item* magical_sword = create_item("MagicalSword", "a2", MOVABLE);
+    struct item* magical_shield = create_item("MagicalShield", "a3", MOVABLE);
+    struct item* boomerang = create_item("Boomerang", "a4", MOVABLE);
+    struct item* bomb = create_item("Bomb", "a5", MOVABLE);
+    struct item* bow = create_item("Bow", "a6", MOVABLE);
+    struct item* arrow = create_item("Arrow", "a7", MOVABLE);
+    struct item* silver_arrow = create_item("SilverArrow", "a8", MOVABLE);
+    struct item* candle = create_item("Candle", "a9", MOVABLE);
+    struct item* recorder = create_item("Recorder", "a10", MOVABLE);
 
     //add items to some rooms
-    add_item_to_room(home, sword);
+    add_item_to_room(kaam1, sword);
     add_item_to_room(akkala_tower, magical_sword);
     add_item_to_room(spring_of_power, magical_shield);
     add_item_to_room(east_akkala_stable, boomerang);
@@ -54,28 +55,28 @@ struct container* create_world(){
     //struct container* world = create_container(NULL, ROOM, home);
 
     //add all rooms to world
-    add_room_to_world(world, home);
-    add_room_to_world(world, garden);
-    add_room_to_world(world, akkala_tower);
-    add_room_to_world(world, dah_hesho);
-    add_room_to_world(world, south_akkala_stable);
-    add_room_to_world(world, spring_of_power);
-    add_room_to_world(world, ze_kasho_shrine);
-    add_room_to_world(world, ancient_tech_lab);
-    add_room_to_world(world, east_akkala_stable);
-    add_room_to_world(world, katosa_aug_shrine);
-    add_room_to_world(world, skull_lake);
-    add_room_to_world(world, tutsuwa_nima_shrine);
-    add_room_to_world(world, central_tower);
-    add_room_to_world(world, dah_kaso_shrine);
-    add_room_to_world(world, kaam_yatak_shrine);
-    add_room_to_world(world, kaam1);
-    add_room_to_world(world, kaam2);
-    add_room_to_world(world, kaam3);
-    add_room_to_world(world, kaam4);
-    add_room_to_world(world, kaam5);
+    add_room_to_world(created_world, home);
+    add_room_to_world(created_world, garden);
+    add_room_to_world(created_world, akkala_tower);
+    add_room_to_world(created_world, dah_hesho);
+    add_room_to_world(created_world, south_akkala_stable);
+    add_room_to_world(created_world, spring_of_power);
+    add_room_to_world(created_world, ze_kasho_shrine);
+    add_room_to_world(created_world, ancient_tech_lab);
+    add_room_to_world(created_world, east_akkala_stable);
+    add_room_to_world(created_world, katosa_aug_shrine);
+    add_room_to_world(created_world, skull_lake);
+    add_room_to_world(created_world, tutsuwa_nima_shrine);
+    add_room_to_world(created_world, central_tower);
+    add_room_to_world(created_world, dah_kaso_shrine);
+    add_room_to_world(created_world, kaam_yatak_shrine);
+    add_room_to_world(created_world, kaam1);
+    add_room_to_world(created_world, kaam2);
+    add_room_to_world(created_world, kaam3);
+    add_room_to_world(created_world, kaam4);
+    add_room_to_world(created_world, kaam5);
 
-    return world;
+    return created_world;
 }
 
 struct container* destroy_world(struct container* world){
