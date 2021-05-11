@@ -21,24 +21,6 @@ struct container* create_world(){
     struct room* dah_kaso_shrine = create_room("Dah Kaso Shrine", "Shrine Dah Kaso is located below the Digdogg Suspension Bridge on the Southwestern side of the Central Hyrule region.");
     struct room* kaam_yatak_shrine = create_room("Kaam Ya'tak Shrine", "Kaam Ya'tak Shrine is located South of the Central Hyrule Tower, just South of Mount Daphnes.");
 
-    //connecting rooms in the world
-    /*set_exits_from_room(home, NULL, garden, NULL, NULL);
-    set_exits_from_room(garden, home, akkala_tower, NULL, NULL);
-    set_exits_from_room(akkala_tower, garden, dah_hesho, NULL, NULL);
-    set_exits_from_room(dah_hesho, akkala_tower, south_akkala_stable, NULL, NULL);
-    set_exits_from_room(south_akkala_stable, dah_hesho, spring_of_power, NULL, NULL);
-    set_exits_from_room(spring_of_power, south_akkala_stable, ze_kasho_shrine, NULL, NULL);
-    set_exits_from_room(ze_kasho_shrine, spring_of_power, ancient_tech_lab, NULL, NULL);
-    set_exits_from_room(ancient_tech_lab, ze_kasho_shrine, east_akkala_stable, NULL, NULL);
-    set_exits_from_room(east_akkala_stable, ancient_tech_lab, katosa_aug_shrine, NULL, NULL);
-    set_exits_from_room(katosa_aug_shrine, east_akkala_stable, skull_lake, NULL, NULL);
-    set_exits_from_room(skull_lake, katosa_aug_shrine, tutsuwa_nima_shrine, NULL, NULL);
-    set_exits_from_room(tutsuwa_nima_shrine, skull_lake, central_tower, NULL, NULL);
-    set_exits_from_room(central_tower, tutsuwa_nima_shrine, dah_kaso_shrine, NULL, NULL);
-    set_exits_from_room(dah_kaso_shrine, central_tower, kaam_yatak_shrine, NULL, NULL);
-    set_exits_from_room(kaam_yatak_shrine, dah_kaso_shrine, NULL, NULL, NULL);*/
-
-
     //creating items
     struct item* sword = create_item("Sword", "It's dangerous to go alone! Take this.", MOVABLE);
     struct item* magical_sword = create_item("Magical Sword", "The White Sword is slightly stronger than the Wooden Sword.", MOVABLE);
@@ -50,7 +32,6 @@ struct container* create_world(){
     struct item* silver_arrow = create_item("Silver Arrow", "Its primary use is to defeat Ganon, as it is the only weapon capable of doing so.", MOVABLE);
     struct item* candle = create_item("Candle", "It is used to either light dark rooms inside a dungeon, burn bushes hiding secret staircases, or even to kill enemies. ", MOVABLE);
     struct item* recorder = create_item("Recorder", "The Recorder is the only musical instrument found in The Legend of Zelda. ", MOVABLE);
-
 
     //add items to some rooms
     add_item_to_room(home, sword);
@@ -66,8 +47,8 @@ struct container* create_world(){
 
     struct container* world = create_container(NULL, ROOM, home);
 
-    //create containers for all rooms
-    //add_room_to_world(world, ROOM, home);
+    //add all rooms to world
+    add_room_to_world(world, home);
     add_room_to_world(world, garden);
     add_room_to_world(world, akkala_tower);
     add_room_to_world(world, dah_hesho);
