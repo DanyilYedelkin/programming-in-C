@@ -5,8 +5,8 @@ OUTPUT=game
 
 all: $(OUTPUT)
 
-$(OUTPUT): backpack.o command.o container.o item.o parser.o room.o world.o main.o
-	$(CC) $(CFLAGS) backpack.o command.o container.o item.o parser.o room.o world.o main.o $(LDLIBS) -o $(OUTPUT)
+$(OUTPUT): backpack.o command.o container.o item.o parser.o room.o world.o game.o main.o
+	$(CC) $(CFLAGS) backpack.o command.o container.o item.o parser.o room.o world.o game.o main.o $(LDLIBS) -o $(OUTPUT)
 
 backpack.o: backpack.c backpack.h
 	$(CC) $(CFLAGS) -c backpack.c $(LDLIBS) -o backpack.o
@@ -28,6 +28,9 @@ room.o: room.c room.h
 
 world.o: world.c world.h
 	$(CC) $(CFLAGS) -c world.c $(LDLIBS) -o world.o
+
+game.o: game.c game.h
+	$(CC) $(CFLAGS) -c game.c $(LDLIBS) -o game.o
 
 main.o: main.c
 	$(CC) $(CFLAGS) -c main.c $(LDLIBS) -o main.o
