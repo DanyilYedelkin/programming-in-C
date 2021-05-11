@@ -4,6 +4,8 @@
 
 struct container* create_world(){
 
+    struct container* world = (struct container*)calloc(1, sizeof(struct container));
+
     //creating rooms
     struct room* home = create_room("start", "Nachadzas sa v chyzi svarneho suhaja. Na vychode sa nachadzaju dvere veduce z chyze von.");
     struct room* garden = create_room("garden", "Stojis pred chyzou a rozoznavas zahradku, ktora je znacne neudrziavana. este ze husty lesik na severe v porovnani so zahradkou nicim nevynika.");
@@ -21,6 +23,24 @@ struct container* create_world(){
     struct room* dah_kaso_shrine = create_room("Dah Kaso Shrine", "Shrine Dah Kaso is located below the Digdogg Suspension Bridge on the Southwestern side of the Central Hyrule region.");
     struct room* kaam_yatak_shrine = create_room("Kaam Ya'tak Shrine", "Kaam Ya'tak Shrine is located South of the Central Hyrule Tower, just South of Mount Daphnes.");
 
+    //connecting rooms in the world
+    set_exits_from_room(home, NULL, garden, NULL, NULL);
+    set_exits_from_room(garden, home, akkala_tower, NULL, NULL);
+    set_exits_from_room(akkala_tower, garden, dah_hesho, NULL, NULL);
+    set_exits_from_room(dah_hesho, akkala_tower, south_akkala_stable, NULL, NULL);
+    set_exits_from_room(south_akkala_stable, dah_hesho, spring_of_power, NULL, NULL);
+    set_exits_from_room(spring_of_power, south_akkala_stable, ze_kasho_shrine, NULL, NULL);
+    set_exits_from_room(ze_kasho_shrine, spring_of_power, ancient_tech_lab, NULL, NULL);
+    set_exits_from_room(ancient_tech_lab, ze_kasho_shrine, east_akkala_stable, NULL, NULL);
+    set_exits_from_room(east_akkala_stable, ancient_tech_lab, katosa_aug_shrine, NULL, NULL);
+    set_exits_from_room(katosa_aug_shrine, east_akkala_stable, skull_lake, NULL, NULL);
+    set_exits_from_room(skull_lake, katosa_aug_shrine, tutsuwa_nima_shrine, NULL, NULL);
+    set_exits_from_room(tutsuwa_nima_shrine, skull_lake, central_tower, NULL, NULL);
+    set_exits_from_room(central_tower, tutsuwa_nima_shrine, dah_kaso_shrine, NULL, NULL);
+    set_exits_from_room(dah_kaso_shrine, central_tower, kaam_yatak_shrine, NULL, NULL);
+    set_exits_from_room(kaam_yatak_shrine, dah_kaso_shrine, NULL, NULL, NULL);
+
+
     //creating items
     struct item* sword = create_item("Sword", "It's dangerous to go alone! Take this.", MOVABLE);
     struct item* magical_sword = create_item("Magical Sword", "The White Sword is slightly stronger than the Wooden Sword.", MOVABLE);
@@ -33,22 +53,6 @@ struct container* create_world(){
     struct item* candle = create_item("Candle", "It is used to either light dark rooms inside a dungeon, burn bushes hiding secret staircases, or even to kill enemies. ", MOVABLE);
     struct item* recorder = create_item("Recorder", "The Recorder is the only musical instrument found in The Legend of Zelda. ", MOVABLE);
 
-    //connecting rooms in the world
-    set_exits_from_room(home, NULL, NULL, garden, NULL);
-    set_exits_from_room(garden, NULL, NULL, akkala_tower, home);
-    set_exits_from_room(akkala_tower, NULL, NULL, dah_hesho, garden);
-    set_exits_from_room(dah_hesho, NULL, NULL, south_akkala_stable, akkala_tower);
-    set_exits_from_room(south_akkala_stable, NULL, NULL, spring_of_power, dah_hesho);
-    set_exits_from_room(spring_of_power, NULL, NULL, ze_kasho_shrine, south_akkala_stable);
-    set_exits_from_room(ze_kasho_shrine, NULL, NULL, ancient_tech_lab, spring_of_power);
-    set_exits_from_room(ancient_tech_lab, NULL, NULL, east_akkala_stable, ze_kasho_shrine);
-    set_exits_from_room(east_akkala_stable, NULL, NULL, katosa_aug_shrine, ancient_tech_lab);
-    set_exits_from_room(katosa_aug_shrine, NULL, NULL, skull_lake, east_akkala_stable);
-    set_exits_from_room(skull_lake, NULL, NULL, tutsuwa_nima_shrine, katosa_aug_shrine);
-    set_exits_from_room(tutsuwa_nima_shrine, NULL, NULL, central_tower, skull_lake);
-    set_exits_from_room(central_tower, NULL, NULL, dah_kaso_shrine, tutsuwa_nima_shrine);
-    set_exits_from_room(dah_kaso_shrine, NULL, NULL, kaam_yatak_shrine, central_tower);
-    set_exits_from_room(kaam_yatak_shrine, NULL, NULL, NULL, dah_kaso_shrine);
 
     //add items to some rooms
     add_item_to_room(home, sword);
@@ -63,21 +67,21 @@ struct container* create_world(){
     add_item_to_room(dah_hesho, recorder);
 
     //create containers for all rooms
-    struct container* world = create_container(NULL, ROOM, home);
-    world = create_container(world, ROOM, garden);
-    world = create_container(world, ROOM, akkala_tower);
-    world = create_container(world, ROOM, dah_hesho);
-    world = create_container(world, ROOM, south_akkala_stable);
-    world = create_container(world, ROOM, spring_of_power);
-    world = create_container(world, ROOM, ze_kasho_shrine);
-    world = create_container(world, ROOM, ancient_tech_lab);
-    world = create_container(world, ROOM, east_akkala_stable);
-    world = create_container(world, ROOM, katosa_aug_shrine);
-    world = create_container(world, ROOM, skull_lake);
-    world = create_container(world, ROOM, tutsuwa_nima_shrine);
-    world = create_container(world, ROOM, central_tower);
-    world = create_container(world, ROOM, dah_kaso_shrine);
-    world = create_container(world, ROOM, kaam_yatak_shrine);
+    world = add_room_to_world(NULL, home);
+    world = add_room_to_world(world, garden);
+    world = add_room_to_world(world, akkala_tower);
+    world = add_room_to_world(world, dah_hesho);
+    world = add_room_to_world(world, south_akkala_stable);
+    world = add_room_to_world(world, spring_of_power);
+    world = add_room_to_world(world, ze_kasho_shrine);
+    world = add_room_to_world(world, ancient_tech_lab);
+    world = add_room_to_world(world, east_akkala_stable);
+    world = add_room_to_world(world, katosa_aug_shrine);
+    world = add_room_to_world(world, skull_lake);
+    world = add_room_to_world(world, tutsuwa_nima_shrine);
+    world = add_room_to_world(world, central_tower);
+    world = add_room_to_world(world, dah_kaso_shrine);
+    world = add_room_to_world(world, kaam_yatak_shrine);
 
     return world;
 }
