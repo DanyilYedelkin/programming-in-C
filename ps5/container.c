@@ -106,7 +106,7 @@ void* get_from_container_by_name(struct container *first, const char *name){
 
     //first changed: create a new container "item" and change first -> "item"
     //back to the first method
-    struct container* item = first;
+    /*struct container* item = first;
     for(; item != NULL; item = item->next){
         if(first->type == ROOM){
             if((strlen(item->room->name) == strlen(name))){
@@ -152,7 +152,7 @@ void* get_from_container_by_name(struct container *first, const char *name){
             }
             break;
         }
-    }
+    }*/
 
     //second changed: try another method 
     /*if(first->type == ROOM){
@@ -244,6 +244,59 @@ void* get_from_container_by_name(struct container *first, const char *name){
             }
         }
     }*/
+
+    //fourth method:
+    struct container* item = first;
+    for(; item != NULL; item = item->next){
+        if(first->type == ROOM){
+            if(item->room != NULL && item->room->name != NULL){
+                int difference = 0;
+                for(int i = 0; i < strlen(name); i++){
+                    difference = tolower(item->room->name[i]) - tolower(name[i]);
+                    if(difference != 0) i = 100000000;
+                }
+                if(difference == 0) return item->room;
+            }
+            break;
+        }
+        if(first->type == ITEM){
+            if(item->item != NULL && item->item->name != NULL){
+                int difference = 0;
+                for(int i = 0; i < strlen(name); i++){
+                    difference = tolower(item->item->name[i]) - tolower(name[i]);
+                    if(difference != 0) i = 100000000;
+                }
+                if(difference == 0) return item->item;
+            }
+            break;
+        }
+        if(first->type == COMMAND){
+            if(item->command != NULL && item->command->name != NULL){
+                int difference = 0;
+                for(int i = 0; i < strlen(name); i++){
+                    difference = tolower(item->command->name[i]) - tolower(name[i]);
+                    if(difference != 0) i = 100000000;
+                }
+                if(difference == 0) return item->command;
+            }
+            break;
+        }
+        if(first->type == TEXT){
+            if(item->text != NULL){
+                int difference = 0;
+                for(int i = 0; i < strlen(name); i++){
+                    difference = tolower(item->text[i]) - tolower(name[i]);
+                    if(difference != 0) i = 100000000;
+                }
+                if(difference == 0) return item->text;
+            }
+            break;
+        }
+    }
+
+
+
+
 
     return NULL;
 }
