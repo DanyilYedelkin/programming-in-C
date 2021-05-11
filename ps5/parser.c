@@ -126,5 +126,8 @@ struct command* parse_input(struct parser* parser, char* input){
         }
     } while(input[input_word] == ' ');
 
+    printf("%s\n", input_buffer);
+
     return get_from_container_by_name(parser->commands, input_buffer);
 }
+//dasd
