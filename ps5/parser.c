@@ -152,9 +152,7 @@ struct command* parse_input(struct parser* parser, char* input){
     } else{
         input_buffer[word] = '\0';
     }
-    //input_buffer[word] = '\0';
-
-    printf("%s\n", input_buffer);
+    input_buffer[word] = '\0';
 
     return get_from_container_by_name(parser->commands, input_buffer);
 }
