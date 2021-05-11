@@ -10,9 +10,9 @@ struct game* create_game(){
     struct game* created_game = calloc(1, sizeof(struct game));
 
     created_game->state = PLAYING;
+    created_game->parser = create_parser();
     created_game->world = create_world();
     created_game->current_room = created_game->world->room;
-    created_game->parser = create_parser();
     created_game->backpack = create_backpack(10);
 
     return created_game;
@@ -93,7 +93,7 @@ void execute_command(struct game* game, struct command* command){
 
     if(strcmp(command->name, "KONIEC") == 0){
         game->state = GAMEOVER;  
-        printf("Gameover\n");     
+        printf("Gameover\n");
     } else if(strcmp(command->name, "SEVER") == 0){
         if(game->current_room->north == NULL){
             printf("Sorry, but you can't find the north\n");
@@ -125,9 +125,9 @@ void execute_command(struct game* game, struct command* command){
     } else if(strcmp(command->name, "ROZHLIADNI SA") == 0){
         show_room(game->current_room);
     } else if(strcmp(command->name, "PRIKAZY") == 0){
-        struct container* commands = game->parser->commands;
-        for(int i = 0; commands != NULL; i++){
-            printf("%s  -->  %s\n", commands->command->name, commands->command->description);
+        //struct container* commands = game->parser->commands;
+        for(int i = 0; game->parser->commands != NULL; i++){
+            printf("%s  -->  %s\n", game->parser->commands->command->name, game->parser->commands->command->description);
         }
     } else if(strcmp(command->name, "VERZIA") == 0){
         printf("|=====================|\n");
@@ -138,6 +138,7 @@ void execute_command(struct game* game, struct command* command){
         printf("|      the Wild       |\n");
         printf("|=====================|\n");
     } else if(strcmp(command->name, "RESTART") == 0){
+        printf("Restart the game :D\n");
         game->state = RESTART;
     } else if(strcmp(command->name, "O HRE") == 0){
         printf("STEP INTO A WORLD OF ADVENTURE\n\n");
@@ -156,9 +157,9 @@ void execute_command(struct game* game, struct command* command){
         add_item_to_room(game->current_room, NULL);
     } else if(strcmp(command->name, "INVENTAR") == 0){
         if(game->backpack->items != NULL){
-            struct container* items = game->backpack->items;
-            for(int i = 0; items != NULL; i++){
-                printf("%s\n", items->item->name);
+            //struct container* items = game->backpack->items;
+            for(int i = 0; game->backpack->items != NULL; i++){
+                printf("%s\n", game->backpack->items->item->name);
             }
         } else{
             printf("Your backpack is empty :D\n");
@@ -176,8 +177,8 @@ void execute_command(struct game* game, struct command* command){
             if(fp != NULL){
                 while(1){
                     if(fscanf(fp, "%s", input_buffer) != EOF){
-                        struct command* input_command = parse_input(game->parser, input_buffer);
-                        execute_command(game, input_command);
+                        //struct command* input_command = parse_input(game->parser, input_buffer);
+                        //execute_command(game, input_command);
                     } else{
                         break;
                     }
@@ -189,14 +190,15 @@ void execute_command(struct game* game, struct command* command){
         if(game->parser->history != NULL){
             FILE *fp = fopen("game_saves.txt", "w");
             printf("Saving... Wait for a while, please\n");
-            struct container* history = game->parser->history;
-            for(int i = 0; history != NULL; i++, history = history->next){
-                fprintf(fp, "%s\n", history->text);
-            }
+            //struct container* history = game->parser->history;
+            //for(int i = 0; history != NULL; i++, history = history->next){
+                //fprintf(fp, "%s\n", history->text);
+           // }
             printf("Saving is completed! :D\n");
             fclose(fp);
         } else{
             printf("Sorry, but nothing to save\n");
         }
     }
+    //destroy_game(game);
 }
