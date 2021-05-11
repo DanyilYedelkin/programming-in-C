@@ -11,25 +11,25 @@ struct parser* create_parser(){
     struct parser* created_parser = calloc(1, sizeof(struct parser));
     //created_parser->commands = calloc(17, sizeof(struct parser));
 
-    created_parser->commands = create_container(NULL, COMMAND, create_command("KONIEC", "Príkaz ukončí rozohratú hru. Nastaví príslušný stav hry.", "^\\s{0,}((QU|EX)IT|KONIEC)\\s{0,}$", 3));
-    create_container(created_parser->commands, COMMAND, create_command("SEVER", "Presun do miestnosti nachádzajúcej sa na sever od aktuálnej. Zmení referenciu aktuálnej miestnosti.", "^\\s{0,}(S|SEVER)\\s{0,}$", 2));
-    create_container(created_parser->commands, COMMAND, create_command("JUH", "Presun do miestnosti nachádzajúcej sa na juh od aktuálnej. Zmení referenciu aktuálnej miestnosti.", "^\\s{0,}(J|JUH)\\s{0,}$", 2));
-    create_container(created_parser->commands, COMMAND, create_command("VYCHOD", "Presun do miestnosti nachádzajúcej sa na východ od aktuálnej. Zmení referenciu aktuálnej miestnosti.", "^\\s{0,}(V|VYCHOD)\\s{0,}$", 2));
-    create_container(created_parser->commands, COMMAND, create_command("ZAPAD", "Presun do miestnosti nachádzajúcej sa na západ od aktuálnej. Zmení referenciu aktuálnej miestnosti.", "^\\s{0,}(Z|ZAPAD)\\s{0,}$", 2));
-    create_container(created_parser->commands, COMMAND, create_command("ROZHLIADNI SA", "Príkaz vypíše aktuálne informácie o miestnosti, v ktorej sa hráč práve nachádza.", "^\\s{0,}ROZHLIADNI\\sSA\\s{0,}$", 1));
-    create_container(created_parser->commands, COMMAND, create_command("PRIKAZY", "Príkaz vypíše na obrazovku zoznam všetkých príkazov, ktoré hra poskytuje.", "^\\s{0,}(PRIKAZY|HELP|POMOC)\\s{0,}$", 3));
-    create_container(created_parser->commands, COMMAND, create_command("VERZIA", "Príkaz zobrazí číslo verzie hry, ľubovolný sprievodný text a meno a priezvisko autora s kontaktom (e-mailová adresa, webová stránka).", "^\\s{0,}VERZIA\\s{0,}$", 1));
-    create_container(created_parser->commands, COMMAND, create_command("RESTART", "Znovu spustí hru od začiatku. Zmení stav hry na požadovaný.", "^\\s{0,}RESTART\\s{0,}$", 1));
-    create_container(created_parser->commands, COMMAND, create_command("O HRE", "Príkaz zobrazí krátky text, ktorý poslúži ako úvod do príbehu. Ako dobrý začiatok sa javí známy text: Kde bolo tam bolo, …", "^\\s{0,}(O HRE|ABOUT)\\s{0,}$", 2));
-    create_container(created_parser->commands, COMMAND, create_command("VEZMI", "Vloží predmet z miestnosti do batohu. Príkaz má jeden povinný parameter, ktorým je názov predmetu. Ak predmet nebude zadaný, program vypíše na obrazovku vhodnú hlášku (napr. Neviem, čo chceš vziať.).", "^\\s{0,}VEZMI(\\s{1,}[a-zA-Z]{1,}){1,}\\s{0,}$", 1));
-    create_container(created_parser->commands, COMMAND, create_command("POLOZ", "Položí predmet z batohu do miestnosti. Príkaz má jeden povinný parameter, ktorým je názov predmetu. Ak predmet nebude zadaný, program vypíše na obrazovku vhodnú hlášku (napr. Neviem, čo chceš položiť.)", "^\\s{0,}POLOZ(\\s{1,}[a-zA-Z]{1,}){1,}\\s{0,}$", 1));
-    create_container(created_parser->commands, COMMAND, create_command("INVENTAR", "Zobrazí obsah hráčovho batohu.", "^\\s{0,}(INVENTAR|I)\\s{0,}$", 2));
-    create_container(created_parser->commands, COMMAND, create_command("POUZI", "Použije predmet z batohu alebo miestnosti. Príkaz má jeden povinný parameter, ktorým je názov predmetu. Ak predmet nebude zadaný, program vypíše na obrazovku vhodnú hlášku (napr. Neviem, čo chceš použiť.).", "^\\s{0,}POUZI(\\s{1,}[a-zA-Z]{1,}){1,}\\s{0,}$", 1));
-    create_container(created_parser->commands, COMMAND, create_command("PRESKUMAJ", "Vypíše opis predmetu, ktorý sa musí nachádzať v miestnosti alebo batohu. Príkaz má jeden povinný parameter, ktorým je názov predmetu. Ak predmet nebude zadaný alebo sa nenájde v batohu alebo v miestnosti, program vypíše na obrazovku vhodnú hlášku (napr. Neviem, čo chceš preskúmať.).", "^\\s{0,}PRESKUMAJ(\\s{1,}[a-zA-Z]{1,}){1,}\\s{0,}$", 1));
-    create_container(created_parser->commands, COMMAND, create_command("NAHRAJ", "Príkaz zabezpečí nahratie uloženej pozície hry z disku. Voliteľným parametrom je cesta k súboru.", "^\\s{0,}(NAHRAJ|LOAD)\\s{0,}$", 2));
-    create_container(created_parser->commands, COMMAND, create_command("ULOZ", "Príkaz uloží stav rozohratej hry na disk. Voliteľným parametrom je cesta k súboru.", "^\\s{0,}(ULOZ|SAVE)\\s{0,}$", 2));
+    created_parser->commands = create_container(NULL, COMMAND, create_command("KONIEC", "KONIEC", "^\\s{0,}((QU|EX)IT|KONIEC)\\s{0,}$", 3));
+    create_container(created_parser->commands, COMMAND, create_command("SEVER", "SEVER", "^\\s{0,}(S|SEVER)\\s{0,}$", 2));
+    create_container(created_parser->commands, COMMAND, create_command("JUH", "JUH", "^\\s{0,}(J|JUH)\\s{0,}$", 2));
+    create_container(created_parser->commands, COMMAND, create_command("VYCHOD", "VYCHOD", "^\\s{0,}(V|VYCHOD)\\s{0,}$", 2));
+    create_container(created_parser->commands, COMMAND, create_command("ZAPAD", "ZAPAD", "^\\s{0,}(Z|ZAPAD)\\s{0,}$", 2));
+    create_container(created_parser->commands, COMMAND, create_command("ROZHLIADNI SA", "ROZHLIADNI SA", "^\\s{0,}ROZHLIADNI\\sSA\\s{0,}$", 1));
+    create_container(created_parser->commands, COMMAND, create_command("PRIKAZY", "PRIKAZY", "^\\s{0,}(PRIKAZY|HELP|POMOC)\\s{0,}$", 3));
+    create_container(created_parser->commands, COMMAND, create_command("VERZIA", "VERZIA", "^\\s{0,}VERZIA\\s{0,}$", 1));
+    create_container(created_parser->commands, COMMAND, create_command("RESTART", "RESTART", "^\\s{0,}RESTART\\s{0,}$", 1));
+    create_container(created_parser->commands, COMMAND, create_command("O HRE", "O HRE", "^\\s{0,}(O HRE|ABOUT)\\s{0,}$", 2));
+    create_container(created_parser->commands, COMMAND, create_command("VEZMI", "VEZMI", "^\\s{0,}VEZMI(\\s{1,}[a-zA-Z]{1,}){1,}\\s{0,}$", 1));
+    create_container(created_parser->commands, COMMAND, create_command("POLOZ", "POLOZ", "^\\s{0,}POLOZ(\\s{1,}[a-zA-Z]{1,}){1,}\\s{0,}$", 1));
+    create_container(created_parser->commands, COMMAND, create_command("INVENTAR", "INVENTAR", "^\\s{0,}(INVENTAR|I)\\s{0,}$", 2));
+    create_container(created_parser->commands, COMMAND, create_command("POUZI", "POUZI", "^\\s{0,}POUZI(\\s{1,}[a-zA-Z]{1,}){1,}\\s{0,}$", 1));
+    create_container(created_parser->commands, COMMAND, create_command("PRESKUMAJ", "PRESKUMAJ", "^\\s{0,}PRESKUMAJ(\\s{1,}[a-zA-Z]{1,}){1,}\\s{0,}$", 1));
+    create_container(created_parser->commands, COMMAND, create_command("NAHRAJ", "NAHRAJ", "^\\s{0,}(NAHRAJ|LOAD)\\s{0,}$", 2));
+    create_container(created_parser->commands, COMMAND, create_command("ULOZ", "ULOZ", "^\\s{0,}(ULOZ|SAVE)\\s{0,}$", 2));
 
-    created_parser->history = create_container(NULL, COMMAND, create_command("O HRE", "Príkaz zobrazí krátky text, ktorý poslúži ako úvod do príbehu. Ako dobrý začiatok sa javí známy text: Kde bolo tam bolo, …", "^\\s{0,}(O HRE|ABOUT)\\s{0,}$", 2));
+    created_parser->history = create_container(NULL, COMMAND, create_command("O HRE", "O HRE", "^\\s{0,}(O HRE|ABOUT)\\s{0,}$", 2));
 
     if (created_parser->history == NULL){
         free(created_parser);
@@ -154,11 +154,9 @@ struct command* parse_input(struct parser* parser, char* input){
             word++;
             input_word++;
         }
-    } else{
-        input_buffer[word] = '\0';
     }
     input_buffer[word] = '\0';
 
-    //return get_from_container_by_name(parser->commands, input_buffer);
-    return create_command(input_buffer, " ", "(EXIT)", 1); 
+    return get_from_container_by_name(parser->commands, input_buffer);
+    //return create_command(input_buffer, " ", "(EXIT)", 1); 
 }
