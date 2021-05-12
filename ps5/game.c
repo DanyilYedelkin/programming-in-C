@@ -1,8 +1,30 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 #include "game.h"
 #include "world.h"
+
+
+/*
+         _nnnn_                      
+        dGGGGMMb     ,"""""""""""""".
+       @p~qp~~qMb    | Linux Rules! |
+       M|@||@) M|   _;..............'
+       @,----.JM| -'
+      JS^\__/  qKL
+     dZP        qKRb
+    dZP          qKKb
+   fZP            SMMb
+   HZM            MMMM
+   FqM            MMMM
+ __| ".        |\dS"qML
+ |    `.       | `' \Zq
+_)      \.___.,|     .'
+\____   )MMMMMM|   .'
+     `-'       `--' hjm
+
+*/
+
 
 struct game* create_game(){
     //first change: malloc -> calloc
@@ -13,7 +35,7 @@ struct game* create_game(){
     created_game->parser = create_parser();
     created_game->world = create_world();
     created_game->current_room = created_game->world->room;
-    created_game->backpack = create_backpack(10);
+    created_game->backpack = create_backpack(12);
 
     return created_game;
 }
@@ -29,7 +51,6 @@ struct game* destroy_game(struct game* game){
     
     return NULL;
 }
-
 
 void play_game(struct game* game){
     if(game == NULL) return;
@@ -204,5 +225,5 @@ void execute_command(struct game* game, struct command* command){
         }*/
         
    // }
-    destroy_command(command);
+    //destroy_command(command);
 }
