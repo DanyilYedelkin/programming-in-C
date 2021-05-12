@@ -229,4 +229,5 @@ void execute_command(struct game* game, struct command* command){
         return;
     }
     //destroy_game(game);
+    free(command);
 }
