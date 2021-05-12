@@ -78,52 +78,9 @@ struct container* create_world(){
     add_room_to_world(created_world, kaam4);
     add_room_to_world(created_world, kaam5);
 
-    return created_world;*/
 
 
-
-    //creating rooms
-    struct room* room_1 = create_room("A", "a"); 
-
-    struct container* world = create_container(NULL, ROOM, room_1);
-
-    struct room* room_2 = create_room("B", "b"); 
-    struct room* room_3 = create_room("C", "c"); 
-    struct room* room_4 = create_room("D", "d"); 
-    struct room* room_5 = create_room("E", "e"); 
-    struct room* room_6 = create_room("F", "f"); 
-    struct room* room_7 = create_room("G", "g"); 
-    struct room* room_8 = create_room("H", "h"); 
-    struct room* room_9 = create_room("I", "i"); 
-    struct room* room_10 = create_room("J", "j"); 
-    struct room* room_11 = create_room("K", "k"); 
-    struct room* room_12 = create_room("L", "l"); 
-    struct room* room_13 = create_room("M", "m"); 
-    struct room* room_14 = create_room("N", "n");
-    struct room* room_15 = create_room("O", "o");
-    struct room* room_16 = create_room("P", "p");
-    struct room* room_17 = create_room("Q", "q");
-    struct room* room_18 = create_room("R", "r");
-    struct room* room_19 = create_room("S", "s");
-    struct room* room_20 = create_room("T", "t");
-
-    //creating items
-    struct item* item_1 = create_item("shield", "u", MOVABLE);
-    struct item* item_2 = create_item("sword", "v", MOVABLE);
-    struct item* item_3 = create_item("magical shield", "w", MOVABLE);
-    struct item* item_4 = create_item("spellbook", "x", MOVABLE);
-    struct item* item_5 = create_item("bone", "y", MOVABLE);
-    struct item* item_6 = create_item("armory", "z", MOVABLE);
-
-    //add items to some rooms
-    add_item_to_room(room_1, item_1); 
-    add_item_to_room(room_3, item_2); 
-    add_item_to_room(room_6, item_3); 
-    add_item_to_room(room_9, item_4);
-    add_item_to_room(room_12 , item_5); 
-    add_item_to_room(room_14, item_6); 
-
-    /*set_exits_from_room(room_1, NULL, NULL, room_2, NULL);
+    set_exits_from_room(room_1, NULL, NULL, room_2, NULL);
     set_exits_from_room(room_2, NULL, NULL, room_3, room_1);
     set_exits_from_room(room_3, NULL, NULL, room_4, room_2);
     set_exits_from_room(room_4, NULL, NULL, room_5, room_3);
@@ -142,31 +99,81 @@ struct container* create_world(){
     set_exits_from_room(room_17, NULL, NULL, room_18, room_16);
     set_exits_from_room(room_18, NULL, NULL, room_19, room_17);
     set_exits_from_room(room_19, NULL, NULL, room_20, room_18);
-    set_exits_from_room(room_20, NULL, NULL, NULL, room_19);*/
+    set_exits_from_room(room_20, NULL, NULL, NULL, room_19);
+
+
+
+    return created_world;*/
+
+
+
+    //creating rooms
+    struct room* home = create_room("A", "a"); 
+
+    //struct container* world = create_container(NULL, ROOM, room_1);
+
+    struct room* garden = create_room("B", "b"); 
+    struct room* town = create_room("C", "c"); 
+    struct room* castle = create_room("D", "d"); 
+    struct room* roomuk = create_room("E", "e"); 
+    struct room* coridor = create_room("F", "f"); 
+    struct room* zal = create_room("G", "g"); 
+    struct room* ad = create_room("H", "h"); 
+    struct room* pechera = create_room("I", "i"); 
+    struct room* dira = create_room("J", "j"); 
+    struct room* pol = create_room("K", "k"); 
+    struct room* okno = create_room("L", "l"); 
+    struct room* lake = create_room("M", "m"); 
+    struct room* more = create_room("N", "n");
+    struct room* okean = create_room("O", "o");
+    struct room* sad = create_room("P", "p");
+    struct room* karcer = create_room("Q", "q");
+    struct room* turma = create_room("R", "r");
+    struct room* dilfo = create_room("S", "s");
+    struct room* dragon = create_room("T", "t");
+
+    //creating items
+    struct item* posoch = create_item("posoch", "u", MOVABLE);
+    struct item* sword = create_item("sword", "v", MOVABLE);
+    struct item* shield = create_item("magical shield", "w", MOVABLE);
+    struct item* book = create_item("spell book", "x", MOVABLE);
+    struct item* bone = create_item("bone", "y", MOVABLE);
+    struct item* armory = create_item("armory", "z", MOVABLE);
+
+    //add items to some rooms
+    add_item_to_room(home, posoch); 
+    add_item_to_room(town, sword); 
+    add_item_to_room(coridor, shield); 
+    add_item_to_room(pechera, book);
+    add_item_to_room(okno , bone); 
+    add_item_to_room(more, armory); 
 
     //add all rooms to world
-    //add_room_to_world(world, room_1); 
-    add_room_to_world(world, room_2); 
-    add_room_to_world(world, room_3);
-    add_room_to_world(world, room_4); 
-    add_room_to_world(world, room_5); 
-    add_room_to_world(world, room_6); 
-    add_room_to_world(world, room_7); 
-    add_room_to_world(world, room_8);
-    add_room_to_world(world, room_9); 
-    add_room_to_world(world, room_10); 
-    add_room_to_world(world, room_11); 
-    add_room_to_world(world, room_12);
-    add_room_to_world(world, room_13); 
-    add_room_to_world(world, room_14); 
-    add_room_to_world(world, room_15); 
-    add_room_to_world(world, room_16); 
-    add_room_to_world(world, room_17); 
-    add_room_to_world(world, room_18); 
-    add_room_to_world(world, room_19); 
-    add_room_to_world(world, room_20); 
 
-    return world;
+    struct container* worldmir = create_container(NULL, ROOM, home);
+
+    //add_room_to_world(world, room_1); 
+    add_room_to_world(worldmir, garden); 
+    add_room_to_world(worldmir, town);
+    add_room_to_world(worldmir, castle); 
+    add_room_to_world(worldmir, roomuk); 
+    add_room_to_world(worldmir, coridor); 
+    add_room_to_world(worldmir, zal); 
+    add_room_to_world(worldmir, ad);
+    add_room_to_world(worldmir, pechera); 
+    add_room_to_world(worldmir, dira); 
+    add_room_to_world(worldmir, pol); 
+    add_room_to_world(worldmir, okno);
+    add_room_to_world(worldmir, lake); 
+    add_room_to_world(worldmir, more); 
+    add_room_to_world(worldmir, okean); 
+    add_room_to_world(worldmir, sad); 
+    add_room_to_world(worldmir, karcer); 
+    add_room_to_world(worldmir, turma); 
+    add_room_to_world(worldmir, dilfo); 
+    add_room_to_world(worldmir, dragon); 
+
+    return worldmir;
 }
 
 struct container* destroy_world(struct container* world){
