@@ -126,10 +126,11 @@ void execute_command(struct game* game, struct command* command){
     } else if(strcmp(command->name, "ROZHLIADNI SA") == 0){
         show_room(game->current_room);
     } else if(strcmp(command->name, "PRIKAZY") == 0){
-        //struct container* commands = game->parser->commands;
-        for(int i = 0; game->parser->commands != NULL; i++, game->parser->commands = game->parser->commands->next){
-            printf("%s  -->  %s\n", game->parser->commands->command->name, game->parser->commands->command->description);
+        struct container* commands = game->parser->commands;
+        for(int i = 0; commands != NULL; i++){
+            printf("%s  -->  %s\n", commands->command->name, commands->command->description);
         }
+        destroy_containers(commands);
     } else if(strcmp(command->name, "VERZIA") == 0){
         printf("|=====================|\n");
         printf("|      build 0.1      |\n");
@@ -139,7 +140,6 @@ void execute_command(struct game* game, struct command* command){
         printf("|      the Wild       |\n");
         printf("|=====================|\n");
 
-        return;
     } else if(strcmp(command->name, "RESTART") == 0){
         printf("Restart the game :D\n");
         game->state = RESTART;
@@ -154,16 +154,16 @@ void execute_command(struct game* game, struct command* command){
         printf("on Nintendo Switch, your journey is freer and more open than ever.\n");
         printf("Take your system anywhere, and adventure as Link any way you like.\n");
     } else if(strcmp(command->name, "VEZMI") == 0){
-        add_item_to_backpack(game->backpack, NULL);
+        //add_item_to_backpack(game->backpack, NULL);
     } else if(strcmp(command->name, "POLOZ") == 0){
-        add_item_to_room(game->current_room, NULL);
-        delete_item_from_backpack(game->backpack, NULL);
+        //add_item_to_room(game->current_room, NULL);
+        //delete_item_from_backpack(game->backpack, NULL);
     } else if(strcmp(command->name, "INVENTAR") == 0){
         if(game->backpack->items != NULL){
            // struct container* inventark = game->backpack->items;
-            for(int i = 0; game->backpack->items != NULL; i++, game->backpack->items = game->backpack->items->next){
+            /*for(int i = 0; game->backpack->items != NULL; i++, game->backpack->items = game->backpack->items->next){
                 printf(" %s\n", game->backpack->items->item->name);
-            }
+            }*/
         } else{
             printf("Your backpack is empty :D\n");
         }
@@ -188,7 +188,7 @@ void execute_command(struct game* game, struct command* command){
             }
         }
        fclose(fp);*/
-    } else if(strcmp(command->name, "ULOZ")){
+    } else if(strcmp(command->name, "ULOZ") == 0){
         //if(game->parser->history != NULL){
             /*FILE *fp = fopen("game_saves.txt", "w");
             printf("Saving... Wait for a while, please\n");
