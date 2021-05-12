@@ -203,35 +203,35 @@ struct container* create_world(){
 
     struct container* world = create_container(NULL, ROOM, home);
 
-    struct room* garden = create_room("A", "St"); 
-    struct room* town = create_room("B", "A"); 
-    struct room* castle = create_room("C", "T"); 
-    struct room* roomuk = create_room("D", "T");
-    struct room* coridor = create_room("E", "T"); 
-    struct room* zal = create_room("F", "Z"); 
-    struct room* ad = create_room("G", "T"); 
-    struct room* pechera = create_room("I", "I"); 
-    struct room* dira = create_room("K", "Ka"); 
-    struct room* pol = create_room("L", "T"); 
-    struct room* okno = create_room("M", "T"); 
-    struct room* lake = create_room("N", "C"); 
-    struct room* more = create_room("Y", "S");
-    struct room* okean = create_room("Q", "mm");
-    struct room* sad = create_room("LX", "ss");
-    struct room* karcer = create_room("X", "zz");
-    struct room* turma = create_room("XL", "aa");
+    struct room* garden = create_room("A", "Srtet"); 
+    struct room* town = create_room("B", "Ater"); 
+    struct room* castle = create_room("C", "Tgdfgd"); 
+    struct room* roomuk = create_room("D", "Tsdf");
+    struct room* coridor = create_room("E", "Tsdf"); 
+    struct room* zal = create_room("F", "fgdgZ"); 
+    struct room* ad = create_room("G", "Tfghfgh"); 
+    struct room* pechera = create_room("I", "sdfI"); 
+    struct room* dira = create_room("K", "hgKa"); 
+    struct room* pol = create_room("L", "Tsdf"); 
+    struct room* okno = create_room("M", "Tsdf"); 
+    struct room* lake = create_room("N", "Cxcv"); 
+    struct room* more = create_room("Y", "Srty");
+    struct room* okean = create_room("Q", "miukm");
+    struct room* sad = create_room("LX", "ssbbbm");
+    struct room* karcer = create_room("X", "zzaweawe");
+    struct room* turma = create_room("XL", "aazxczs");
 
     //creating items for rooms
-    struct item* palto = create_item("palto", "I.", MOVABLE);
-    struct item* sword = create_item("sword", "T.", MOVABLE);
-    struct item* shield = create_item("shield", "I.", MOVABLE);
-    struct item* spell = create_item("spell", "I ", MOVABLE);
-    struct item* book = create_item("book", "T", MOVABLE);
-    struct item* armory = create_item("armory", "T", MOVABLE);
-    struct item* strela = create_item("strlea", "T", MOVABLE);
-    struct item* bow = create_item("bow", "I", MOVABLE);
-    struct item* bottle = create_item("bottle", "I ", MOVABLE);
-    struct item* radio = create_item("radio", "T", MOVABLE);
+    struct item* palto = create_item("palto", "Iuiu.", MOVABLE);
+    struct item* sword = create_item("sword", "Tiu", MOVABLE);
+    struct item* shield = create_item("shield", "Iiu.", MOVABLE);
+    struct item* spell = create_item("spell", "Iiu ", MOVABLE);
+    struct item* book = create_item("book", "Tui", MOVABLE);
+    struct item* armory = create_item("armory", "Tu", MOVABLE);
+    struct item* strela = create_item("strlea", "Tu", MOVABLE);
+    struct item* bow = create_item("bow", "Iiu", MOVABLE);
+    struct item* bottle = create_item("bottle", "Iu", MOVABLE);
+    struct item* radio = create_item("radio", "Tu", MOVABLE);
 
 
     //add items to some rooms
