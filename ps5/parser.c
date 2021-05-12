@@ -4,6 +4,27 @@
 #include <ctype.h>
 #include "parser.h"
 
+/*
+         _nnnn_                      
+        dGGGGMMb     ,"""""""""""""".
+       @p~qp~~qMb    | Linux Rules! |
+       M|@||@) M|   _;..............'
+       @,----.JM| -'
+      JS^\__/  qKL
+     dZP        qKRb
+    dZP          qKKb
+   fZP            SMMb
+   HZM            MMMM
+   FqM            MMMM
+ __| ".        |\dS"qML
+ |    `.       | `' \Zq
+_)      \.___.,|     .'
+\____   )MMMMMM|   .'
+     `-'       `--' hjm
+
+*/
+
+
 struct parser* create_parser(){
     
     //https://ru.wikipedia.org/wiki/Регулярные_выражения
@@ -184,12 +205,12 @@ struct command* parse_input(struct parser* parser, char* input){
         if(input[i_word] == ' ' && ch_p == 1 && (((char)tolower(input[i_word - 1]) == 'o') || (((char)tolower(input[i_word - 1]) == 'i') && ((char)tolower(input[i_word - 2]) == 'n')))){ 
             ch_p = 2; 
         } 
-        if(input[i_word] != ' ' && ch_p == 2){ 
+        if(ch_p == 2 && input[i_word] != ' '){ 
             ch_p = 3; 
             input_buffer[word] = ' '; 
             word++; 
         } 
-        if(input[i_word] != ' ' && ch_p == 3){ 
+        if(ch_p == 3 && input[i_word] != ' '){ 
             input_buffer[word] = (char)tolower(input[i_word]); 
             word++;
         }
@@ -197,7 +218,7 @@ struct command* parse_input(struct parser* parser, char* input){
     } 
     input_buffer[word] = '\0'; 
 
-    printf("%s\n", input_buffer);
+    //printf("%s\n", input_buffer);
 
     return get_from_container_by_name(parser->commands, input_buffer); 
 }
