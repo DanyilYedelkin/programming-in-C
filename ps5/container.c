@@ -1,8 +1,30 @@
 #include <stdio.h>
-#include <ctype.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <string.h>
 #include "container.h"
+
+
+/*
+         _nnnn_                      
+        dGGGGMMb     ,"""""""""""""".
+       @p~qp~~qMb    | Linux Rules! |
+       M|@||@) M|   _;..............'
+       @,----.JM| -'
+      JS^\__/  qKL
+     dZP        qKRb
+    dZP          qKKb
+   fZP            SMMb
+   HZM            MMMM
+   FqM            MMMM
+ __| ".        |\dS"qML
+ |    `.       | `' \Zq
+_)      \.___.,|     .'
+\____   )MMMMMM|   .'
+     `-'       `--' hjm
+
+*/
+
 
 void creating_Wcont(struct container* new_container, enum container_type type, void* entry);
 void creating_cont(struct container* new_container, enum container_type type, void* entry);
@@ -79,7 +101,18 @@ void creating_cont(struct container* new_container, enum container_type type, vo
 struct container* destroy_containers(struct container* first){
     if(first == NULL) return NULL;
 
-    free_memory_container(first);
+    //create two containers for cleaning, one of them is first, the next is next step of first
+    struct container* first_container = first;
+    struct container* next_container = first->next;
+
+    free_memory_container(first_container);
+
+    //free memory for all branch of the container
+    for(int i = 0; next_container != NULL; i++){
+        first_container = next_container;
+        next_container = next_container->next;
+        if(first_container != NULL) free_memory_container(first_container);
+    }
 
     return NULL;
 }
@@ -99,7 +132,6 @@ void free_memory_container(struct container* container){
     }
     free(container);
 }
-
 
 void* get_from_container_by_name(struct container *first, const char *name){
     if((name == NULL) || (first == NULL) || (strlen(name) == 0)) return NULL;
@@ -295,7 +327,7 @@ void* get_from_container_by_name(struct container *first, const char *name){
     }*/
 
 
-
+    //struct container* check = first;
     if(first->type == ROOM){
         for(int i = 0; first != NULL && first->room != NULL; i++, first = first->next){
             if(strcmpBIG(name, first->room->name) == 1) return first->room;
@@ -327,7 +359,6 @@ int strcmpBIG(char const *first_name, char const *second_name){
     }
     return 1;
 }
-
 
 struct container* remove_container(struct container *first, void *entry){
     if(first == NULL) return NULL;
