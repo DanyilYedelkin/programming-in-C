@@ -173,8 +173,8 @@ struct container* create_world(){
     add_room_to_world(worldmir, dilfo); 
     add_room_to_world(worldmir, dragon); 
 
-    return worldmir;
-*/
+    return worldmir;*/
+
 
 
 
@@ -202,10 +202,10 @@ struct container* create_world(){
     struct room* okno = create_room("M", "T"); 
     struct room* lake = create_room("N", "C"); 
     struct room* more = create_room("Y", "S");
-    struct room* okean = create_room("kr", "mm");
-    struct room* sad = create_room("NKV", "ss");
-    struct room* karcer = create_room("MNS", "zz");
-    struct room* turma = create_room("LNM", "aa");
+    struct room* okean = create_room("Q", "mm");
+    struct room* sad = create_room("LX", "ss");
+    struct room* karcer = create_room("X", "zz");
+    struct room* turma = create_room("XL", "aa");
 
     //creating items for rooms
     struct item* palto = create_item("palto", "I.", MOVABLE);
@@ -264,12 +264,24 @@ struct container* destroy_world(struct container* world){
 }
 
 struct container* add_room_to_world(struct container* world, struct room* room){
-    if(room == NULL) return NULL;
+    //first method 
+    /*if(room == NULL) return NULL;
 
     if(world != NULL){
         if(get_room(world, room->name) != NULL) return NULL;
     }
-    return create_container(world, ROOM, room);
+    return create_container(world, ROOM, room);*/
+
+    //second method 
+    if(room == NULL) return NULL;
+    if(world != NULL){
+        struct room* new_room = get_from_container_by_name(world, room->name);
+        if(new_room != NULL) return NULL;
+        return create_container(world, ROOM, room);
+    } else if(world == NULL){
+        return create_container(world, ROOM, room);
+    }
+    return NULL;
 }
 
 struct room* get_room(struct container* world, char* name){
