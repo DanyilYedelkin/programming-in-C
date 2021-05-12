@@ -1,8 +1,30 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include "backpack.h"
+
+/*
+         _nnnn_                      
+        dGGGGMMb     ,"""""""""""""".
+       @p~qp~~qMb    | Linux Rules! |
+       M|@||@) M|   _;..............'
+       @,----.JM| -'
+      JS^\__/  qKL
+     dZP        qKRb
+    dZP          qKKb
+   fZP            SMMb
+   HZM            MMMM
+   FqM            MMMM
+ __| ".        |\dS"qML
+ |    `.       | `' \Zq
+_)      \.___.,|     .'
+\____   )MMMMMM|   .'
+     `-'       `--' hjm
+
+*/
+
+
 
 struct backpack* create_backpack(const int capacity){
     //first changed: changed malloc -> calloc
@@ -17,6 +39,8 @@ struct backpack* create_backpack(const int capacity){
 
 struct backpack* destroy_backpack(struct backpack* backpack){
     if(backpack == NULL) return NULL;
+
+    //destroy_containers(backpack->items);
     free(backpack);
 
     return NULL;
