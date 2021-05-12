@@ -184,12 +184,12 @@ struct command* parse_input(struct parser* parser, char* input){
         if(input[i_word] == ' ' && ch_p == 1 && (((char)tolower(input[i_word - 1]) == 'o') || (((char)tolower(input[i_word - 1]) == 'i') && ((char)tolower(input[i_word - 2]) == 'n')))){ 
             ch_p = 2; 
         } 
-        if(ch_p == 2 && input[i_word] != ' '){ 
+        if(input[i_word] != ' ' && ch_p == 2){ 
             ch_p = 3; 
             input_buffer[word] = ' '; 
             word++; 
         } 
-        if(ch_p == 3 && input[i_word] != ' '){ 
+        if(input[i_word] != ' ' && ch_p == 3){ 
             input_buffer[word] = (char)tolower(input[i_word]); 
             word++;
         }
