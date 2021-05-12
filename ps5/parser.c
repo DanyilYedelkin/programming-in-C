@@ -49,7 +49,7 @@ struct parser* destroy_parser(struct parser* parser) {
 }
 
 struct command* parse_input(struct parser* parser, char* input){
-    if((input == NULL) || (parser == NULL) || (strlen(input) == 0) || (strlen(input) < 1)) return NULL;
+    if((input == NULL) || (parser == NULL) || (strlen(input) == 0)) return NULL;
 
     /*int input_word = 0;
     int word = 0;
@@ -160,29 +160,44 @@ struct command* parse_input(struct parser* parser, char* input){
 
     //third method
 
-    char* input_buffer = calloc(20, sizeof(char));
+    /*char* input_buffer = calloc(20, sizeof(char));
     int word = 0;
-    int ch_word = 0;
+    int ch_word = 0;*/
 
 
-    if(input[ch_word] == ' '){
-        for(int j = 0; input[ch_word] == ' '; j++, ch_word++){}
+    char input_buffer[strlen(input)]; 
+    int ch_p = 1; 
+    int word = 0; 
+    int i_word = 0;
+
+    if(input[i_word] == ' '){
+        for(int i = 0; input[i_word] == ' '; i++, i_word++){}
     }
 
-    while(ch_word < strlen(input)){
-        if(input[ch_word] == ' '){
-            input_buffer[word] = '\0';
-            break;
+    while(i_word < strlen(input)){ 
+        if(input[i_word] != ' ' && ch_p == 1){ 
+            input_buffer[word] = (char)tolower(input[i_word]);
+            word++;
+            i_word++;
+            continue; 
+        } 
+        if(input[i_word] == ' ' && ch_p == 1 && (((char)tolower(input[i_word - 1]) == 'o') || (((char)tolower(input[i_word - 1]) == 'i') && ((char)tolower(input[i_word - 2]) == 'n')))){ 
+            ch_p = 2; 
+        } 
+        if(ch_p == 2 && input[i_word] != ' '){ 
+            ch_p = 3; 
+            input_buffer[word] = ' '; 
+            word++; 
+        } 
+        if(ch_p == 3 && input[i_word] != ' '){ 
+            input_buffer[word] = (char)tolower(input[i_word]); 
+            word++;
         }
-        input_buffer[word] = (char)tolower(input[ch_word]);
-        word++;
-        ch_word++;
-    }
+        i_word++;
+    } 
+    input_buffer[word] = '\0'; 
 
     printf("%s\n", input_buffer);
 
     return get_from_container_by_name(parser->commands, input_buffer); 
-
-    //return get_from_container_by_name(parser->commands, input_buffer);
-    //return create_command(input_buffer, " ", "(EXIT)", 1); 
 }
