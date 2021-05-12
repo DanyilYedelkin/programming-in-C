@@ -4,6 +4,28 @@
 #include "room.h"
 #include "item.h"
 
+
+/*
+         _nnnn_                      
+        dGGGGMMb     ,"""""""""""""".
+       @p~qp~~qMb    | Linux Rules! |
+       M|@||@) M|   _;..............'
+       @,----.JM| -'
+      JS^\__/  qKL
+     dZP        qKRb
+    dZP          qKKb
+   fZP            SMMb
+   HZM            MMMM
+   FqM            MMMM
+ __| ".        |\dS"qML
+ |    `.       | `' \Zq
+_)      \.___.,|     .'
+\____   )MMMMMM|   .'
+     `-'       `--' hjm
+
+*/
+
+
 struct container* create_world(){
 
     //creating rooms
@@ -176,14 +198,6 @@ struct container* create_world(){
     return worldmir;*/
 
 
-
-
-
-
-
-
-
-
     //creating rooms for world
     struct room* home = create_room("start", "N"); 
 
@@ -274,18 +288,21 @@ struct container* add_room_to_world(struct container* world, struct room* room){
 
     //second method 
     if(room == NULL) return NULL;
+
     if(world != NULL){
         struct room* new_room = get_from_container_by_name(world, room->name);
         if(new_room != NULL) return NULL;
+
         return create_container(world, ROOM, room);
     } else if(world == NULL){
         return create_container(world, ROOM, room);
     }
+
     return NULL;
 }
 
 struct room* get_room(struct container* world, char* name){
-    //if((world == NULL) || (name == NULL)) return NULL;
+    if((world == NULL) || (name == NULL)) return NULL;
 
     return get_from_container_by_name(world, name);
 }
