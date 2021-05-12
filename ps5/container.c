@@ -360,6 +360,7 @@ int strcmpBIG(char const *first_name, char const *second_name){
     return 1;
 }
 
+//removing containers
 struct container* remove_container(struct container *first, void *entry){
     if(first == NULL) return NULL;
     if(entry == NULL) return first;
