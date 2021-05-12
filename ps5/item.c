@@ -3,6 +3,27 @@
 #include <string.h>
 #include "item.h"
 
+/*
+         _nnnn_                      
+        dGGGGMMb     ,"""""""""""""".
+       @p~qp~~qMb    | Linux Rules! |
+       M|@||@) M|   _;..............'
+       @,----.JM| -'
+      JS^\__/  qKL
+     dZP        qKRb
+    dZP          qKKb
+   fZP            SMMb
+   HZM            MMMM
+   FqM            MMMM
+ __| ".        |\dS"qML
+ |    `.       | `' \Zq
+_)      \.___.,|     .'
+\____   )MMMMMM|   .'
+     `-'       `--' hjm
+
+*/
+
+
 void creating(struct item* new_item, char* name, char* description, unsigned int properties);
 void free_memory_item(struct item* item);
 
@@ -34,5 +55,8 @@ struct item* destroy_item(struct item* item){
 void free_memory_item(struct item* item){
     free(item->name);
     free(item->description);
+    item->name = NULL;
+    item->description = NULL;
+
     free(item);
 }
