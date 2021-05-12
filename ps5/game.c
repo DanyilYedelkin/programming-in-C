@@ -21,14 +21,15 @@ struct game* create_game(){
 struct game* destroy_game(struct game* game){
     if(game == NULL) return NULL;
 
-    destroy_world(game->world);
-    destroy_parser(game->parser);
-    destroy_backpack(game->backpack);
+    if (game->backpack != NULL) destroy_backpack(game->backpack);
+    if (game->parser != NULL) destroy_parser(game->parser);
     game->current_room = NULL;
+    if (game->world != NULL) destroy_containers(game->world);
     free(game);
     
     return NULL;
 }
+
 
 void play_game(struct game* game){
     if(game == NULL) return;
