@@ -123,7 +123,7 @@ struct container* create_world(){
     add_item_to_room(room_12 , item_5); 
     add_item_to_room(room_14, item_6); 
 
-    set_exits_from_room(room_1, NULL, NULL, room_2, NULL);
+    /*set_exits_from_room(room_1, NULL, NULL, room_2, NULL);
     set_exits_from_room(room_2, NULL, NULL, room_3, room_1);
     set_exits_from_room(room_3, NULL, NULL, room_4, room_2);
     set_exits_from_room(room_4, NULL, NULL, room_5, room_3);
@@ -142,7 +142,7 @@ struct container* create_world(){
     set_exits_from_room(room_17, NULL, NULL, room_18, room_16);
     set_exits_from_room(room_18, NULL, NULL, room_19, room_17);
     set_exits_from_room(room_19, NULL, NULL, room_20, room_18);
-    set_exits_from_room(room_20, NULL, NULL, NULL, room_19);
+    set_exits_from_room(room_20, NULL, NULL, NULL, room_19);*/
 
     //add all rooms to world
     //add_room_to_world(world, room_1); 
