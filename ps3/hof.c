@@ -12,12 +12,6 @@ int load(struct player list[]){
     }
     
     int number = 0;
-    /*while(1){
-        if(fscanf(fp, "%s %d", list[number].name, &list[number].score) != EOF){
-            if(number > 10) break;
-            number++;
-        } else break;
-    }*/
     for(number = 0; number < 10; number++){
         if(fscanf(fp, "%s %d", list[number].name, &list[number].score) != EOF) continue;
         else break;
@@ -27,19 +21,6 @@ int load(struct player list[]){
     
     return number;
 }
-
-/*
-manager 1000
-manager 900
-manager 800
-manager 700
-manager 600
-manager 500
-manager 400
-manager 300
-manager 200
-manager 100
-*/
 
 bool save(const struct player list[], const int size){
     FILE *fp = fopen(HOF_FILE, "w");
@@ -92,7 +73,7 @@ bool add_player(struct player list[], int* size, const struct player player){
     
     return add;
 }
-//https://ru.wikibooks.org/wiki/Язык_Си_в_примерах/Сортировка
+
 int cmp(const void *a, const void *b){
     if(((struct player*)a)->score == ((struct player*)b)->score){
         return strcmp(((struct player*)a)->name, ((struct player*)b)->name);
