@@ -4,31 +4,7 @@
 #include "game.h"
 #include "world.h"
 
-
-/*
-         _nnnn_                      
-        dGGGGMMb     ,"""""""""""""".
-       @p~qp~~qMb    | Linux Rules! |
-       M|@||@) M|   _;..............'
-       @,----.JM| -'
-      JS^\__/  qKL
-     dZP        qKRb
-    dZP          qKKb
-   fZP            SMMb
-   HZM            MMMM
-   FqM            MMMM
- __| ".        |\dS"qML
- |    `.       | `' \Zq
-_)      \.___.,|     .'
-\____   )MMMMMM|   .'
-     `-'       `--' hjm
-
-*/
-
-
 struct game* create_game(){
-    //first change: malloc -> calloc
-    //struct game* created_game = malloc(sizeof(created_game));
     struct game* created_game = calloc(1, sizeof(struct game));
 
     created_game->state = PLAYING;
@@ -80,38 +56,10 @@ void play_game(struct game* game){
             printf("Gameover! Try in another :D\n");
         }
     } while((game->state != SOLVED) || (game->state != GAMEOVER));
-
-    if(game->state == SOLVED){
-        printf("Congratulations! You're win :D\n");
-    } else if(game->state == GAMEOVER){
-        printf("Gameover! Try in another :D\n");
-    }
 }
 
 void execute_command(struct game* game, struct command* command){
     if((command == NULL) || (game == NULL)) return;
-
-    /* all commands are in the website https://kurzy.kpi.fei.tuke.sk/pvjc/2021/problemset.05.adventure.html
-            príkaz:
-    +   KONIEC
-    +   SEVER   
-    +   JUH
-    +   VYCHOD
-    +   ZAPAD
-    +   ROZHLIADNI SA
-    +   PRIKAZY
-    +   VERZIA
-    +   RESTART
-    +   O HRE
-    +   VEZMI
-    +   POLOZ
-    +   INVERNTAR
-    +   POUZI
-    +   PRESKUMAJ
-    +   NAHRAJ
-    +   ULOZ
-
-    */
 
     if(strcmp(command->name, "KONIEC") == 0){
         game->state = GAMEOVER;  
@@ -145,15 +93,15 @@ void execute_command(struct game* game, struct command* command){
             game->current_room = game->current_room->west;
             printf("Okey, now you are in the west\n");
         }
-    } //else if(strcmp(command->name, "ROZHLIADNI SA") == 0){
-       // show_room(game->current_room);
-   // } else if(strcmp(command->name, "PRIKAZY") == 0){
-      //  struct container* commands = game->parser->commands;
-      //  for(int i = 0; commands != NULL; i++){
-      //      printf("%s  -->  %s\n", commands->command->name, commands->command->description);
-      //  }
-      //  destroy_containers(commands);
-   /* } else if(strcmp(command->name, "VERZIA") == 0){
+    } else if(strcmp(command->name, "ROZHLIADNI SA") == 0){
+        show_room(game->current_room);
+    } else if(strcmp(command->name, "PRIKAZY") == 0){
+        struct container* commands = game->parser->commands;
+        for(int i = 0; commands != NULL; i++){
+            printf("%s  -->  %s\n", commands->command->name, commands->command->description);
+        }
+        destroy_containers(commands);
+    } else if(strcmp(command->name, "VERZIA") == 0){
         printf("|=====================|\n");
         printf("|      build 0.1      |\n");
         printf("|     Demo Verzia     |\n");
@@ -175,25 +123,24 @@ void execute_command(struct game* game, struct command* command){
         printf("of the kingdom of Hyrule in this stunning Open-Air Adventure. Now\n");
         printf("on Nintendo Switch, your journey is freer and more open than ever.\n");
         printf("Take your system anywhere, and adventure as Link any way you like.\n");
-    } //else if(strcmp(command->name, "VEZMI") == 0){
-       // add_item_to_backpack(game->backpack, NULL);
-    //} else if(strcmp(command->name, "POLOZ") == 0){
-      //  add_item_to_room(game->current_room, NULL);
-       // delete_item_from_backpack(game->backpack, NULL);
-    //} else if(strcmp(command->name, "INVENTAR") == 0){
-       // if(game->backpack->items != NULL){
-           // struct container* inventark = game->backpack->items;
-            /*for(int i = 0; game->backpack->items != NULL; i++, game->backpack->items = game->backpack->items->next){
+    } else if(strcmp(command->name, "VEZMI") == 0){
+        add_item_to_backpack(game->backpack, NULL);
+    } else if(strcmp(command->name, "POLOZ") == 0){
+        add_item_to_room(game->current_room, NULL);
+        delete_item_from_backpack(game->backpack, NULL);
+    } else if(strcmp(command->name, "INVENTAR") == 0){
+        if(game->backpack->items != NULL){
+            struct container* inventark = game->backpack->items;
+            for(int i = 0; game->backpack->items != NULL; i++, game->backpack->items = game->backpack->items->next){
                 printf(" %s\n", game->backpack->items->item->name);
-            }*/
-       // } else{
-        //    printf("Your backpack is empty :D\n");
-        //}
-   // } else if(strcmp(command->name, "POUZI") == 0){
-    //} else if(strcmp(command->name, "PRESKUMAJ") == 0){
-       // printf("%s\n", game->backpack->items->item->description);
-   // } else if(strcmp(command->name, "NAHRAJ") == 0){
-        /*FILE *fp = fopen("game_saves.txt", "r");
+            }
+        } else{
+            printf("Your backpack is empty :D\n");
+        }
+    } else if(strcmp(command->name, "PRESKUMAJ") == 0){
+        printf("%s\n", game->backpack->items->item->description);
+    } else if(strcmp(command->name, "NAHRAJ") == 0){
+        FILE *fp = fopen("game_saves.txt", "r");
         if(fp == NULL){
             printf("You haven't any saves\n");
         } else{
@@ -209,10 +156,10 @@ void execute_command(struct game* game, struct command* command){
                 }
             }
         }
-       fclose(fp);*/
-    //} else if(strcmp(command->name, "ULOZ") == 0){
-        //if(game->parser->history != NULL){
-            /*FILE *fp = fopen("game_saves.txt", "w");
+       fclose(fp);
+    } else if(strcmp(command->name, "ULOZ") == 0){
+        if(game->parser->history != NULL){
+            FILE *fp = fopen("game_saves.txt", "w");
             printf("Saving... Wait for a while, please\n");
             struct container* history = game->parser->history;
             for(int i = 0; history != NULL; i++, history = history->next){
@@ -222,8 +169,7 @@ void execute_command(struct game* game, struct command* command){
             fclose(fp);
         } else{
             printf("Sorry, but nothing to save\n");
-        }*/
+        }
         
-   // }
-    //destroy_command(command);
+    }
 }
