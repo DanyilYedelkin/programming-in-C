@@ -2,9 +2,9 @@ All full tasks are from the website https://kurzy.kpi.fei.tuke.sk/pvjc/2021/
 (work was started 03.01.2021 (1 february), and was completed 05.25.2021 (25 may)
 
 
-ps 1 - work with Playfair cipher, Vigenère cipher, Block cipher, BMP cipher 
+ps 1 - work with Playfair cipher, Vigenère cipher, Block cipher, BMP cipher (private security)
 ps 2 - work with mathematics and physics (tasks from the website https://kurzy.kpi.fei.tuke.sk/pvjc/2021/problemset.02.problems.to.solve.html
-ps 3 - game 2048 in C
+ps 3 - game 2048 in C (private security)
 ps 4 - work with BMP images, files, Base64 (flip, rotate, scale and extract BMP file)
 ps 5 - game Adventure https://kurzy.kpi.fei.tuke.sk/pvjc/2021/problemset.05.adventure.html
 ps 6 - game Mastermind, using Arduino Uno
