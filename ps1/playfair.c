@@ -1,10 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-//#include "playfair.h"
+#include "playfair.h"
 #include <stdbool.h>
-
-#define ALPHA "ASas"
 
 char* playfair_encrypt(const char* key, const char* text){
     if(text == NULL || key == NULL){
