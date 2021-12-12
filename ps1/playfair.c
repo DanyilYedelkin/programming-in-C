@@ -1,16 +1,17 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "playfair.h"
+//#include "playfair.h"
 #include <stdbool.h>
+
+#define ALPHA "ABCDEFGHIJKLMNOPQRSTUVXYZ"
 
 char* playfair_encrypt(const char* key, const char* text){
     if(text == NULL || key == NULL){
         return NULL;
     }
-    for(int i=0; i<2; i++){
-        if(key[i]==' ' && key[++i]=='\0'){
+    for(int i = 0; i < 2; i++){
+        if(key[i] == ' ' && key[++i] == '\0'){
             return NULL;
         }
     }
@@ -20,64 +21,20 @@ char* playfair_encrypt(const char* key, const char* text){
         }
     }
     int numberLine=-1;
-    //char *playfair = (char*)calloc(2*strlen(text), sizeof(char));
     char *changed_key = (char*)calloc(strlen(key)+1, sizeof(char));
     strcpy(changed_key, key);
-    //char *changed_text=(char*)calloc(2*strlen(text), sizeof(char));
-    int length=0;
-    bool ifTrue=true;
-    //======================= problem 
+
+    int length = 0;
+    bool ifTrue = true;
     char alphabet[26];
     strcpy(alphabet, ALPHA);
-    //alphabet[26]='\0';
-    //=======================
     char cipher_table[5][5];
-    for(int i=0; i<5; i++){
-        for(int j=0; j<5; j++){
+
+    for(int i = 0; i < 5; i++){
+        for(int j = 0; j < 5; j++){
             cipher_table[i][j]='A';
         }
     }
-    //printf("%s\n", alphabet);
-
-    /*for(int i=0; i<(strlen(key)+1); i++){
-        new_key[i]=toupper(key[i]);
-    }*/
-    /*int counter=0;
-    int length_key=0;
-    for(int i=0; i<(strlen(text)+1); i++){
-        if(text[i]!=' '){
-            new_key[i]=toupper(key[length_key]);
-            length_key++;
-        }
-        if(text[i]==' '){
-            new_key[i]=' ';
-        }
-        if(key[length_key]=='\0' && i!=(length_key-1)){
-            counter=i+1;
-            for(int j=0; j<(strlen(text)+1-i); j++){
-                new_key[counter]=toupper(key[j]);
-                counter++;
-            }
-            break;
-        }
-        if(key[length_key]=='\0' && i==(length_key-1)){
-            new_key[i]=' ';
-            counter=i+1;
-            for(int j=0; j<(strlen(text)+1-i); j++){
-                new_key[counter]=toupper(key[j]);
-                counter++;
-            }
-            break;
-        }
-    }*/
-    char *down10=(char*)calloc(2*strlen(text)+1, sizeof(char));
-    int repeating9=0;
-
-    for(int i=0; i<5; i++){
-        down10[i+repeating9]=key[i];
-        repeating9++;
-    }
-    free(down10);
 
     for(int i=0; i<strlen(key); i++){
         if(isalpha(key[i])){
@@ -97,210 +54,104 @@ char* playfair_encrypt(const char* key, const char* text){
         return NULL;
     }
 
-    char *upgrade_key=(char*)calloc(2*strlen(text)+1, sizeof(char));
-    int repeating3=0;
-
-    for(int i=0; i<5; i++){
-        upgrade_key[i+repeating3]=changed_key[i];
-        repeating3++;
-    }
-    free(upgrade_key);
-
     //================================================================
 
     char *changed_text=(char*)calloc(2*strlen(text)+1, sizeof(char));
-    char* checkText=(char*)calloc(2*strlen(text)+1, sizeof(char));
 
     for(int i=0, another=0; i<strlen(text); i++){
-        checkText[i]=changed_text[i];
-        //printf("\ncheckText[i]\n");
         if(changed_text!=NULL){
             changed_text[i+another]=toupper(text[i]);
         }
-        checkText[i]=changed_text[i];
-        //printf("\ncheckText[i]\n");
         if(length>-100){
             length++;
         }
         if(changed_text[i+another]==' '){
-            checkText[i]=changed_text[i];
-            //printf("\ncheckText[i]\n");
             if(length>-100){
                 length--;
                 another--;
             }
-            checkText[i]=changed_text[i];
-            //printf("\ncheckText[i]\n");
         } else{
-            checkText[i]=changed_text[i];
-            //printf("\ncheckText[i]\n");
             if(changed_text[i+another]=='W'){
                 changed_text[i+another]='V';
             }
-            checkText[i]=changed_text[i];
-            //printf("\ncheckText[i]\n");
             if(length>-100 && another>-100){
                 if((another+i)%2==1){
-                    checkText[i]=changed_text[i];
-                    //printf("\ncheckText[i]\n");
                     if(changed_text[i+another]!=' '){
-                        checkText[i]=changed_text[i];
-                        //printf("\ncheckText[i]\n");
                         if(changed_text[i+another]!='X'){
-                            checkText[i]=changed_text[i];
-                            //printf("\ncheckText[i]\n");
                             if(changed_text[i+another]==changed_text[i-1+another]){
-                                checkText[i]=changed_text[i];
-                                //printf("\ncheckText[i]\n");
                                 changed_text[i+another+1]=changed_text[i+another];
-                                checkText[i]=changed_text[i];
-                                //printf("\ncheckText[i]\n");
                                 changed_text[i+another]='X';
                                 if(length>-100 && another>-100){
                                     length++;
-                                    checkText[i]=changed_text[i];
-                                    //printf("\ncheckText[i]\n");
                                     if(another>-100){
-                                       another++;
+                                        another++;
                                     }
                                 }
-                                checkText[i]=changed_text[i];
-                                //printf("\ncheckText[i]\n");
                             }
                         }
                     }
                 }
             }
         }
-
-        char *donn=(char*)calloc(2*strlen(text)+1, sizeof(char));
-        int repeating11=0;
-
-        for(int i=0; i<5; i++){
-            donn[i+repeating11]=changed_key[i];
-            repeating11++;
-        }
-        free(donn);
     }
-    free(checkText);
-    char *down=(char*)calloc(2*strlen(text)+1, sizeof(char));
-    int repeating5=0;
+
     if(length%2==1){
         changed_text[length]='X';
         length++;
     }
 
-    for(int i=0; i<5; i++){
-        down[i+repeating5]=changed_key[i];
-        repeating5++;
-    }
-    free(down);
     changed_text[length]='\0';
-    //changed_text[++length]='\0';
 
-    //===============================================================================
-
-    /*char alphabet[26];
-    strcpy(alphabet, ALPHA);
-    alphabet[26]='\0';
-    char cipher_table[5][5];*/
-    //printf("%s\n", alphabet);
-
-//===========================================================
-    char* CheckTable=(char*)calloc(2*strlen(text)+1, sizeof(char));  
 
     for(int i=0 ; i<5; i++){
         for(int j=0; j<5; j++){
             if(numberLine>-10){
                 numberLine++;
             }
-            CheckTable[i]=cipher_table[i][j];
-            //printf("%c\n", CheckTable[i]);
-            
-                if(numberLine<strlen(key)){
-                    if(numberLine>-10){
-                        cipher_table[i][j]='.'; 
-                    }
-                    CheckTable[i]=cipher_table[i][j];
-                    //printf("%c\n", CheckTable[i]);
-                    
-                    for(int alph=0; alph<25 ; alph++){
-                        if(alphabet[alph]==changed_key[numberLine]){
-                            if(alphabet[alph]!=26){
-                                alphabet[alph]='.';
-                            }
-                            CheckTable[i]=cipher_table[i][j];
-                            //printf("%c\n", CheckTable[i]);
-                            if(cipher_table!=NULL){
-                                cipher_table[i][j]=changed_key[numberLine];
-                            }
-                            CheckTable[i]=cipher_table[i][j];
-                            //printf("%c\n", CheckTable[i]);
+
+            if(numberLine<strlen(key)){
+                if(numberLine>-10){
+                    cipher_table[i][j]='.';
+                }
+
+                for(int alph=0; alph<25 ; alph++){
+                    if(alphabet[alph]==changed_key[numberLine]){
+                        if(alphabet[alph]!=26){
+                            alphabet[alph]='.';
+                        }
+                        if(cipher_table!=NULL){
+                            cipher_table[i][j]=changed_key[numberLine];
                         }
                     }
-                    CheckTable[i]=cipher_table[i][j];
-                    //printf("%c\n", CheckTable[i]);
-                    if(cipher_table[i][j]=='.'){
-                        if(j>-1){
-                            if(j!=0){
-                                j--;
-                            } else if(j==0){
-                                if(j!='.'){
-                                    i--;
-                                }
-                                j=4;
+                }
+                if(cipher_table[i][j]=='.'){
+                    if(j>-1){
+                        if(j!=0){
+                            j--;
+                        } else if(j==0){
+                            if(j!='.'){
+                                i--;
                             }
+                            j=4;
                         }
                     }
-                    CheckTable[i]=cipher_table[i][j];
-                    //printf("%c\n", CheckTable[i]);
-                }else if(cipher_table[i][j]!='W'){
-                    CheckTable[i]=cipher_table[i][j];
-                    //printf("%c\n", CheckTable[i]);
-                    for(int alph=0; alph<25 ; alph++){
-                        //if(isalpha(alphabet)){
-                            if(alphabet[alph]!='.'){
-                                CheckTable[i]=cipher_table[i][j];
-                                //printf("%c\n", CheckTable[i]);
-                                if(cipher_table!=NULL){
-                                    cipher_table[i][j]=alphabet[alph];
-                                }
-                                CheckTable[i]=cipher_table[i][j];
-                                //printf("%c\n", CheckTable[i]);
-                                if(alphabet[alph]!=25){
-                                    alphabet[alph]='.';
-                                }
-                                break;
-                            }
-                            CheckTable[i]=cipher_table[i][j];
-                            //printf("%c\n", CheckTable[i]);
-                        //}
+                }
+            }else if(cipher_table[i][j]!='W'){
+                for(int alph=0; alph<25 ; alph++){
+                    if(alphabet[alph]!='.'){
+                        if(cipher_table!=NULL){
+                            cipher_table[i][j]=alphabet[alph];
+                        }
+                        if(alphabet[alph]!=25){
+                            alphabet[alph]='.';
+                        }
+                        break;
+                    }
                 }
             }
         }
     }
-    free(CheckTable);
-    //printf("%s\n\n", changed_text);
 
-    for(int i=0; i<5; i++){
-        for(int j=0; j<5; j++){
-            //printf("%c", cipher_table[i][j]);
-        } 
-        //printf("\n");
-    }
-    for(int i=0; i<5; i++){
-        for(int j=0; j<5; j++){
-            if(cipher_table[i][j]=='H'){
-                //printf("\n%d, %d\n", i, j);
-                break;
-            }
-        } 
-        //printf("\n");
-    }
-    //printf("\n\n%d\n\n", length);
-    //int first_pos_x=0, first_pos_y=0, second_pos_x=0, second_pos_y=0;
-    int* numbers=(int*)calloc(2*strlen(text)+1, sizeof(int));
-    //char *playfair = (char*)calloc(2*strlen(text)+1, sizeof(char));
     char* playfair=(char*)calloc(length+length/2, sizeof(char));
     int counter=0;
 
@@ -316,88 +167,40 @@ char* playfair_encrypt(const char* key, const char* text){
                                 counter++;
                                 if(first_pos_x==second_pos_x || first_pos_y==second_pos_y){
                                     if(first_pos_x==second_pos_x){
-                                        numbers[i]=first_pos_x;
-                                        //printf("%ls", numbers);
-                                        numbers[i]=first_pos_y;
-                                        //printf("%ls", numbers);
                                         counter++;
                                         if(first_pos_y==4){
-                                            numbers[i]=first_pos_x;
-                                            //printf("%ls", numbers);
-                                            numbers[i]=first_pos_y;
-                                            //printf("%ls", numbers);
                                             playfair[i]=cipher_table[first_pos_x][0];
                                         } else if(first_pos_y>=0 && first_pos_y<4){
                                             playfair[i]=cipher_table[first_pos_x][first_pos_y+1];
-                                            numbers[i]=first_pos_x;
-                                            //printf("%ls", numbers);
-                                            numbers[i]=first_pos_y;
-                                            //printf("%ls", numbers);
                                         }
                                         counter++;
-                                        numbers[i]=first_pos_x;
-                                        //printf("%ls", numbers);
-                                        numbers[i]=first_pos_y;
-                                        //printf("%ls", numbers);
                                         if(second_pos_y==4){
                                             playfair[g]=cipher_table[second_pos_x][0];
-                                            numbers[i]=first_pos_x;
-                                            //printf("%ls", numbers);
-                                            numbers[i]=first_pos_y;
-                                            //printf("%ls", numbers);
                                         } else if(second_pos_y>=0 && second_pos_y<4){
                                             playfair[g]=cipher_table[second_pos_x][second_pos_y+1];
                                         }
                                         counter++;
-                                        numbers[i]=first_pos_x;
-                                        //printf("%ls", numbers);
-                                        numbers[i]=first_pos_y;
-                                        //printf("%ls", numbers);
                                     }
                                     if(first_pos_y==second_pos_y){
                                         if(first_pos_x==4){
-                                            numbers[i]=first_pos_x;
-                                            //printf("%ls", numbers);
-                                            numbers[i]=first_pos_y;
-                                            //printf("%ls", numbers);
                                             playfair[i]=cipher_table[0][first_pos_y];
                                         } else if(first_pos_x>=0 && first_pos_x<4){
                                             playfair[i]=cipher_table[first_pos_x+1][first_pos_y];
-                                            numbers[i]=first_pos_x;
-                                            //printf("%ls", numbers);
-                                            numbers[i]=first_pos_y;
-                                            //printf("%ls", numbers);
                                         }
                                         counter++;
                                         if(second_pos_x==4){
                                             playfair[g]=cipher_table[0][second_pos_y];
-                                            numbers[i]=first_pos_x;
-                                            //printf("%ls", numbers);
-                                            numbers[i]=first_pos_y;
-                                            //printf("%ls", numbers);
                                         } else if(second_pos_x>=0 && second_pos_x<4){
                                             playfair[g]=cipher_table[second_pos_x+1][second_pos_y];
-                                            numbers[i]=first_pos_x;
-                                            //printf("%ls", numbers);
-                                            numbers[i]=first_pos_y;
-                                            //printf("%ls", numbers);
-                                        }       
-                                        counter++;                            
+                                        }
+                                        counter++;
                                     }
                                 } else if(first_pos_x!=second_pos_x && first_pos_y!=second_pos_y){
                                     playfair[g]=cipher_table[second_pos_x][first_pos_y];
-                                    numbers[i]=first_pos_x;
-                                    //printf("%ls", numbers);
-                                    numbers[i]=first_pos_y;
-                                    //printf("%ls", numbers);
                                     playfair[i]=cipher_table[first_pos_x][second_pos_y];
-                                    numbers[i]=first_pos_x;
-                                    //printf("%ls", numbers);
-                                    numbers[i]=first_pos_y;
-                                    //printf("%ls", numbers);                                   
                                 }
                                 counter=0;
-            
+
                             }
                         }
                     }
@@ -405,15 +208,14 @@ char* playfair_encrypt(const char* key, const char* text){
             }
         }
     }
-    free(numbers);
+
     free(changed_text);
     free(changed_key);
     changed_key=NULL;
     changed_text=NULL;
-    numbers=NULL;
+
     int finally_length=length+(length)/2-1;
-    //printf("\n%d, %d, %d, %d\n\n", first_pos_x, first_pos_y, second_pos_x, second_pos_y);
-    
+
     playfair[finally_length]='\0';
 
     for(int i=0; i<finally_length; i++){
@@ -436,16 +238,15 @@ char* playfair_encrypt(const char* key, const char* text){
     return playfair;
 }
 
-//============================================================================================
 
 char* playfair_decrypt(const char* key, const char* text){
     if(key==NULL || text==NULL){
         return NULL;
-    } 
+    }
     for(int proverka=0; key[proverka]!='\0'; proverka++){
         if(key[proverka]!=' ' && !isalpha(key[proverka])){
             return NULL;
-        } 
+        }
     }
     for(int i=0; i<strlen(text); i++){
         if(text[i]=='W'){
@@ -457,64 +258,12 @@ char* playfair_decrypt(const char* key, const char* text){
     int numberLine=-1;
     char changed_plafair[strlen(text)];
     strcpy(changed_plafair,text);
-    //memcpy(changed_plafair, text, strlen(text));
+
     int last_position=4;
     int finally_length=strlen(text)-(strlen(text)+1)/3+1;
-    //char *playfair = (char*)calloc(2*strlen(text)+1, sizeof(char));
+
     char *changed_key = (char*)calloc(2*strlen(key)+1, sizeof(char));
-    //char *changed_text=(char*)calloc(2*strlen(text)+1, sizeof(char));
-    //char mytext[finally_length];
-    //playfair[finally_length]='\0';
-    //mytext[finally_length]='\0';
-    //int length=0;
-    /*char* proverkaText=(char*)calloc(2*strlen(text)+1, sizeof(char));
-    strcpy(proverkaText, text);
-    for(int i=0; i<strlen(proverkaText); i++){
-        if(proverkaText[i]=='W'){
-            return NULL;
-        }
-    }
-    free(proverkaText);*/
 
-    /*for(int i=0; i<(strlen(key)+1); i++){
-        new_key[i]=toupper(key[i]);
-    }*/
-    /*int counter=0;
-    int length_key=0;
-    for(int i=0; i<(strlen(text)+1); i++){
-        if(text[i]!=' '){
-            new_key[i]=toupper(key[length_key]);
-            length_key++;
-        }
-        if(text[i]==' '){
-            new_key[i]=' ';
-        }
-        if(key[length_key]=='\0' && i!=(length_key-1)){
-            counter=i+1;
-            for(int j=0; j<(strlen(text)+1-i); j++){
-                new_key[counter]=toupper(key[j]);
-                counter++;
-            }
-            break;
-        }
-        if(key[length_key]=='\0' && i==(length_key-1)){
-            new_key[i]=' ';
-            counter=i+1;
-            for(int j=0; j<(strlen(text)+1-i); j++){
-                new_key[counter]=toupper(key[j]);
-                counter++;
-            }
-            break;
-        }
-    }*/
-    char *down44=(char*)calloc(2*strlen(text)+1, sizeof(char));
-    int repeating14=0;
-
-    for(int i=0; i<5; i++){
-        down44[i+repeating14]=down44[i];
-        repeating14++;
-    }
-    free(down44);
 
     for(int i=0; i<strlen(key); i++){
         if(isalpha(key[i])){
@@ -529,24 +278,13 @@ char* playfair_decrypt(const char* key, const char* text){
         if(changed_key[i]=='W'){
             changed_key[i]='V';
         }
-        /*if(key[i+1]=='\0'){
-            changed_key[i+1]='\0';
-        }*/
     }
     if(ifTrue){
         free(changed_key);
         return NULL;
     }
 
-    char *upgrade_key=(char*)calloc(2*strlen(text)+1, sizeof(char));
     char *changed_text=(char*)calloc(2*strlen(text)+1, sizeof(char));
-    int repeating8=0;
-
-    for(int i=0; i<5; i++){
-        upgrade_key[i+repeating8]=changed_key[i];
-        repeating8++;
-    }
-    free(upgrade_key);   
 
     char texts[strlen(text)];
     strcpy(texts, text);
@@ -557,159 +295,72 @@ char* playfair_decrypt(const char* key, const char* text){
             }
         }
     }
-    
 
-    //=======================================================
-    char *down2=(char*)calloc(2*strlen(text)+1, sizeof(char));
-    int repeating1=0;
 
-    for(int i=0; i<5; i++){
-        down2[i+repeating1]=down2[i];
-        repeating1++;
-    }
-    free(down2);
-    //changed_text[++length]='\0';
-
-    char *upgrade_key1=(char*)calloc(2*strlen(text)+1, sizeof(char));
-    int repeating2=0;
-
-    for(int i=0; i<5; i++){
-        upgrade_key1[i+repeating2]=upgrade_key1[i];
-        repeating2++;
-    }
-    free(upgrade_key1);
-    //=============================problem
     char alphabet[27];
     strcpy(alphabet, ALPHA);
     alphabet[26]='\0';
-    //=============================
+
     char cipher_table[5][5];
     for(int i=0; i<5; i++){
         for(int j=0; j<5; j++){
             cipher_table[i][j]='A';
         }
     }
-    //printf("%s\n", alphabet);
 
-    char *down1=(char*)calloc(2*strlen(text)+1, sizeof(char));
-    int repeating=0;
-
-    for(int i=0; i<5; i++){
-        down1[i+repeating]=down1[i];
-        repeating++;
-    }
-    free(down1);
-    char* CheckTable=(char*)calloc(2*strlen(text)+1, sizeof(char));
-    //printf("\n%s\n", changed_key);
 
     for(int i=0 ; i<5; i++){
         for(int j=0; j<5; j++){
             if(numberLine>-10){
                 numberLine++;
             }
-            CheckTable[i]=cipher_table[i][j];
-            //printf("%c\n", CheckTable[i]);
-                if(numberLine<strlen(key)){
-                    if(numberLine>-10){
-                        cipher_table[i][j]='.'; 
-                    }
-                    CheckTable[i]=cipher_table[i][j];
-                    //printf("%c\n", CheckTable[i]);
-                    
-                    for(int alph=0; alph<25 ; alph++){
-                        CheckTable[i]=cipher_table[i][j];
-                        //printf("%c\n", CheckTable[i]);
-                        if(alphabet[alph]==changed_key[numberLine]){
-                            if(alphabet[alph]!=25){
-                                alphabet[alph]='.';
-                            }
-                            CheckTable[i]=cipher_table[i][j];
-                            //printf("%c\n", CheckTable[i]);
-                            if(cipher_table!=NULL){
-                                cipher_table[i][j]=changed_key[numberLine];
-                            }
-                            CheckTable[i]=cipher_table[i][j];
-                            //printf("%c\n", CheckTable[i]);
-                        }
-                    }
-                    if(cipher_table[i][j]=='.'){
-                        CheckTable[i]=cipher_table[i][j];
-                        //printf("%c\n", CheckTable[i]);
-                        if(j>-1){
-                            if(j!=0){
-                                j--;
-                            } else if(j==0){
-                                if(j!='.'){
-                                    i--;
-                                }
-                                j=4;
-                            }
-                            CheckTable[i]=cipher_table[i][j];
-                            //printf("%c\n", CheckTable[i]);
-                        }
-                    }
-                }else if(cipher_table[i][j]!='W'){
-                    CheckTable[i]=cipher_table[i][j];
-                    //printf("%c\n", CheckTable[i]);
-                    for(int alph=0; alph<25 ; alph++){
-                        CheckTable[i]=cipher_table[i][j];
-                        //printf("%c\n", CheckTable[i]);
-                        //if(isalpha(alphabet)==0){
-                            if(alphabet[alph]!='.'){
-                                if(cipher_table!=NULL){
-                                    cipher_table[i][j]=alphabet[alph];
-                                }
-                                CheckTable[i]=cipher_table[i][j];
-                                //printf("%c\n", CheckTable[i]);
-                                if(alphabet[alph]!=25){
-                                    alphabet[alph]='.';
-                                }
-                                CheckTable[i]=cipher_table[i][j];
-                                //printf("%c\n", CheckTable[i]);
-                                break;
-                            }
-                        //}
+            if(numberLine<strlen(key)){
+                if(numberLine>-10){
+                    cipher_table[i][j]='.';
                 }
-                CheckTable[i]=cipher_table[i][j];
-                //printf("%c\n", CheckTable[i]);
+
+                for(int alph=0; alph<25 ; alph++){
+                    if(alphabet[alph]==changed_key[numberLine]){
+                        if(alphabet[alph]!=25){
+                            alphabet[alph]='.';
+                        }
+                        if(cipher_table!=NULL){
+                            cipher_table[i][j]=changed_key[numberLine];
+                        }
+                    }
+                }
+                if(cipher_table[i][j]=='.'){
+                    if(j>-1){
+                        if(j!=0){
+                            j--;
+                        } else if(j==0){
+                            if(j!='.'){
+                                i--;
+                            }
+                            j=4;
+                        }
+                    }
+                }
+            }else if(cipher_table[i][j]!='W'){
+                for(int alph=0; alph<25 ; alph++){
+                    if(alphabet[alph]!='.'){
+                        if(cipher_table!=NULL){
+                            cipher_table[i][j]=alphabet[alph];
+                        }
+                        if(alphabet[alph]!=25){
+                            alphabet[alph]='.';
+                        }
+                        break;
+                    }
+                }
             }
         }
     }
-    free(CheckTable);
-    //printf("%s\n\n", changed_text);
 
-    for(int i=0; i<5; i++){
-        for(int j=0; j<5; j++){
-            //printf("%c", cipher_table[i][j]);
-        } 
-        //printf("\n");
-    }
-    for(int i=0; i<5; i++){
-        for(int j=0; j<5; j++){
-            if(cipher_table[i][j]=='H'){
-                //printf("\n%d, %d\n", i, j);
-            }
-        } 
-        //printf("\n");
-    }
-    //printf("\n\n%d\n\n", length);
     char *playfair = (char*)calloc(2*strlen(text)+1, sizeof(char));
     playfair[finally_length]='\0';
 
-    //=====================================================
-
-    for(int i=0; i<5; i++){
-        for(int j=0; j<5; j++){
-            //printf("%c", cipher_table[i][j]);
-        }
-    }
-    //printf("\n\n\n");
     strcpy(changed_plafair, text);
-
-    for(int i=0; i<strlen(text); i++){
-        //printf("%c", changed_plafair[i]);
-    }
-    //printf("\n\n");
 
     for(int i=0; i<strlen(text); i++){
         if(changed_plafair[i]==' '){
@@ -720,18 +371,14 @@ char* playfair_decrypt(const char* key, const char* text){
             }
         }
     }
-    //int* numbers=(int*)calloc(strlen(text), sizeof(int));
-    int numbers[1000];
-    for(int i=0; i<1000; i++){
-        numbers[i]=0;
-    }
-    numbers[999]='\0';
+
+
     for(int i=0;i<finally_length+1;i++){
         if(finally_length!=0){
-            changed_text[i]=changed_plafair[i];//===
+            changed_text[i]=changed_plafair[i];
         }
     }
-    //printf("\n%s\n", changed_text);
+
     int counter=0;
 
     for(int i=0, g=1; i<finally_length; i+=2, g+=2){
@@ -743,82 +390,38 @@ char* playfair_decrypt(const char* key, const char* text){
                     for(int second_pos_x=0 ; second_pos_x<5; second_pos_x++){
                         for(int second_pos_y=0; second_pos_y<5; second_pos_y++){
                             if (changed_text[g]==cipher_table[second_pos_x][second_pos_y]){
-                                numbers[i]=first_pos_x;
-                                //printf("%ls", numbers);
-                                numbers[i]=first_pos_y;
-                                //printf("%ls", numbers);
                                 counter++;
                                 if(first_pos_x==second_pos_x || first_pos_y==second_pos_y){
                                     if(first_pos_x==second_pos_x){
                                         if(first_pos_y==0){
                                             counter++;
-                                            playfair[i]=cipher_table[first_pos_x][last_position]; 
-                                            numbers[i]=first_pos_x;
-                                            //printf("%ls", numbers);
-                                            numbers[i]=first_pos_y;
-                                            //printf("%ls", numbers);                                          
+                                            playfair[i]=cipher_table[first_pos_x][last_position];
                                         } else if(first_pos_y>0 && first_pos_y<5){
                                             playfair[i]=cipher_table[first_pos_x][first_pos_y-1];
-                                            numbers[i]=first_pos_x;
-                                            //printf("%ls", numbers);
-                                            numbers[i]=first_pos_y;
-                                            //printf("%ls", numbers);
                                         }
                                         if(second_pos_y==0){
                                             playfair[g]=cipher_table[second_pos_x][last_position];
-                                            numbers[i]=first_pos_x;
-                                            //printf("%ls", numbers);
-                                            numbers[i]=first_pos_y;
-                                            //printf("%ls", numbers);
                                         } else if(second_pos_y>0 && second_pos_y<5){
                                             playfair[g]=cipher_table[second_pos_x][second_pos_y-1];
-                                            numbers[i]=first_pos_x;
-                                            //printf("%ls", numbers);
-                                            numbers[i]=first_pos_y;
-                                            //printf("%ls", numbers);
                                         }
                                         counter++;
                                     }
                                     if(first_pos_y==second_pos_y){
                                         if(first_pos_x==0){
                                             playfair[i]=cipher_table[last_position][first_pos_y];
-                                            numbers[i]=first_pos_x;
-                                            //printf("%ls", numbers);
-                                            numbers[i]=first_pos_y;
-                                            //printf("%ls", numbers);
                                         } else if(first_pos_x>0 && first_pos_x<5){
                                             playfair[i]=cipher_table[first_pos_x-1][first_pos_y];
-                                            numbers[i]=first_pos_x;
-                                            //printf("%ls", numbers);
-                                            numbers[i]=first_pos_y;
-                                            //printf("%ls", numbers);
                                         }
                                         if(second_pos_x==0){
                                             playfair[g]=cipher_table[last_position][second_pos_y];
-                                            numbers[i]=first_pos_x;
-                                            //printf("%ls", numbers);
-                                            numbers[i]=first_pos_y;
-                                            //printf("%ls", numbers);
                                         } else if(second_pos_x>0 && second_pos_x<5){
                                             playfair[g]=cipher_table[second_pos_x-1][second_pos_y];
-                                            numbers[i]=first_pos_x;
-                                            //printf("%ls", numbers);
-                                            numbers[i]=first_pos_y;
-                                            //printf("%ls", numbers);
                                         }
                                         counter++;
                                     }
                                     counter=0;
                                 } else if(first_pos_x!=second_pos_x && first_pos_y!=second_pos_y){
-                                    numbers[i]=first_pos_x;
-                                    //printf("%ls", numbers);
-                                    numbers[i]=first_pos_y;
-                                    //printf("%ls", numbers);
                                     playfair[g]=cipher_table[second_pos_x][first_pos_y];
-                                    numbers[i]=first_pos_x;
-                                    //printf("%ls", numbers);
-                                    numbers[i]=first_pos_y;
-                                    //printf("%d", numbers[i]);
                                     playfair[i]=cipher_table[first_pos_x][second_pos_y];
                                 }
                             }
@@ -828,11 +431,7 @@ char* playfair_decrypt(const char* key, const char* text){
             }
         }
     }
-    for(int i=0; i<1000; i++){
-        counter=numbers[i];
-    }
-    counter=0;
-    //free(numbers);
+
     free(changed_key);
     free(changed_text);
     changed_key=NULL;
@@ -841,4 +440,6 @@ char* playfair_decrypt(const char* key, const char* text){
 
     return playfair;
 }
+
+
 
