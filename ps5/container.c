@@ -1,29 +1,7 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 #include "container.h"
-
-
-/*
-         _nnnn_                      
-        dGGGGMMb     ,"""""""""""""".
-       @p~qp~~qMb    | Linux Rules! |
-       M|@||@) M|   _;..............'
-       @,----.JM| -'
-      JS^\__/  qKL
-     dZP        qKRb
-    dZP          qKKb
-   fZP            SMMb
-   HZM            MMMM
-   FqM            MMMM
- __| ".        |\dS"qML
- |    `.       | `' \Zq
-_)      \.___.,|     .'
-\____   )MMMMMM|   .'
-     `-'       `--' hjm
-
-*/
 
 
 void creating_Wcont(struct container* new_container, enum container_type type, void* entry);
@@ -37,32 +15,19 @@ struct container* create_container(struct container* first, enum container_type 
     if((entry == NULL) || (first != NULL && first->type != type)) return NULL;
 
     if(first == NULL){
-        //first changed: malloc -> calloc
-        //struct container* new_container = malloc(sizeof(struct container));
         struct container* new_container = calloc(1, sizeof(struct container));
         new_container->type = type;
-
         creating_Wcont(new_container, type, entry);
 
-        //first changed: add the new container to the first container
         return new_container;
-        //first = new_container;
-       // return first;
     } else{
         if(type != first->type) return NULL;
 
-        //struct container* check = first;
         struct container* new_container = first;
         for(int i = 0; new_container->next != NULL; i++, new_container = new_container->next){}
         new_container->next = calloc(1, sizeof(struct container));
         new_container->next->type = type;
         creating_cont(new_container->next, type, entry);
-        //creating_Wcont(new_container, type, entry);
-        /*while(check->next != NULL){
-            check = check->next;
-        }
-        check->next = new_container;
-        new_container->next = NULL;*/
 
         return new_container->next;
     }
@@ -136,198 +101,6 @@ void free_memory_container(struct container* container){
 void* get_from_container_by_name(struct container *first, const char *name){
     if((name == NULL) || (first == NULL) || (strlen(name) == 0)) return NULL;
 
-    //first changed: create a new container "item" and change first -> "item"
-    //back to the first method
-    /*struct container* item = first;
-    for(; item != NULL; item = item->next){
-        if(first->type == ROOM){
-            if((strlen(item->room->name) == strlen(name))){
-                int difference = 0;
-                for(int i = 0; i < strlen(name); i++){
-                    difference = tolower(item->room->name[i]) - tolower(name[i]);
-                    if(difference != 0) break;
-                }
-                if(difference == 0) return item->room;
-            }
-            break;
-        }
-        if(first->type == ITEM){
-            if((strlen(item->item->name) == strlen(name))){
-                int difference = 0;
-                for(int i = 0; i < strlen(name); i++){
-                    difference = tolower(item->item->name[i]) - tolower(name[i]);
-                    if(difference != 0) break;
-                }
-                if(difference == 0) return item->item;
-            }
-            break;
-        }
-        if(first->type == COMMAND){
-            if((strlen(item->command->name) == strlen(name))){
-                int difference = 0;
-                for(int i = 0; i < strlen(name); i++){
-                    difference = tolower(item->command->name[i]) - tolower(name[i]);
-                    if(difference != 0) break;
-                }
-                if(difference == 0) return item->command;
-            }
-            break;
-        }
-        if(first->type == TEXT){
-            if((strlen(item->text) == strlen(name))){
-                int difference = 0;
-                for(int i = 0; i < strlen(name); i++){
-                    difference = tolower(item->text[i]) - tolower(name[i]);
-                    if(difference != 0) break;
-                }
-                if(difference == 0) return item->text;
-            }
-            break;
-        }
-    }*/
-
-    //second changed: try another method 
-    /*if(first->type == ROOM){
-        for(int i = 0; first != NULL || first->room != NULL; i++){
-            if((strlen(first->room->name) == strlen(name))){
-                int difference = 0;
-                for(int i = 0; i < strlen(name); i++){
-                    difference = tolower(first->room->name[i]) - tolower(name[i]);
-                    if(difference != 0){
-                        i = 100000000;
-                    }
-                }
-                if(difference == 0) return first;
-                else first = first->next;
-            }
-        }
-    }
-    if(first->type == ITEM){
-        for(int i = 0; first != NULL || first->item != NULL; i++){
-            if((strlen(first->item->name) == strlen(name))){
-                int difference = 0;
-                for(int i = 0; i < strlen(name); i++){
-                    difference = tolower(first->item->name[i]) - tolower(name[i]);
-                    if(difference != 0){
-                        i = 10000000;
-                    }
-                }
-                if(difference == 0) return first;
-                else first = first->next;
-            }
-        }
-    }
-    if(first->type == COMMAND){
-        for(int i = 0; first != NULL || first->command != NULL; i++){
-            if((strlen(first->command->name) == strlen(name))){
-                int difference = 0;
-                for(int i = 0; i < strlen(name); i++){
-                    difference = tolower(first->command->name[i]) - tolower(name[i]);
-                    if(difference != 0){
-                        i = 100000000;
-                    }
-                }
-                if(difference == 0) return first;
-                else first = first->next;
-            }
-        }
-    }
-    if(first->type == TEXT){
-        for(int i = 0; first != NULL || first->text != NULL; i++){
-            if((strlen(first->text) == strlen(name))){
-                int difference = 0;
-                for(int i = 0; i < strlen(name); i++){
-                    difference = tolower(first->text[i]) - tolower(name[i]);
-                    if(difference != 0){
-                        i = 100000000;
-                    }
-                }
-                if(difference == 0) return first;
-                else first = first->next;
-            }
-        }
-    }*/
-
-    //third changed: try another method
-    //back to the first method
-
-    /*if(first->type == ROOM){
-        for(int i = 0; first != NULL; i++, first = first->next){
-            if(strlen(name) == strlen(first->room->name)){
-                if(strcmpBIG(name, first->room->name) == 0) return first->room;
-            }
-        }
-    } else if(first->type == ITEM){
-        for(int i = 0; first != NULL; i++, first = first->next){
-            if(strlen(name) == strlen(first->item->name)){
-                if(strcmpBIG(name, first->item->name) == 0) return first->item;
-            }
-        }
-    } else if(first->type == COMMAND){
-        for(int i = 0; first != NULL; i++, first = first->next){
-            if(strlen(name) == strlen(first->command->name)){
-                if(strcmpBIG(name, first->command->name) == 0) return first->command;
-            }
-        }
-    } else if(first->type == TEXT){
-        for(int i = 0; first != NULL; i++, first = first->next){
-            if(strlen(name) == strlen(first->text)){
-                if(strcmpBIG(name, first->text) == 0) return first->text;
-            }
-        }
-    }*/
-
-    //fourth method:
-    /*struct container* item = first;
-    for(; item != NULL; item = item->next){
-        if(first->type == ROOM){
-            if(item->room != NULL && item->room->name != NULL){
-                int difference = 0;
-                for(int i = 0; i < strlen(name); i++){
-                    difference = tolower(item->room->name[i]) - tolower(name[i]);
-                    if(difference != 0) i = 100000000;
-                }
-                if(difference == 0) return item->room;
-            }
-            break;
-        }
-        if(first->type == ITEM){
-            if(item->item != NULL && item->item->name != NULL){
-                int difference = 0;
-                for(int i = 0; i < strlen(name); i++){
-                    difference = tolower(item->item->name[i]) - tolower(name[i]);
-                    if(difference != 0) i = 100000000;
-                }
-                if(difference == 0) return item->item;
-            }
-            break;
-        }
-        if(first->type == COMMAND){
-            if(item->command != NULL && item->command->name != NULL){
-                int difference = 0;
-                for(int i = 0; i < strlen(name); i++){
-                    difference = tolower(item->command->name[i]) - tolower(name[i]);
-                    if(difference != 0) i = 100000000;
-                }
-                if(difference == 0) return item->command;
-            }
-            break;
-        }
-        if(first->type == TEXT){
-            if(item->text != NULL){
-                int difference = 0;
-                for(int i = 0; i < strlen(name); i++){
-                    difference = tolower(item->text[i]) - tolower(name[i]);
-                    if(difference != 0) i = 100000000;
-                }
-                if(difference == 0) return item->text;
-            }
-            break;
-        }
-    }*/
-
-
-    //struct container* check = first;
     if(first->type == ROOM){
         for(int i = 0; first != NULL && first->room != NULL; i++, first = first->next){
             if(strcmpBIG(name, first->room->name) == 1) return first->room;
@@ -422,3 +195,4 @@ int removing_second(struct container* first_container, struct container* next_co
     }
     return 0;
 }
+
