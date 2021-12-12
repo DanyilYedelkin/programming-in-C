@@ -3,33 +3,10 @@
 #include <string.h>
 #include "bmp.h"
 
-/*
-         _nnnn_                      
-        dGGGGMMb     ,"""""""""""""".
-       @p~qp~~qMb    | Linux Rules! |
-       M|@||@) M|   _;..............'
-       @,----.JM| -'
-      JS^\__/  qKL
-     dZP        qKRb
-    dZP          qKKb
-   fZP            SMMb
-   HZM            MMMM
-   FqM            MMMM
- __| ".        |\dS"qML
- |    `.       | `' \Zq
-_)      \.___.,|     .'
-\____   )MMMMMM|   .'
-     `-'       `--' hjm
-*/
-
-
 
 struct bmp_header* read_bmp_header(FILE* stream){
-    //https://web.cs.ucdavis.edu/~amenta/s12/readBMP.cpp
-    //https://elcharolin.wordpress.com/2018/11/28/read-and-write-bmp-files-in-c-c/
     if(stream == NULL) return NULL;
     fseek(stream, 0, 2);
-    //http://www.c-cpp.ru/content/ftell
     int length_file = ftell(stream);
     if(length_file == -1L) return NULL;
 
