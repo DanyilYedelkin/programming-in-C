@@ -1,36 +1,11 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include "parser.h"
 
-/*
-         _nnnn_                      
-        dGGGGMMb     ,"""""""""""""".
-       @p~qp~~qMb    | Linux Rules! |
-       M|@||@) M|   _;..............'
-       @,----.JM| -'
-      JS^\__/  qKL
-     dZP        qKRb
-    dZP          qKKb
-   fZP            SMMb
-   HZM            MMMM
-   FqM            MMMM
- __| ".        |\dS"qML
- |    `.       | `' \Zq
-_)      \.___.,|     .'
-\____   )MMMMMM|   .'
-     `-'       `--' hjm
-
-*/
-
 
 struct parser* create_parser(){
-    
-    //https://ru.wikipedia.org/wiki/Регулярные_выражения
-    //https://www.youtube.com/watch?v=bWu8IJ_DasE
     struct parser* created_parser = calloc(1, sizeof(struct parser));
-    //created_parser->commands = calloc(17, sizeof(struct parser));
 
     created_parser->commands = create_container(NULL, COMMAND, create_command("KONIEC", "KONIEC", "^\\s{0,}((QU|EX)IT|KONIEC)\\s{0,}$", 3));
     create_container(created_parser->commands, COMMAND, create_command("SEVER", "SEVER", "^\\s{0,}(S|SEVER)\\s{0,}$", 2));
@@ -72,120 +47,6 @@ struct parser* destroy_parser(struct parser* parser) {
 struct command* parse_input(struct parser* parser, char* input){
     if((input == NULL) || (parser == NULL) || (strlen(input) == 0)) return NULL;
 
-    /*int input_word = 0;
-    int word = 0;
-    char input_buffer[strlen(input)];*/
-
-    //first changed: remove old method and add new method
-    /*do{
-        if(input[0] != ' '){
-            while(input_word < strlen(input)){  
-                if(input[input_word] == ' ' ){
-                    while(input[input_word] == ' '){
-                        input_word++;
-                    }
-                    if(input[input_word] == '\0'){
-                        input_buffer[word] = '\0';
-                        break;
-                    }
-                    if(input[input_word] != ' '){
-                        input_buffer[word] = ' ';
-                        int next_word = word + 1;
-                        while(input_word < strlen(input)){
-                            if(input[input_word] == ' '){
-                                input_buffer[next_word] = '\0';
-                                break;
-                            }
-                            
-                            input_buffer[next_word] = (char)tolower(input[input_word]);
-                            next_word++;
-                            input_word++;
-                        }
-                        break;
-                    }
-                }
-                input_buffer[word] = (char)tolower(input[input_word]);
-                word++;
-                input_word++;
-            }
-            break;
-        }
-        if(input[input_word] == ' '){
-            input_word++;
-        }
-        if(input[input_word] != ' '){
-            while(input_word < strlen(input)){  
-                if(input[input_word] == ' ' ){
-                    while(input[input_word] == ' '){
-                        input_word++;
-                    }
-                    if(input[input_word] == '\0'){
-                        input_buffer[word] = '\0';
-                        break;
-                    }
-                    if(input[input_word] != ' '){
-                        input_buffer[word] = ' ';
-                        int next_word = word + 1;
-                        while(input_word < strlen(input)){
-                            if(input[input_word] == ' '){
-                                input_buffer[next_word] = '\0';
-                                break;
-                            }
-                            
-                            input_buffer[next_word] = (char)tolower(input[input_word]);
-                            next_word++;
-                            input_word++;
-                        }
-                        break;
-                    }
-                }
-                input_buffer[word] = (char)tolower(input[input_word]);
-                word++;
-                input_word++;
-            }
-            break;
-        }
-    } while(input[input_word] == ' ');*/
-
-
-    /*if(input[input_word] == ' '){
-        for(int i = 0; input[input_word] == ' '; i++, input_word++){}
-    }
-
-    while(input_word < strlen(input)){
-        if(input[input_word] == ' '){
-            break;
-        }
-        input_buffer[word] = (char)tolower(input[input_word]);
-        word++;
-        input_word++;
-    }
-    if(input[input_word] == ' ' && (((char)tolower(input[input_word - 1]) == 'I' && (char)tolower(input[input_word - 2]) == 'N') || (char)tolower(input[input_word - 1]) == 'O')){
-        while(input[input_word] == ' '){
-            input_word++;
-        }
-        input_buffer[word] = ' ';
-        word++;
-        while(input[input_word] != ' '){
-            if(input[input_word] == ' '){
-                input_buffer[word] = '\0';
-                break;
-            }
-            input_buffer[word] = (char)tolower(input[input_word]);
-            word++;
-            input_word++;
-        }
-    }
-    input_buffer[word] = '\0';*/
-
-
-    //third method
-
-    /*char* input_buffer = calloc(20, sizeof(char));
-    int word = 0;
-    int ch_word = 0;*/
-
-
     char input_buffer[strlen(input)]; 
     int ch_p = 1; 
     int word = 0; 
@@ -216,9 +77,8 @@ struct command* parse_input(struct parser* parser, char* input){
         }
         i_word++;
     } 
-    input_buffer[word] = '\0'; 
-
-    //printf("%s\n", input_buffer);
+    input_buffer[word] = '\0';
 
     return get_from_container_by_name(parser->commands, input_buffer); 
 }
+
