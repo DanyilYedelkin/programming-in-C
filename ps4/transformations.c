@@ -1,28 +1,7 @@
 #include <stdlib.h>
-#include <stdio.h>
 #include <math.h>
 #include <string.h>
 #include "bmp.h"
-
-/*
-         _nnnn_                      
-        dGGGGMMb     ,"""""""""""""".
-       @p~qp~~qMb    | Linux Rules! |
-       M|@||@) M|   _;..............'
-       @,----.JM| -'
-      JS^\__/  qKL
-     dZP        qKRb
-    dZP          qKKb
-   fZP            SMMb
-   HZM            MMMM
-   FqM            MMMM
- __| ".        |\dS"qML
- |    `.       | `' \Zq
-_)      \.___.,|     .'
-\____   )MMMMMM|   .'
-     `-'       `--' hjm
-*/
-
 
 
 struct bmp_image* flip_horizontally(const struct bmp_image* image){
@@ -97,8 +76,6 @@ struct bmp_image* rotate_left(const struct bmp_image* image){
     new->header = malloc(sizeof(struct bmp_header));
 	memcpy(new->header, image->header, sizeof(*image->header));
 
-    
-	//the idea of rotating http://www.cpp.re/forum/beginner/265541/
 	new->header->width = image->header->height;
 	new->header->height = image->header->width;
 	int padding = 4 - ((new->header->bpp / 8) * image->header->height) % 4;
@@ -111,7 +88,6 @@ struct bmp_image* rotate_left(const struct bmp_image* image){
 	new->header->image_size = new_image_size;
 	new->header->size = new_image_size + new->header->offset;
 	new->data = (struct pixel*)calloc(image->header->width*image->header->height, sizeof(struct pixel));
-	//and the another idea of rotating https://cboard.cprogramming.com/c-programming/175363-rotating-bmp-image-multiple-90-c.html
 	int i = 0;
 	//function to rotate the bmp image to the left
 	for (int y = 0; y < image->header->width; y++){
@@ -124,15 +100,6 @@ struct bmp_image* rotate_left(const struct bmp_image* image){
 }
 
 struct bmp_image* rotate_right(const struct bmp_image* image){
-	/*if(image == NULL) return NULL;
-
-	struct bmp_image* new = malloc(sizeof(struct bmp_image));
-	new = rotate_left(image);
-	for(int i = 0; i < 2; i++){
-		new = rotate_left(new);
-	}
-
-	return new;*/
 	if(image == NULL) return NULL;
 	struct bmp_image* new = malloc(sizeof(struct bmp_image));
     new->header = malloc(sizeof(struct bmp_header));
@@ -151,8 +118,6 @@ struct bmp_image* rotate_right(const struct bmp_image* image){
 	new->header->image_size = new_image_size;
 	new->header->size = new_image_size + new->header->offset;
 	new->data = (struct pixel*)calloc(image->header->width*image->header->height, sizeof(struct pixel));
-	//the idea of rotating http://www.cpp.re/forum/beginner/265541/
-	//and the another idea of rotating https://cboard.cprogramming.com/c-programming/175363-rotating-bmp-image-multiple-90-c.html
 	int i = 0;
 	//function to rotate the bmp image to the right
 	for (int y = 0; y < image->header->width; y++){
@@ -229,7 +194,6 @@ struct bmp_image* scale(const struct bmp_image* image, float factor){
 	for(int y = 0; y < new_height; y++){
 		for(int x = 0; x < new_width; x++, i++){
 			//add (int), because have an error: array subscript is not an integer
-			//new->data[i] = image->data[(int)(floor(x/factor) + floor(y/factor) * image->header->width)];
             new->data[i] = image->data[(((int)(y * image->header->height) / new->header->height) * image->header->width) + ((int)(x * image->header->width) / new->header->width)];
 		}
 	}
