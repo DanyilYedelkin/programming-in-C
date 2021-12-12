@@ -1,28 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <ctype.h>
 #include <string.h>
 #include "room.h"
-
-/*
-         _nnnn_                      
-        dGGGGMMb     ,"""""""""""""".
-       @p~qp~~qMb    | Linux Rules! |
-       M|@||@) M|   _;..............'
-       @,----.JM| -'
-      JS^\__/  qKL
-     dZP        qKRb
-    dZP          qKKb
-   fZP            SMMb
-   HZM            MMMM
-   FqM            MMMM
- __| ".        |\dS"qML
- |    `.       | `' \Zq
-_)      \.___.,|     .'
-\____   )MMMMMM|   .'
-     `-'       `--' hjm
-
-*/
 
 
 void creating_room(struct room* new_room, char* name, char* description);
@@ -30,7 +9,6 @@ void creating_room(struct room* new_room, char* name, char* description);
 struct room* create_room(char *name, char *description){
     if((name == NULL) || (description == NULL) || (strlen(name) == 0) || (strlen(description) == 0)) return NULL;
 
-    //struct room* new_room = malloc(sizeof(struct room));
     struct room* new_room = calloc(1, sizeof(struct room));
     new_room->name = calloc(strlen(name)+1, sizeof(struct room));
     new_room->description = calloc(strlen(description)+1, sizeof(struct room));
@@ -76,13 +54,10 @@ void show_room(const struct room* room){
     printf("\nYou see:\n"); 
     if(room->items != NULL){
         struct container* container = room->items;
-        //container = room->items;
         while (container != NULL){
 	        printf("%s\n", container->item->name);
 	        container = container->next;
         }
-        //free(container);
-        //destroy_containers(container);
     } else printf("Nothing\n");
 }
 
