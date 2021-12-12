@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include <math.h>
 
 typedef struct Node{
@@ -52,7 +51,6 @@ void creatingTrees(Node* trees, int n, int k){
         Node *tree = NULL;
         for(int counterNodes = 0; counterNodes < k; counterNodes++){
             value = 0;
-            //scanf("%d", &value);
             if ((value < 1) || (value > pow(10, 6))) {
                 return;
             }
@@ -61,7 +59,7 @@ void creatingTrees(Node* trees, int n, int k){
         trees[num] = tree[num];
     }
 }
-//https://www.geeksforgeeks.org/write-c-code-to-determine-if-two-trees-are-identical/
+
 Node* creatingNodes(Node* tree, int head) {
     if (tree == NULL){
         tree = (Node*)malloc(sizeof(Node));
@@ -72,17 +70,17 @@ Node* creatingNodes(Node* tree, int head) {
     else if(head < tree->head) tree->left = creatingNodes(tree->left, head);
     return tree;
 }
-//https://www.cprogramming.com/tutorial/c/lesson18.html
+
 void destroyNode(Node* tree){
     if(tree == NULL){
         return;
-    } else if(tree != NULL){
+    } else{
         destroyNode(tree->right);
         destroyNode(tree->left);
         free(tree);
     }
 }
-//https://www.geeksforgeeks.org/write-c-code-to-determine-if-two-trees-are-identical/
+
 int comparing(Node* firstTree, Node* SecondTree) {
     if ((firstTree == NULL) && (SecondTree == NULL))  return 1;
     else if((firstTree == NULL) || (SecondTree == NULL)) return 0;
@@ -91,3 +89,4 @@ int comparing(Node* firstTree, Node* SecondTree) {
         return compare;
     }
 }
+
