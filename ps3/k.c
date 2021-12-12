@@ -396,3 +396,4 @@ bool update(struct game *game, int dy, int dx){
 
     return false;
 }
+
